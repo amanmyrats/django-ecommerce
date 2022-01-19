@@ -1,0 +1,87 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% block content %}
+
+
+
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y" style="min-height:84vh">
+    {% if request.GET.command == 'mailverification' %} 
+    <div class="container mx-auto alert alert-info text-center" style="max-width: 1024px; margin-top:100px;">
+        {% translate 'We have sent link to your mail address:' %} {{request.GET.email}}, {% translate 'please click that link to activate your account.' %}
+        <br><br>
+        {% translate 'Already Verified?' %} <a href="{% url 'login' %}">{% translate 'Login' %}</a>
+    </div>
+    {% elif request.GET.command == 'mobileverification' %} 
+    <div class="container mx-auto alert alert-info text-center" style="max-width: 768px; margin-top:100px;">
+       <h6>
+           {% translate 'We sent a confirmation code to your phone number: ' %} {{ request.GET.mobile }}
+       </h6> 
+       <h6>
+           {% translate 'Enter that 4-digit code here to verify that your phone number is working.' %}
+       </h6>
+        <form action="{% url 'activate_by_phone_number' %}"" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                    <div class="input-group-text">993</div>
+                    </div>
+                    <input type="tel" class="form-control" pattern="6[1-5]{1}[0-9]{6}" readonly value="{{request.GET.mobile}}" name="phone_number">
+                </div>
+                <input type="text" class="form-control" placeholder="{% translate '4-digit code' %}" name="mobile_verification_code">
+             </div> <!-- form-group// -->
+            <button type="submit"  class="btn btn-primary btn-block">{% translate 'Verify' %}</button>
+        </form>
+        <br><br><br>
+        <h6>
+            {% translate 'If you want to change your phone number then click button below' %}
+
+        </h6>
+        <a href="{% url 'update_phone_number' %}?current_phone_number={{request.GET.mobile}}" class="btn btn-info">{% translate 'Change Phone Number '%}</a>
+        </div>
+    {% else %}
+    <!-- ============================ COMPONENT LOGIN   ================================= -->
+        <div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+          <div class="card-body">
+          <h4 class="card-title mb-4">{% translate 'Sign in' %}</h4>
+          <form action="{% url 'login' %}" method="POST">
+              {% csrf_token %}
+              <div class="form-group">
+                  <div class="input-group mb-2">
+                      <div class="input-group-prepend">
+                          <div class="input-group-text">993</div>
+                        </div>
+                        <input type="tel" class="form-control" pattern="6[1-5]{1}[0-9]{6}" placeholder="{% translate 'Phone Number' %}" name="phone_number">
+                    </div>
+                </div> <!-- form-group// -->
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="{% translate 'Password' %}" name="password">
+                </div> <!-- form-group// -->
+                
+                <div class="form-group">
+                    <a href="{% url 'forgotPassword' %}" class="float-right">{% translate 'Forgot password?' %}</a> 
+                    
+                </div> <!-- form-group form-check .// -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> {% translate 'Login' %}  </button>
+                </div> <!-- form-group// -->    
+            </form>
+            {% include 'includes/alerts.html' %}
+        </div> <!-- card-body.// -->
+    </div> <!-- card .// -->
+    
+    <p class="text-center mt-4">{% translate "Don't have account?" %} <a href="{% url 'registration' %}">{% translate 'Sign up' %}</a></p>
+    <br><br>
+    <!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+    {% endif %}
+    
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+
+{% endblock %}

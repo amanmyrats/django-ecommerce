@@ -1,0 +1,109 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% block content %} 
+
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  <div class="container">
+    <div class="row">
+      {% include 'includes/dashboard_sidebar.html' %}
+      <main class="col-md-9">
+        <article class="card">
+          <header class="card-header">
+            <strong class="d-inline-block mr-3">{% translate 'Edit Your Profile' %}</strong>
+          </header>
+          <div class="card-body">
+
+            <div class="row align-items-center">
+              <div class=" form-group col-md-9">
+                <!-- <label>{% translate 'Phone Number' %}</label> -->
+                <div class="row">
+
+                  <div class="input-group mb-2 col-md-7">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">993</div>
+                    </div>
+                    <input type="tel" class="form-control" pattern="6[1-5]{1}[0-9]{6}" readonly value="{{request.user.phone_number}}" name="phone_number">
+                  </div>
+                  <a href="{% url 'update_phone_number' %}?current_phone_number={{request.user.phone_number}}" class="col-md-3 btn btn-primary">{% translate 'Change Phone' %}</a>
+                </div>
+              </div>
+            <div class="text-right col-md-3">
+              <img src="{{userprofile.profile_picture.url}}" alt="{% translate 'Profile Picture' %}" width="100" style="border-radius: 50px;">
+            </div>
+          </div>
+          <br><br><br>
+
+            <div class="row"> 
+              <div class="col-md-12">
+                <div class="row">
+
+                <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-row">
+                    <div class="form-group col-md-6"></div>
+                    <div class="form-group col-md-6">
+                          <label>{% translate 'Profile Picture' %}</label>
+                          {{profile_form.profile_picture}}
+                        </div>
+                      </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label>{% translate 'First Name' %}</label>
+                      {{user_form.first_name}}
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>{% translate 'Last Name' %}</label>
+                      {{user_form.last_name}}
+                    </div>
+                  </div>
+                      
+                      <div class="form-group">
+                        <label>{% translate 'Address Line 1' %}</label>
+                        {{profile_form.address_line_1}}
+                      </div>
+                      
+                      <div class="form-group">
+                        <label>{% translate 'Address Line 2' %}</label>
+                        {{profile_form.address_line_2}}
+                      </div>
+                      
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <label>{% translate 'City' %}</label>
+                          {{profile_form.city}}
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>{% translate 'State' %}</label>
+                          {{profile_form.state}}
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>{% translate 'Country' %}</label>
+                          {{profile_form.country}}
+                        </div>
+                      </div>
+                      <input type="submit" value="{% translate 'Save' %}" class="btn btn-primary">
+                      
+                    </form>
+                  </div>
+                </div>
+              </div> <!-- row.// -->
+              {% include 'includes/alerts.html' %}
+            </div> <!-- card-body .// -->
+            
+          </article> <!-- order-group.// --> 
+        </main>
+      </div> <!-- row.// -->
+    </div>
+    
+    
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  
+  
+  
+  
+  {% endblock %}

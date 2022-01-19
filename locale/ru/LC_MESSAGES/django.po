@@ -1,0 +1,534 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-08 20:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: ecommerce/settings.py:158
+msgid "English"
+msgstr ""
+
+#: ecommerce/settings.py:159
+msgid "Russian"
+msgstr "Русский"
+
+#: ecommerce/settings.py:160
+msgid "Turkmen"
+msgstr "Туркменский"
+
+#: ecommerce/views.py:10
+msgid "hello this is a test"
+msgstr "Привет, это тест."
+
+#: templates/accounts/account_verification_email.html:4
+#: templates/accounts/reset_password_email.html:4
+#: templates/orders/order_recieved_email.html:4
+msgid "Hi"
+msgstr ""
+
+#: templates/accounts/account_verification_email.html:6
+msgid "Please click on below link to confirm your registration."
+msgstr ""
+
+#: templates/accounts/account_verification_email.html:9
+#: templates/accounts/reset_password_email.html:9
+msgid "If you think it is not you, ignore this email."
+msgstr ""
+
+#: templates/accounts/change_password.html:18
+msgid "Change Your Password"
+msgstr ""
+
+#: templates/accounts/change_password.html:28
+#: templates/accounts/change_password.html:29
+msgid "Current Password"
+msgstr ""
+
+#: templates/accounts/change_password.html:33
+#: templates/accounts/change_password.html:34
+msgid "Create New Password"
+msgstr ""
+
+#: templates/accounts/change_password.html:38
+#: templates/accounts/change_password.html:39
+msgid "Confirm New Password"
+msgstr ""
+
+#: templates/accounts/change_password.html:42
+#: templates/accounts/forgotPassword.html:28
+msgid "Submit"
+msgstr ""
+
+#: templates/accounts/dashboard.html:17
+msgid "Logged in as"
+msgstr ""
+
+#: templates/accounts/dashboard.html:26
+msgid "Total Orders"
+msgstr ""
+
+#: templates/accounts/dashboard.html:28
+msgid "View Orders"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:17
+msgid "Edit Your Profile"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:21
+#: templates/accounts/edit_profile.html:43
+msgid "Profile Picture"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:29 templates/store/checkout.html:24
+msgid "First Name"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:33 templates/store/checkout.html:28
+msgid "Last Name"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:39
+#: templates/accounts/registration.html:35 templates/store/checkout.html:38
+msgid "Phone Number"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:49 templates/store/checkout.html:44
+msgid "Address Line 1"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:54 templates/store/checkout.html:48
+msgid "Address Line 2"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:60 templates/store/checkout.html:54
+msgid "City"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:64 templates/store/checkout.html:58
+msgid "State"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:68 templates/store/checkout.html:62
+msgid "Country"
+msgstr ""
+
+#: templates/accounts/edit_profile.html:72
+msgid "Save"
+msgstr ""
+
+#: templates/accounts/forgotPassword.html:15
+msgid "Forgot Password"
+msgstr ""
+
+#: templates/accounts/forgotPassword.html:20 templates/accounts/login.html:26
+msgid "Email Address"
+msgstr ""
+
+#: templates/accounts/forgotPassword.html:24
+msgid "Got password? Login"
+msgstr ""
+
+#: templates/accounts/forgotPassword.html:34 templates/accounts/login.html:43
+#: templates/accounts/resetPassword.html:33
+msgid "Don't have account?"
+msgstr ""
+
+#: templates/accounts/forgotPassword.html:34 templates/accounts/login.html:43
+#: templates/accounts/registration.html:16
+#: templates/accounts/resetPassword.html:33
+msgid "Sign up"
+msgstr ""
+
+#: templates/accounts/login.html:15
+msgid "Already Verified?"
+msgstr ""
+
+#: templates/accounts/login.html:15 templates/accounts/login.html:37
+msgid "Login"
+msgstr ""
+
+#: templates/accounts/login.html:21 templates/includes/navbar.html:73
+msgid "Sign in"
+msgstr ""
+
+#: templates/accounts/login.html:29
+msgid "Password"
+msgstr ""
+
+#: templates/accounts/login.html:33
+msgid "Forgot password?"
+msgstr ""
+
+#: templates/accounts/my_orders.html:17
+msgid "Your order history"
+msgstr ""
+
+#: templates/accounts/my_orders.html:25 templates/accounts/order_detail.html:39
+#: templates/orders/order_complete.html:49
+msgid "Order"
+msgstr ""
+
+#: templates/accounts/my_orders.html:26
+msgid "Billing Name"
+msgstr ""
+
+#: templates/accounts/my_orders.html:27
+msgid "Phone"
+msgstr ""
+
+#: templates/accounts/my_orders.html:28
+msgid "Order Total"
+msgstr ""
+
+#: templates/accounts/my_orders.html:29
+msgid "Date"
+msgstr ""
+
+#: templates/accounts/order_detail.html:18
+msgid "Invoice logo"
+msgstr ""
+
+#: templates/accounts/order_detail.html:25
+msgid "Invoiced To"
+msgstr ""
+
+#: templates/accounts/order_detail.html:40
+msgid "Transaction ID"
+msgstr ""
+
+#: templates/accounts/order_detail.html:41
+msgid "Order Date:"
+msgstr ""
+
+#: templates/accounts/order_detail.html:42
+msgid "Status:"
+msgstr ""
+
+#: templates/accounts/order_detail.html:52
+msgid "Description"
+msgstr ""
+
+#: templates/accounts/order_detail.html:53
+msgid "Qty"
+msgstr ""
+
+#: templates/accounts/order_detail.html:54
+#: templates/orders/order_complete.html:64
+msgid "Total"
+msgstr ""
+
+#: templates/accounts/order_detail.html:102
+#: templates/orders/order_complete.html:89
+msgid "Sub Total:"
+msgstr ""
+
+#: templates/accounts/order_detail.html:106
+#: templates/orders/order_complete.html:93 templates/store/cart.html:100
+msgid "Tax:"
+msgstr ""
+
+#: templates/accounts/order_detail.html:111
+#: templates/orders/order_complete.html:98
+msgid "Grand Total:"
+msgstr ""
+
+#: templates/accounts/order_detail.html:119
+msgid "Thank you for shopping with us!"
+msgstr ""
+
+#: templates/accounts/registration.html:21
+msgid "First name"
+msgstr ""
+
+#: templates/accounts/registration.html:25
+msgid "Last name"
+msgstr ""
+
+#: templates/accounts/registration.html:31 templates/includes/navbar.html:25
+#: templates/store/checkout.html:34
+msgid "Email"
+msgstr ""
+
+#: templates/accounts/registration.html:41
+msgid "Create password"
+msgstr ""
+
+#: templates/accounts/registration.html:45
+msgid "Repeat password"
+msgstr ""
+
+#: templates/accounts/registration.html:50 templates/includes/navbar.html:74
+msgid "Register"
+msgstr ""
+
+#: templates/accounts/registration.html:56
+msgid "Have an account?"
+msgstr ""
+
+#: templates/accounts/registration.html:56
+msgid "Log In"
+msgstr ""
+
+#: templates/accounts/resetPassword.html:15
+msgid "Reset Password"
+msgstr ""
+
+#: templates/accounts/resetPassword.html:20
+msgid "Create Password"
+msgstr ""
+
+#: templates/accounts/resetPassword.html:23
+msgid "Confirm Password"
+msgstr ""
+
+#: templates/accounts/resetPassword.html:27
+msgid "Reset"
+msgstr ""
+
+#: templates/accounts/reset_password_email.html:6
+msgid "As requested please click link below to reset your password."
+msgstr ""
+
+#: templates/base.html:11
+msgid "One of the Biggest Online Shopping Platform"
+msgstr ""
+
+#: templates/home.html:67
+msgid "Popular products"
+msgstr ""
+
+#: templates/home.html:94 templates/store/store.html:159
+msgid "Select Color-Size"
+msgstr ""
+
+#: templates/home.html:96 templates/store/store.html:161
+msgid "Add to Cart"
+msgstr ""
+
+#: templates/includes/alerts.html:8
+msgid "Error:"
+msgstr ""
+
+#: templates/includes/dashboard_sidebar.html:5
+#: templates/includes/navbar.html:79
+msgid "Dashboard"
+msgstr ""
+
+#: templates/includes/dashboard_sidebar.html:6
+msgid "My Orders"
+msgstr ""
+
+#: templates/includes/dashboard_sidebar.html:7
+msgid "Edit Profile"
+msgstr ""
+
+#: templates/includes/dashboard_sidebar.html:8
+msgid "Change Password"
+msgstr ""
+
+#: templates/includes/dashboard_sidebar.html:11
+msgid "Log out"
+msgstr ""
+
+#: templates/includes/navbar.html:26
+msgid "Call Us"
+msgstr ""
+
+#: templates/includes/navbar.html:43 templates/store/store.html:30
+msgid "Categories"
+msgstr ""
+
+#: templates/includes/navbar.html:46 templates/store/store.html:37
+msgid "All Products"
+msgstr ""
+
+#: templates/includes/navbar.html:53
+msgid "Store"
+msgstr ""
+
+#: templates/includes/navbar.html:57
+msgid "Search"
+msgstr ""
+
+#: templates/includes/navbar.html:71
+msgid "Welcome guest!"
+msgstr ""
+
+#: templates/includes/navbar.html:77
+msgid "Welcome"
+msgstr ""
+
+#: templates/includes/navbar.html:80
+msgid "Logout"
+msgstr ""
+
+#: templates/orders/order_complete.html:10
+msgid "Ordered Successfully"
+msgstr ""
+
+#: templates/orders/order_complete.html:13 templates/store/cart.html:18
+#: templates/store/cart.html:112 templates/store/checkout.html:123
+msgid "Continue Shopping"
+msgstr ""
+
+#: templates/orders/order_complete.html:35
+msgid "Invoiced To:"
+msgstr ""
+
+#: templates/orders/order_complete.html:51
+msgid "Order Date"
+msgstr ""
+
+#: templates/orders/order_complete.html:62
+msgid "Product Name"
+msgstr ""
+
+#: templates/orders/order_complete.html:63 templates/orders/payments.html:57
+#: templates/store/cart.html:28 templates/store/checkout.html:82
+msgid "Quantity"
+msgstr ""
+
+#: templates/orders/order_complete.html:106
+msgid "Thanks for your shopping!"
+msgstr ""
+
+#: templates/orders/order_recieved_email.html:6
+msgid "YOUR ORDER HAS BEEN RECIEVED"
+msgstr ""
+
+#: templates/orders/order_recieved_email.html:8
+msgid "Order Number"
+msgstr ""
+
+#: templates/orders/payments.html:14
+msgid "Review your order and Make Payment"
+msgstr ""
+
+#: templates/orders/payments.html:19 templates/store/checkout.html:21
+msgid "Billing Address"
+msgstr ""
+
+#: templates/orders/payments.html:31 templates/store/checkout.html:67
+msgid "Order Note"
+msgstr ""
+
+#: templates/orders/payments.html:40
+msgid "Payment Method"
+msgstr ""
+
+#: templates/orders/payments.html:50
+msgid "Review Products"
+msgstr ""
+
+#: templates/orders/payments.html:56 templates/store/cart.html:27
+#: templates/store/checkout.html:81
+msgid "Product"
+msgstr ""
+
+#: templates/orders/payments.html:58 templates/store/cart.html:29
+#: templates/store/checkout.html:83
+msgid "Price"
+msgstr ""
+
+#: templates/orders/payments.html:87 templates/store/cart.html:75
+#: templates/store/cart.html:77 templates/store/checkout.html:111
+#: templates/store/checkout.html:113
+msgid "each"
+msgstr ""
+
+#: templates/orders/payments.html:105 templates/store/cart.html:96
+msgid "Total price:"
+msgstr ""
+
+#: templates/store/cart.html:15
+msgid "Your shoppig cart is Empty"
+msgstr ""
+
+#: templates/store/cart.html:82
+msgid "Remove"
+msgstr ""
+
+#: templates/store/cart.html:104
+msgid "Total:"
+msgstr ""
+
+#: templates/store/cart.html:111
+msgid "Place Order"
+msgstr ""
+
+#: templates/store/checkout.html:122
+msgid "Checkout"
+msgstr ""
+
+#: templates/store/product_detail.html:26
+#: templates/store/product_detail.html:28
+msgid "Product Image"
+msgstr ""
+
+#: templates/store/product_detail.html:60
+msgid "Choose Color and Size"
+msgstr ""
+
+#: templates/store/product_detail.html:64
+msgid "Select"
+msgstr ""
+
+#: templates/store/product_detail.html:98
+msgid "Out of Stock"
+msgstr ""
+
+#: templates/store/product_detail.html:100
+msgid "Add to cart"
+msgstr ""
+
+#: templates/store/store.html:10
+msgid "Search Result"
+msgstr ""
+
+#: templates/store/store.html:12
+msgid "Our Store"
+msgstr ""
+
+#: templates/store/store.html:82
+msgid "Price range "
+msgstr ""
+
+#: templates/store/store.html:115
+msgid "Apply"
+msgstr ""
+
+#: templates/store/store.html:127
+msgid "Items found"
+msgstr ""
+
+#: templates/store/store.html:169
+msgid "No Result."
+msgstr ""
+
+#: templates/store/store.html:179 templates/store/store.html:181
+msgid "Previous"
+msgstr ""
+
+#: templates/store/store.html:193 templates/store/store.html:195
+msgid "Next"
+msgstr ""
+
+#~ msgid "this is test"
+#~ msgstr "Это тест."

@@ -1,0 +1,10 @@
+{% load i18n %}
+{% autoescape off %} 
+
+{% translate 'Hi' %} {{user.first_name}}
+
+{% translate 'YOUR ORDER HAS BEEN RECIEVED' %}
+
+{% translate 'Order Number' %}: {{order.number}}
+
+{% endautoescape %}

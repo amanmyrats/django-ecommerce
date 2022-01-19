@@ -1,0 +1,532 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-08 20:18+0000\n"
+"PO-Revision-Date: 2022-01-08 18:15+0000\n"
+"Last-Translator: admin admin <admin@admin.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: ecommerce/settings.py:158
+msgid "English"
+msgstr "Iňlisçe"
+
+#: ecommerce/settings.py:159
+msgid "Russian"
+msgstr "Rusça"
+
+#: ecommerce/settings.py:160
+msgid "Turkmen"
+msgstr "Türkmençe"
+
+#: ecommerce/views.py:10
+msgid "hello this is a test"
+msgstr "Salam, bul test."
+
+#: templates/accounts/account_verification_email.html:4
+#: templates/accounts/reset_password_email.html:4
+#: templates/orders/order_recieved_email.html:4
+msgid "Hi"
+msgstr "Salam"
+
+#: templates/accounts/account_verification_email.html:6
+msgid "Please click on below link to confirm your registration."
+msgstr "Registrasiýaňyzy tassyklamak üçin aşakdaky linke basyň."
+
+#: templates/accounts/account_verification_email.html:9
+#: templates/accounts/reset_password_email.html:9
+msgid "If you think it is not you, ignore this email."
+msgstr "Eger bu size degişli däl bolsa, bu yazga üns bermäň."
+
+#: templates/accounts/change_password.html:18
+msgid "Change Your Password"
+msgstr "Paroly Çalyş"
+
+#: templates/accounts/change_password.html:28
+#: templates/accounts/change_password.html:29
+msgid "Current Password"
+msgstr "Şuwagtky Parol"
+
+#: templates/accounts/change_password.html:33
+#: templates/accounts/change_password.html:34
+msgid "Create New Password"
+msgstr "Täze Parol Ýaz"
+
+#: templates/accounts/change_password.html:38
+#: templates/accounts/change_password.html:39
+msgid "Confirm New Password"
+msgstr "Täze Paroly Tassykla"
+
+#: templates/accounts/change_password.html:42
+#: templates/accounts/forgotPassword.html:28
+msgid "Submit"
+msgstr "Ugrat"
+
+#: templates/accounts/dashboard.html:17
+msgid "Logged in as"
+msgstr "Sistema giren: "
+
+#: templates/accounts/dashboard.html:26
+msgid "Total Orders"
+msgstr "Jemi Zakazlar"
+
+#: templates/accounts/dashboard.html:28
+msgid "View Orders"
+msgstr "Zakazlary Gör"
+
+#: templates/accounts/edit_profile.html:17
+msgid "Edit Your Profile"
+msgstr "Profili Düzet"
+
+#: templates/accounts/edit_profile.html:21
+#: templates/accounts/edit_profile.html:43
+msgid "Profile Picture"
+msgstr "Profil Surat"
+
+#: templates/accounts/edit_profile.html:29 templates/store/checkout.html:24
+msgid "First Name"
+msgstr "At"
+
+#: templates/accounts/edit_profile.html:33 templates/store/checkout.html:28
+msgid "Last Name"
+msgstr "Familiýa"
+
+#: templates/accounts/edit_profile.html:39
+#: templates/accounts/registration.html:35 templates/store/checkout.html:38
+msgid "Phone Number"
+msgstr "Telefon Nomer"
+
+#: templates/accounts/edit_profile.html:49 templates/store/checkout.html:44
+msgid "Address Line 1"
+msgstr "Adres-1"
+
+#: templates/accounts/edit_profile.html:54 templates/store/checkout.html:48
+msgid "Address Line 2"
+msgstr "Adres-2"
+
+#: templates/accounts/edit_profile.html:60 templates/store/checkout.html:54
+msgid "City"
+msgstr "Şäher"
+
+#: templates/accounts/edit_profile.html:64 templates/store/checkout.html:58
+msgid "State"
+msgstr "Welaýat"
+
+#: templates/accounts/edit_profile.html:68 templates/store/checkout.html:62
+msgid "Country"
+msgstr "Döwlet"
+
+#: templates/accounts/edit_profile.html:72
+msgid "Save"
+msgstr "Ýatda Sakla"
+
+#: templates/accounts/forgotPassword.html:15
+msgid "Forgot Password"
+msgstr "Paroly Ýatdan Çykardym"
+
+#: templates/accounts/forgotPassword.html:20 templates/accounts/login.html:26
+msgid "Email Address"
+msgstr "Email"
+
+#: templates/accounts/forgotPassword.html:24
+msgid "Got password? Login"
+msgstr "Parolyň barmy? Giriň"
+
+#: templates/accounts/forgotPassword.html:34 templates/accounts/login.html:43
+#: templates/accounts/resetPassword.html:33
+msgid "Don't have account?"
+msgstr "Hasabyň ýokmy?"
+
+#: templates/accounts/forgotPassword.html:34 templates/accounts/login.html:43
+#: templates/accounts/registration.html:16
+#: templates/accounts/resetPassword.html:33
+msgid "Sign up"
+msgstr "Agza bol"
+
+#: templates/accounts/login.html:15
+msgid "Already Verified?"
+msgstr "Eýýäm tassykladyňyzmy?"
+
+#: templates/accounts/login.html:15 templates/accounts/login.html:37
+msgid "Login"
+msgstr "Gir"
+
+#: templates/accounts/login.html:21 templates/includes/navbar.html:73
+msgid "Sign in"
+msgstr "Gir"
+
+#: templates/accounts/login.html:29
+msgid "Password"
+msgstr "Parol"
+
+#: templates/accounts/login.html:33
+msgid "Forgot password?"
+msgstr "Parol ýatdan çykdymy?"
+
+#: templates/accounts/my_orders.html:17
+msgid "Your order history"
+msgstr "Zakazlaryň sanawy"
+
+#: templates/accounts/my_orders.html:25 templates/accounts/order_detail.html:39
+#: templates/orders/order_complete.html:49
+msgid "Order"
+msgstr "Zakaz"
+
+#: templates/accounts/my_orders.html:26
+msgid "Billing Name"
+msgstr "Faktura Ady"
+
+#: templates/accounts/my_orders.html:27
+msgid "Phone"
+msgstr "Telefon"
+
+#: templates/accounts/my_orders.html:28
+msgid "Order Total"
+msgstr "Zakaz Jemi"
+
+#: templates/accounts/my_orders.html:29
+msgid "Date"
+msgstr "Sene"
+
+#: templates/accounts/order_detail.html:18
+msgid "Invoice logo"
+msgstr "Faktura Logo"
+
+#: templates/accounts/order_detail.html:25
+msgid "Invoiced To"
+msgstr "Faktura Kime:"
+
+#: templates/accounts/order_detail.html:40
+msgid "Transaction ID"
+msgstr "Töleg ID"
+
+#: templates/accounts/order_detail.html:41
+msgid "Order Date:"
+msgstr "Zakaz Senesi:"
+
+#: templates/accounts/order_detail.html:42
+msgid "Status:"
+msgstr "Ýagdaýy:"
+
+#: templates/accounts/order_detail.html:52
+msgid "Description"
+msgstr "Harydyň Ady"
+
+#: templates/accounts/order_detail.html:53
+msgid "Qty"
+msgstr "Mukdar"
+
+#: templates/accounts/order_detail.html:54
+#: templates/orders/order_complete.html:64
+msgid "Total"
+msgstr "Jemi"
+
+#: templates/accounts/order_detail.html:102
+#: templates/orders/order_complete.html:89
+msgid "Sub Total:"
+msgstr "Ara Jemi:"
+
+#: templates/accounts/order_detail.html:106
+#: templates/orders/order_complete.html:93 templates/store/cart.html:100
+msgid "Tax:"
+msgstr "Salgyt:"
+
+#: templates/accounts/order_detail.html:111
+#: templates/orders/order_complete.html:98
+msgid "Grand Total:"
+msgstr "Umumy Jemi:"
+
+#: templates/accounts/order_detail.html:119
+msgid "Thank you for shopping with us!"
+msgstr "Bizden söwda edeniňiz üçin sagboluň!"
+
+#: templates/accounts/registration.html:21
+msgid "First name"
+msgstr "At"
+
+#: templates/accounts/registration.html:25
+msgid "Last name"
+msgstr "Familiýa"
+
+#: templates/accounts/registration.html:31 templates/includes/navbar.html:25
+#: templates/store/checkout.html:34
+msgid "Email"
+msgstr "Email"
+
+#: templates/accounts/registration.html:41
+msgid "Create password"
+msgstr "Parol döret"
+
+#: templates/accounts/registration.html:45
+msgid "Repeat password"
+msgstr "Paroly gaýtala"
+
+#: templates/accounts/registration.html:50 templates/includes/navbar.html:74
+msgid "Register"
+msgstr "Agza boluň"
+
+#: templates/accounts/registration.html:56
+msgid "Have an account?"
+msgstr "Hasabyňyz barmy?"
+
+#: templates/accounts/registration.html:56
+msgid "Log In"
+msgstr "Gir"
+
+#: templates/accounts/resetPassword.html:15
+msgid "Reset Password"
+msgstr "Paroly Nollaň"
+
+#: templates/accounts/resetPassword.html:20
+msgid "Create Password"
+msgstr "Parol Dörediň"
+
+#: templates/accounts/resetPassword.html:23
+msgid "Confirm Password"
+msgstr "Paroly Tassyklaň"
+
+#: templates/accounts/resetPassword.html:27
+msgid "Reset"
+msgstr "Nolla"
+
+#: templates/accounts/reset_password_email.html:6
+msgid "As requested please click link below to reset your password."
+msgstr "Siz parolyňyzy nollamak islediňiz, nollamak üçin aşakdaky linke basyň."
+
+#: templates/base.html:11
+msgid "One of the Biggest Online Shopping Platform"
+msgstr "Zakaz ediň, Gapyňyza gelsin"
+
+#: templates/home.html:67
+msgid "Popular products"
+msgstr "Köp Satylýan Harytlar"
+
+#: templates/home.html:94 templates/store/store.html:159
+msgid "Select Color-Size"
+msgstr "Reňk we Ölçeg Saýlaň"
+
+#: templates/home.html:96 templates/store/store.html:161
+msgid "Add to Cart"
+msgstr "Sebede Goş"
+
+#: templates/includes/alerts.html:8
+msgid "Error:"
+msgstr "Ýalňyşlyk:"
+
+#: templates/includes/dashboard_sidebar.html:5
+#: templates/includes/navbar.html:79
+msgid "Dashboard"
+msgstr "Dolandyryş Paneli"
+
+#: templates/includes/dashboard_sidebar.html:6
+msgid "My Orders"
+msgstr "Meniň Zakazlarym"
+
+#: templates/includes/dashboard_sidebar.html:7
+msgid "Edit Profile"
+msgstr "Profili Üýtget"
+
+#: templates/includes/dashboard_sidebar.html:8
+msgid "Change Password"
+msgstr "Paroly Çalyş"
+
+#: templates/includes/dashboard_sidebar.html:11
+msgid "Log out"
+msgstr "Çyk"
+
+#: templates/includes/navbar.html:26
+msgid "Call Us"
+msgstr "Jaň Ediň"
+
+#: templates/includes/navbar.html:43 templates/store/store.html:30
+msgid "Categories"
+msgstr "Kategoriýalar"
+
+#: templates/includes/navbar.html:46 templates/store/store.html:37
+msgid "All Products"
+msgstr "Hemme Harytlar"
+
+#: templates/includes/navbar.html:53
+msgid "Store"
+msgstr "Dükan"
+
+#: templates/includes/navbar.html:57
+msgid "Search"
+msgstr "Gözle"
+
+#: templates/includes/navbar.html:71
+msgid "Welcome guest!"
+msgstr "Myhman hoşgeldiňiz!"
+
+#: templates/includes/navbar.html:77
+msgid "Welcome"
+msgstr "Hoşgeldiňiz"
+
+#: templates/includes/navbar.html:80
+msgid "Logout"
+msgstr "Çyk"
+
+#: templates/orders/order_complete.html:10
+msgid "Ordered Successfully"
+msgstr "Zakaz Edildi"
+
+#: templates/orders/order_complete.html:13 templates/store/cart.html:18
+#: templates/store/cart.html:112 templates/store/checkout.html:123
+msgid "Continue Shopping"
+msgstr "Söwda Etmäne Dowam Et"
+
+#: templates/orders/order_complete.html:35
+msgid "Invoiced To:"
+msgstr "Faktura Kime:"
+
+#: templates/orders/order_complete.html:51
+msgid "Order Date"
+msgstr "Zakaz Senesi"
+
+#: templates/orders/order_complete.html:62
+msgid "Product Name"
+msgstr "Harydyň Ady"
+
+#: templates/orders/order_complete.html:63 templates/orders/payments.html:57
+#: templates/store/cart.html:28 templates/store/checkout.html:82
+msgid "Quantity"
+msgstr "Mukdary"
+
+#: templates/orders/order_complete.html:106
+msgid "Thanks for your shopping!"
+msgstr "Söwdaňyz üçin sagboluň!"
+
+#: templates/orders/order_recieved_email.html:6
+msgid "YOUR ORDER HAS BEEN RECIEVED"
+msgstr "ZAKAZYŇYZ KABUL EDILDI"
+
+#: templates/orders/order_recieved_email.html:8
+msgid "Order Number"
+msgstr "Zakaz Nomeri"
+
+#: templates/orders/payments.html:14
+msgid "Review your order and Make Payment"
+msgstr "Zakazyňyza täzeden göz aýlaň we Tölegi Geçiriň"
+
+#: templates/orders/payments.html:19 templates/store/checkout.html:21
+msgid "Billing Address"
+msgstr "Faktura Adresi"
+
+#: templates/orders/payments.html:31 templates/store/checkout.html:67
+msgid "Order Note"
+msgstr "Zakaz Belligi"
+
+#: templates/orders/payments.html:40
+msgid "Payment Method"
+msgstr "Töleg Görnüşi"
+
+#: templates/orders/payments.html:50
+msgid "Review Products"
+msgstr "Harytlara Täzeden Göz Aýlaň"
+
+#: templates/orders/payments.html:56 templates/store/cart.html:27
+#: templates/store/checkout.html:81
+msgid "Product"
+msgstr "Haryt"
+
+#: templates/orders/payments.html:58 templates/store/cart.html:29
+#: templates/store/checkout.html:83
+msgid "Price"
+msgstr "Baha"
+
+#: templates/orders/payments.html:87 templates/store/cart.html:75
+#: templates/store/cart.html:77 templates/store/checkout.html:111
+#: templates/store/checkout.html:113
+msgid "each"
+msgstr "herbiri"
+
+#: templates/orders/payments.html:105 templates/store/cart.html:96
+msgid "Total price:"
+msgstr "Jemi Baha:"
+
+#: templates/store/cart.html:15
+msgid "Your shoppig cart is Empty"
+msgstr "Siziň Sebediňiz Boş"
+
+#: templates/store/cart.html:82
+msgid "Remove"
+msgstr "Aýyr"
+
+#: templates/store/cart.html:104
+msgid "Total:"
+msgstr "Jemi:"
+
+#: templates/store/cart.html:111
+msgid "Place Order"
+msgstr "Zakaz Et"
+
+#: templates/store/checkout.html:122
+msgid "Checkout"
+msgstr "Satyn Al"
+
+#: templates/store/product_detail.html:26
+#: templates/store/product_detail.html:28
+msgid "Product Image"
+msgstr "Haryt Suraty"
+
+#: templates/store/product_detail.html:60
+msgid "Choose Color and Size"
+msgstr "Reňk we Ölçeg Saýla"
+
+#: templates/store/product_detail.html:64
+msgid "Select"
+msgstr "Saýla"
+
+#: templates/store/product_detail.html:98
+msgid "Out of Stock"
+msgstr "Sklatda Gutardy"
+
+#: templates/store/product_detail.html:100
+msgid "Add to cart"
+msgstr "Sebede Goş"
+
+#: templates/store/store.html:10
+msgid "Search Result"
+msgstr "Gözlegiň Netijesi"
+
+#: templates/store/store.html:12
+msgid "Our Store"
+msgstr "Biziň Dükanymyz"
+
+#: templates/store/store.html:82
+msgid "Price range "
+msgstr "Baha Aralygy"
+
+#: templates/store/store.html:115
+msgid "Apply"
+msgstr "Täzele"
+
+#: templates/store/store.html:127
+msgid "Items found"
+msgstr "(tapylan haryt sany)"
+
+#: templates/store/store.html:169
+msgid "No Result."
+msgstr "Netije Ýok"
+
+#: templates/store/store.html:179 templates/store/store.html:181
+msgid "Previous"
+msgstr "Öňki"
+
+#: templates/store/store.html:193 templates/store/store.html:195
+msgid "Next"
+msgstr "Indiki"
+
+#~ msgid "this is test"
+#~ msgstr "Bul test."

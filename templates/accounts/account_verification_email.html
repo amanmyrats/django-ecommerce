@@ -1,0 +1,11 @@
+{% load i18n %}
+{% autoescape off %} 
+
+{% translate 'Hi' %} {{user.first_name}}
+
+{% translate 'Please click on below link to confirm your registration.' %}
+http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+{% translate 'If you think it is not you, ignore this email.' %}
+
+{% endautoescape %}

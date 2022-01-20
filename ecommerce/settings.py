@@ -125,7 +125,7 @@ AUTH_USER_MODEL = 'accounts.Account'
 #             'ENGINE': 'django.db.backends.sqlite3',
 #             'NAME': BASE_DIR / 'db.sqlite3',
 #         }
-    }
+    # }
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

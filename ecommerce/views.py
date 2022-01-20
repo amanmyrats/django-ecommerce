@@ -7,11 +7,13 @@ from store.models import Product, ReviewRating
 
 def home(request):
     products = Product.objects.all().filter(is_available=True).order_by('created_date')
+    products_exist = Product.objects.all().filter(is_available=True).order_by('created_date').exists()
     hello = _('hello this is a test')
     # Get the reviews
     reviews = None
-    for product in products:
-        reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
+    if products_exist:
+        for product in products:
+            reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
 
     context = {
         'products': products,

@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['sargajak-env.eba-um2msmtg.us-west-2.elasticbeanstalk.com', 'http://127.0.0.1', '127.0.0.1', '*']
+ALLOWED_HOSTS = ['http://sargajakcom-dev.us-west-2.elasticbeanstalk.com/', 'http://127.0.0.1', '127.0.0.1', '*']
 
 
 # Application definition

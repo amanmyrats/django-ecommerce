@@ -111,6 +111,7 @@ AUTH_USER_MODEL = 'accounts.Account'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 if 'RDS_DB_NAME' in os.environ:
+    print('Using RDS_DB_NAME')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -120,8 +121,12 @@ if 'RDS_DB_NAME' in os.environ:
             'HOST': os.environ['RDS_HOSTNAME'],
             'PORT': os.environ['RDS_PORT'],
         }
+
     }
+    for x in DATABASES['default']:
+        print(x, DATABASES['default'][x])
 else:
+    print('Using sqlite3')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

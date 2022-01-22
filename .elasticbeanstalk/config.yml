@@ -1,11 +1,11 @@
 branch-defaults:
   main:
-    environment: sargajak-developmentenv
+    environment: sargajak-dev-env
     group_suffix: null
 global:
-  application_name: sargajak-devenv
+  application_name: sargajak
   branch: null
-  default_ec2_keyname: aws-eb
+  default_ec2_keyname: sargajakkeypair
   default_platform: Python 3.7
   default_region: us-west-2
   include_git_submodules: true

@@ -37,7 +37,7 @@ if 'DEBUG' in os.environ:
 else:
     DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['http://sargajakcom-dev.us-west-2.elasticbeanstalk.com/', 'http://127.0.0.1', '127.0.0.1', '*']
+ALLOWED_HOSTS = ['sargajak-developmentenv.eba-vsmpedkh.us-west-2.elasticbeanstalk.com', 'http://127.0.0.1', '127.0.0.1', '*']
 
 
 # Application definition

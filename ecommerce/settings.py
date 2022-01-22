@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from distutils.debug import DEBUG
 from pathlib import Path
 import os
 
@@ -32,10 +33,11 @@ else:
     SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'DEBUG' in os.environ:
-    DEBUG = os.environ['DEBUG']
-else:
-    DEBUG = config('DEBUG', default=True, cast=bool)
+# if 'DEBUG' in os.environ:
+#     DEBUG = os.environ['DEBUG']
+# else:
+#     DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = False
 
 ALLOWED_HOSTS = ['sargajak-developmentenv.eba-vsmpedkh.us-west-2.elasticbeanstalk.com', 'http://127.0.0.1', '127.0.0.1', '*']
 

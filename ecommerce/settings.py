@@ -33,11 +33,11 @@ else:
     SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# if 'DEBUG' in os.environ:
-#     DEBUG = os.environ['DEBUG']
-# else:
-#     DEBUG = config('DEBUG', default=True, cast=bool)
-DEBUG = False
+if 'DEBUG' in os.environ:
+    DEBUG = os.environ['DEBUG']
+else:
+    DEBUG = True
+
 
 ALLOWED_HOSTS = ['sargajak-developmentenv.eba-vsmpedkh.us-west-2.elasticbeanstalk.com', 'http://127.0.0.1', '127.0.0.1', '*']
 
@@ -110,36 +110,9 @@ AUTH_USER_MODEL = 'accounts.Account'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# if 'RDS_DB_NAME' in os.environ:
-#     print('Using RDS_DB_NAME')
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': os.environ['RDS_DB_NAME'],
-#             'USER': os.environ['RDS_USERNAME'],
-#             'PASSWORD': os.environ['RDS_PASSWORD'],
-#             'HOST': os.environ['RDS_HOSTNAME'],
-#             'PORT': os.environ['RDS_PORT'],
-#         }
-
-#     }
-#     for x in DATABASES['default']:
-#         print(x, DATABASES['default'][x])
-# else:
-#     print('Using sqlite3')
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': BASE_DIR / 'db.sqlite3',
-#         }
-#     }
-# DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': BASE_DIR / 'db.sqlite3',
-#         }
-# }
-DATABASES = {
+if 'RDS_DB_NAME' in os.environ:
+    print('Using RDS_DB_NAME')
+    DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ['RDS_DB_NAME'],
@@ -149,6 +122,16 @@ DATABASES = {
             'PORT': os.environ['RDS_PORT'],
         }
 
+    }
+    for x in DATABASES['default']:
+        print(x, DATABASES['default'][x])
+else:
+    print('Using sqlite3')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 
 # Password validation
@@ -197,16 +180,17 @@ LOCALE_PATHS = (
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 if DEBUG:
-
+    print('DEBUG is True')
     STATIC_URL = '/static/'
     STATIC_ROOT = BASE_DIR / 'static'
     STATICFILES_DIRS = [
         BASE_DIR / 'ecommerce/static/',
     ]
 else:
-    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    print('DEBUG is False')
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age-86400',

@@ -181,15 +181,7 @@ LOCALE_PATHS = (
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-if DEBUG:
-    print('DEBUG is True')
-    STATIC_URL = '/static/'
-    STATIC_ROOT = BASE_DIR / 'static'
-    STATICFILES_DIRS = [
-        BASE_DIR / 'ecommerce/static/',
-    ]
-else:
-    print('DEBUG is False')
+if 'AWS_ACCESS_KEY_ID' in os.environ:
     AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
     AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
     AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
@@ -209,6 +201,13 @@ else:
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
     DEFAULT_FILE_STORAGE = 'ecommerce.media_storages.MediaStorage'
+else:
+    print('DEBUG is True')
+    STATIC_URL = '/static/'
+    STATIC_ROOT = BASE_DIR / 'static'
+    STATICFILES_DIRS = [
+        BASE_DIR / 'ecommerce/static/',
+    ]
 
 
 # Media files configuration

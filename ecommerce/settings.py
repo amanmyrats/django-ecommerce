@@ -34,7 +34,7 @@ else:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if 'DEBUG' in os.environ:
-    DEBUG = os.environ['DEBUG']
+    DEBUG = bool(os.environ['DEBUG'])
     print('DEBUG is from eb:', os.environ['DEBUG'])
 else:
     print('DEBUG is set to True manually')

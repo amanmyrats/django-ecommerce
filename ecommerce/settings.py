@@ -36,6 +36,7 @@ else:
 if 'DEBUG' in os.environ:
     DEBUG = bool(os.environ['DEBUG'])
     print('DEBUG is from eb:', os.environ['DEBUG'])
+    print('This is type of DEBUG', type(DEBUG))
 else:
     print('DEBUG is set to True manually')
     DEBUG = True

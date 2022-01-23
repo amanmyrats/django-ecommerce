@@ -36,7 +36,7 @@ else:
 if 'DEBUG' in os.environ:
     DEBUG = False
 else:
-    DEBUG = True
+    DEBUG = config('DEBUG')
 
 
 ALLOWED_HOSTS = ['sargajak-developmentenv.eba-vsmpedkh.us-west-2.elasticbeanstalk.com', 'http://127.0.0.1', '127.0.0.1', '*']
@@ -111,7 +111,7 @@ AUTH_USER_MODEL = 'accounts.Account'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 if 'RDS_DB_NAME' in os.environ:
-    print('Using RDS_DB_NAME')
+    # print('Using RDS_DB_NAME')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -123,10 +123,10 @@ if 'RDS_DB_NAME' in os.environ:
         }
 
     }
-    for x in DATABASES['default']:
-        print(x, DATABASES['default'][x])
+    # for x in DATABASES['default']:
+    #     print(x, DATABASES['default'][x])
 else:
-    print('Using sqlite3')
+    # print('Using sqlite3')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -158,7 +158,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Ashgabat'
 
 USE_I18N = True
 

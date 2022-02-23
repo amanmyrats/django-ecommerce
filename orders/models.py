@@ -1,6 +1,8 @@
 from django.db import models
+from django.forms import FloatField
+from django.utils.translation import gettext as _
 
-from accounts.models import Account
+from accounts.models import Account, Vendor, Driver
 from store.models import Product, Variation
 
 
@@ -17,28 +19,22 @@ class Payment(models.Model):
 
 
 class Order(models.Model):
-    STATUS = (
-        ('New', 'New'),
-        ('Accepted', 'Accepted'),
-        ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
-    )
     user = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     order_number = models.CharField(max_length=20)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=15)
-    email = models.EmailField(max_length=50)
-    address_line_1 =  models.CharField(max_length=50)
-    address_line_2 =  models.CharField(max_length=50, blank=True)
-    country =  models.CharField(max_length=50)
-    state =  models.CharField(max_length=50)
-    city =  models.CharField(max_length=50)
-    order_note =  models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    phone_extra = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(max_length=50, blank=True, null=True)
+    address_line_1 = models.CharField(max_length=50)
+    address_line_2 = models.CharField(max_length=50, blank=True, null=True)
+    country = models.CharField(max_length=50, blank=True, null=True)
+    state = models.CharField(max_length=50, blank=True, null=True)
+    city = models.CharField(max_length=50)
+    order_note = models.CharField(max_length=100, blank=True)
     order_total = models.FloatField()
     tax = models.FloatField()
-    status = models.CharField(max_length=10, choices=STATUS, default='New')
     ip = models.CharField(blank=True, max_length=50)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -48,10 +44,13 @@ class Order(models.Model):
         return f'{self.first_name} {self.last_name}'
     
     def full_address(self):
-        return f'{self.address_line_1} {self.address_line_2}'
+        if bool(self.address_line_2):
+            return f'{self.address_line_1} {self.address_line_2}'
+        else:
+            return f'{self.address_line_1}'
 
     def __str__(self):
-        return self.user.first_name
+        return self.order_number
 
 
 class OrderProduct(models.Model):
@@ -73,13 +72,49 @@ class OrderProduct(models.Model):
         if self.quantity and self.product_price:
             try:
                 total = self.quantity * self.product_price
-                return total
+                return float(total)
             except:
                 return 0
         else:
             return 0
 
 
+class OrderDelivery(models.Model):
+    STATUS = (
+        ('1', _('New')),
+        ('2', _('On Delivery')),
+        ('3', _('Delivered and Paid')),
+        ('4', _('Cancelled')),
+    )
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, related_name='vendorsales')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, related_name='ordersales')
+    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, blank=True, null=True)
+    delivery_fee = models.FloatField(default=20)
+    status = models.CharField(max_length=1, choices=STATUS, default='1')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def vendor_total(self):
+        order_items = OrderProduct.objects.filter(order=self.order, product__owner=self.vendor)
+        total = 0
+        for order_item in order_items:
+            total += order_item.total()
+        return total
+    
+
+class City(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
 
 
+class Delivery(models.Model):
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    fee = models.FloatField()
+    free_delivery_limit = models.FloatField()
+
+    def __str__(self):
+        return '{} - {}'.format(self.vendor, self.city)
 

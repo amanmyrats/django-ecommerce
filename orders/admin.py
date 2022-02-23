@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models
 
-from .models import Payment, Order, OrderProduct
+from .models import Payment, Order, OrderProduct, OrderDelivery, City, Delivery
 
 
 class OrderProductInline(admin.TabularInline):
@@ -21,3 +21,6 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Payment)
 admin.site.register(Order)
 admin.site.register(OrderProduct)
+admin.site.register(OrderDelivery)
+admin.site.register(City)
+admin.site.register(Delivery)

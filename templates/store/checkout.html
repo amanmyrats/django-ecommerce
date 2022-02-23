@@ -22,45 +22,74 @@
                 <div class="form-row">
                     <div class="col form-group">
                         <label for="">{% translate 'First Name' %}</label>
-                        <input type="text" name="first_name" class="form-control" required> 
+                        <input type="text" name="first_name" class="form-control" value="{{ request.user.first_name }}" required> 
                     </div>
                     <div class="col form-group">
                         <label for="">{% translate 'Last Name' %}</label>
-                        <input type="text" name="last_name" class="form-control" required> 
+                        <input type="text" name="last_name" class="form-control" value="{{ request.user.last_name }}" required> 
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col form-group">
                         <label for="">{% translate 'Email' %}</label>
-                        <input type="email" name="email" class="form-control" required> 
+                        <input type="email" name="email" class="form-control" 
+                        value="{% if not request.user.email == 'None' %} {{ request.user.email }}{% endif %}"> 
                     </div>
+                </div>
+                    <div class="form-row">
+                        <div class="col form-group">
+
+                            <label for="">{% translate 'Phone Number' %}</label>
+                            <div class="input-group col">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">993</div>
+                                </div>
+                                <input type="tel" class="form-control" pattern="6[1-5]{1}[0-9]{6}" readonly 
+                                value="{{request.user.phone_number}}" name="phone_number">
+                            </div>
+                        </div>
+
                     <div class="col form-group">
-                        <label for="">{% translate 'Phone Number' %}</label>
-                        <input type="text" name="phone" class="form-control" required> 
+                        <label for="">{% translate 'Extra Phone Number' %}</label>
+                        <div class="input-group col">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">993</div>
+                            </div>
+                            <input type="tel" class="form-control" pattern="6[1-5]{1}[0-9]{6}" 
+                            value="{% if not billingaddress.phone_extra == 'None' %}{{ billingaddress.phone_extra }}{% endif %}" name="phone_extra">
+                        </div>
                     </div>
+
                 </div>
                 <div class="form-row">
                     <div class="col form-group">
                         <label for="">{% translate 'Address Line 1' %}</label>
-                        <input type="text" name="address_line_1" class="form-control" required> 
+                        <input type="text" name="address_line_1" class="form-control" 
+                        value="{% if not billingaddress.address_line_1 == 'None' %}{{ billingaddress.address_line_1 }}{% endif %}" required> 
+                        {% if billingaddress.address_line_1 == 'None' %} none {% else %} not none {% endif %}
                     </div>
                     <div class="col form-group">
                         <label for="">{% translate 'Address Line 2' %}</label>
-                        <input type="text" name="address_line_2" class="form-control" > 
+                        <input type="text" name="address_line_2" class="form-control" 
+                        value="{% if not billingaddress.address_line_2 == 'None' %}{{ billingaddress.address_line_2 }}{% endif %}" > 
+                        {% if billingaddress.address_line_2 == 'None' %} none {% else %} not none {% endif %}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col form-group">
                         <label for="">{% translate 'City' %}</label>
-                        <input type="text" name="city" class="form-control" required> 
+                        <input type="text" name="city" class="form-control" required 
+                        value="{% if not billingaddress.city == 'None' %}{{ billingaddress.city }}{% endif %}"> 
                     </div>
                     <div class="col form-group">
                         <label for="">{% translate 'State' %}</label>
-                        <input type="text" name="state" class="form-control" required> 
+                        <input type="text" name="state" class="form-control" 
+                        value="{% if not billingaddress.state == 'None' %}{{ billingaddress.state }}{% endif %}"> 
                     </div>
                     <div class="col form-group">
                         <label for="">{% translate 'Country' %}</label>
-                        <input type="text" name="country" class="form-control" required> 
+                        <input type="text" name="country" class="form-control" 
+                        value="{% if not billingaddress.country == 'None' %}{{ billingaddress.country }}{% endif %}"> 
                     </div>
                 </div>
                 <div class="form-row">
@@ -72,9 +101,10 @@
         
     </aside> <!-- col.// -->
     <aside class="col-lg-6">
-        
         <div class="card">
             <div class="card-body">
+                {% for vendor, values in vendors_dict.items %}
+                <h5 class="card-title">{% translate 'Vendor: ' %} {{vendor}}</h5>
                 <table class="table table-borderless table-shopping-cart">
                     <thead class="text-muted">
                         <tr class="small text-uppercase">
@@ -85,7 +115,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for cart_item in cart_items %}
+                        {% for cart_item in values.cartitems %}
                         <tr>
                             <td>
                                 <figure class="itemside align-items-center">
@@ -107,14 +137,44 @@
                             <td> 
                                 <div class="price-wrap"> 
                                     <var class="price">${{ cart_item.sub_total }}</var> 
-                                        <small class="text-muted"> ${{ cart_item.variation.price }} {% translate 'each' %} </small> 
+                                        <small class="text-muted"> ${{ cart_item.variation.sale_price }}{% translate 'each' %} </small> 
                                 </div> <!-- price-wrap .// -->
                             </td>
                             
                         </tr>
                         {% endfor %}
+                        <tr>
+                            <td class="card-subtitle text-muted">{% translate 'Delivery' %}:({{vendor}}):</td>
+                            <td></td>
+                            <td class="card-subtitle text-muted">{{values.delivery}}</td>
+                        </tr>
+                        <tr>
+                            <td class="card-subtitle text-muted">{% translate 'Subtotal' %}:({{vendor}}):</td>
+                            <td></td>
+                            <td class="card-subtitle text-muted">{{values.subtotal}}</td>
+                        </tr>
                     </tbody>
                 </table>
+                <br>
+                {% endfor %}
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="dlist-align">
+                          <dt>{% translate 'Total price:' %}</dt>
+                          <dd class="text-right">${{ total }}</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                          <dt>{% translate 'Total Delivery:' %}</dt>
+                          <dd class="text-right"> ${{ total_delivery }}</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                          <dt>{% translate 'Total:' %}</dt>
+                          <dd class="text-right text-dark b"><strong>${{ grand_total }}</strong></dd>
+                        </dl>
+                        <hr>
+
+                    </div> <!-- card-body.// -->
+                    </div> <!-- card.// -->
                 <button type="submit" name="submit"  class="btn btn-primary btn-block">{% translate 'Checkout' %}</button>
                 <a href="{% url 'store' %}" class="btn btn-light btn-block">{% translate 'Continue Shopping' %}</a>
             </div> <!-- card-body.// -->

@@ -1,32 +1,83 @@
+from ast import Num
+import code
+import imp
+from locale import currency
+import os
+from pathlib import Path 
+from PIL import Image
+
 from enum import unique
 from pyexpat.errors import messages
 from unicodedata import name
 from django.db import models
+from django.http import request
 from django.urls import reverse
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, UniqueConstraint
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 
-from accounts.models import Account
+from django_resized import ResizedImageField
+
+from accounts.models import Account, Vendor
 from category.models import Category
 
 
 class Product(models.Model):
-    product_name    = models.CharField(max_length=200, unique=True)
-    slug            = models.SlugField(max_length=200, unique=True)
+    def medium_image_name(instance, filename):
+        filename = '{}_medium.jpg'.format(instance.id)
+        return os.path.join('photos/products', filename)
+    def small_image_name(instance, filename):
+        filename = '{}_small.jpg'.format(instance.id)
+        return os.path.join('photos/products', filename)
+    def thumb_image_name(instance, filename):
+        filename = '{}_thumb.jpg'.format(instance.id)
+        return os.path.join('photos/products', filename)
+    brand           = models.CharField(max_length=30, blank=True, null=True)
+    product_code    = models.CharField(max_length=30, null=True, blank=True)
+    product_name    = models.CharField(max_length=200)
     description     = models.TextField(max_length=500, blank=True)
-    image           = models.ImageField(upload_to='photos/products')
+    slug            = models.SlugField(max_length=200, unique=True, blank=True)
+    image           = ResizedImageField(size=[500,500], upload_to=medium_image_name)
+    image_small     = ResizedImageField(size=[75,75], upload_to=small_image_name, blank=True, null=True)
+    image_thumbnail = ResizedImageField(size=[45,45], upload_to=thumb_image_name, blank=True, null=True)
+    owner           = models.ForeignKey(Vendor, on_delete=models.SET_NULL, blank=True, null=True)
+    
     # stock           = models.IntegerField()
+    category        = models.ForeignKey(Category, on_delete=models.CASCADE)
     is_available    = models.BooleanField(default=True)
-    category   = models.ForeignKey(Category, on_delete=models.CASCADE)
     created_date    = models.DateTimeField(auto_now_add=True)
     modified_date   = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [UniqueConstraint(fields=['owner', 'brand', 'product_name'], name='owner_product'),]
 
     def get_url(self):
         return reverse('product_detail', args=[self.category.slug, self.slug])
 
     def __str__(self):
-        return self.product_name
+        if self.brand:
+            return '{} - {}'.format(str(self.brand), str(self.product_name))
+        else:
+            return str(self.product_name)
     
+    def image_url(self):
+        try:
+            return self.image.url
+        except:
+            return ''
+    
+    def image_small_url(self):
+        try:
+            return self.image_small.url
+        except:
+            return ''
+
+    def image_thumbnail_url(self):
+        try:
+            return self.image_thumbnail.url
+        except:
+            return ''
+
     def has_no_variation(self):
         has_no_variation_exists = Variation.objects.filter(product=self, color__name='No Variation', size__name='No Variation').exists()
         print('has_no_variation_exists', has_no_variation_exists)
@@ -95,7 +146,7 @@ class Product(models.Model):
         variations = Variation.objects.filter(product=self)
         prices = []
         for v in variations:
-            prices.append(v.price)
+            prices.append(v.sale_price)
         try:
             return min(prices)
         except:
@@ -105,7 +156,7 @@ class Product(models.Model):
         variations = Variation.objects.filter(product=self)
         prices = []
         for v in variations:
-            prices.append(v.price)
+            prices.append(v.sale_price)
         try:
             return max(prices)
         except:
@@ -127,16 +178,41 @@ class Size(models.Model):
 
 
 class Variation(models.Model):
+    def medium_image_name(instance, filename):
+        filename = '{}_medium.jpg'.format(instance.id)
+        return os.path.join('photos/products', filename)
+    def small_image_name(instance, filename):
+        filename = '{}_small.jpg'.format(instance.id)
+        return os.path.join('photos/products', filename)
+    def thumb_image_name(instance, filename):
+        filename = '{}_thumb.jpg'.format(instance.id)
+        return os.path.join('photos/products', filename)
+
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Vendor, on_delete=models.SET_NULL, blank=True, null=True)
     color = models.ForeignKey(Color, on_delete=models.PROTECT, default=1)
     size = models.ForeignKey(Size, on_delete=models.PROTECT, default=1)
     quantity = models.IntegerField()
-    price = models.FloatField()
+    
+    currency = models.ForeignKey('Currency', on_delete=models.SET_NULL, null=True, blank=True)
+
+    initial_price = models.FloatField(default=0)
+    expense_percentage = models.FloatField(default=0)
+    expense_fixed = models.FloatField(default=0)
+
+    final_price = models.FloatField(default=0, blank=True, null=True)
+    sale_price = models.FloatField(default=0, blank=True, null=True)
+
+    # image           = ResizedImageField(size=[500,500], upload_to=medium_image_name)
+    # image_small     = ResizedImageField(size=[75,75], upload_to=small_image_name, blank=True, null=True)
+    # image_thumbnail = ResizedImageField(size=[45,45], upload_to=thumb_image_name, blank=True, null=True)
+
+    in_stock = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     created_data = models.DateTimeField(auto_now=True)
     
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['product', 'color', 'size'], name='single_variation')]
+        constraints = [models.UniqueConstraint(fields=['owner', 'product', 'color', 'size'], name='single_variation')]
 
     @property
     def detail(self):
@@ -147,6 +223,26 @@ class Variation(models.Model):
     
     def __str__(self):
         return str(self.color) + str(self.size)
+    
+    def save(self, *args, **kwargs):
+        self.final_price = self.initial_price
+        if self.expense_percentage:
+            self.final_price += self.final_price * self.expense_percentage/100
+        if self.expense_fixed:
+            self.final_price += + self.expense_fixed
+        
+        # Stock
+        if self.quantity <= 0:
+            self.in_stock = False
+        else:
+            self.in_stock = True
+        
+        # if self.currency.code != 'TMT':
+        #     self.final_price = self.final_tmt_price * 21
+        # else:
+        #     self.final_price = self.final_tmt_price
+        self.sale_price = self.final_price
+        super(Variation, self).save(*args, **kwargs)
 
 
 class ReviewRating(models.Model):
@@ -174,3 +270,87 @@ class ProductGallery(models.Model):
     class Meta:
         verbose_name = 'productgallery'
         verbose_name_plural = 'Product Galleries'
+
+
+class Currency(models.Model):
+    code = models.CharField(max_length=3)
+    num = models.IntegerField(null=True, blank=True)
+    currency = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.code)
+
+
+class CurrencyRates(models.Model):
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
+    usdequivalent = models.FloatField(default=0)
+    # tmtequivalent = models.FloatField(default=0)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.vendor, self.currency, str(self.usdequivalent))
+
+
+class OtherExpense(models.Model):
+    TYPES = [
+        ('percentage', '%'),
+        ('fixed', 'Fixed'),
+    ]
+    variation = models.ForeignKey(Variation, on_delete=models.CASCADE)
+    increase_type = models.CharField(max_length=20, choices=TYPES, default='percentage')
+    increase_amount = models.FloatField(default=0)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.variation, self.increase_type, self.increase_amount)
+    
+
+class Transport(models.Model):
+    TYPES = [
+        ('percentage', '%'),
+        ('fixed', 'Fixed'),
+    ]
+    name = models.CharField(max_length=30)
+    increase_type = models.CharField(max_length=20, choices=TYPES, default='percentage')
+    increase_amount = models.FloatField(default=0)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.name, self.increase_type, self.increase_amount)
+
+
+class Tax(models.Model):
+    TYPES = [
+        ('percentage', '%'),
+        ('fixed', 'Fixed'),
+    ]
+    name = models.CharField(max_length=30)
+    increase_type = models.CharField(max_length=20, choices=TYPES, default='percentage')
+    increase_amount = models.FloatField(default=0)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.name, self.increase_type, self.increase_amount)
+
+
+class MoneyTransfer(models.Model):
+    TYPES = [
+        ('percentage', '%'),
+        ('fixed', 'Fixed'),
+    ]
+    name = models.CharField(max_length=30)
+    increase_type = models.CharField(max_length=20, choices=TYPES, default='percentage')
+    increase_amount = models.FloatField(default=0)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.name, self.increase_type, self.increase_amount)
+
+
+class Income(models.Model):
+    TYPES = [
+        ('percentage', '%'),
+        ('fixed', 'Fixed'),
+    ]
+    name = models.CharField(max_length=30)
+    increase_type = models.CharField(max_length=20, choices=TYPES, default='percentage')
+    increase_amount = models.FloatField(default=0)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.name, self.increase_type, self.increase_amount)

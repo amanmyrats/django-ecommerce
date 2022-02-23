@@ -1,0 +1,94 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% block content %} 
+
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  <div class="container">
+    <div class="row">
+      {% include 'includes/dashboard_sidebar.html' %}
+      <main class="col-md-9">
+        <article class="card">
+          <header class="card-header">
+            <strong class="d-inline-block mr-3">{% translate 'Add New Product' %}</strong>
+          </header> 
+          <div class="card-body">
+
+            <div class="row"> 
+              <div class="col-md-12">
+                <div class="row">
+
+                <form action="{% url 'add_product' %}" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label>{% translate 'Product Category' %}</label>
+                        {{add_product_form.category}}
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label>{% translate 'Product Image' %}</label>
+                        {{add_product_form.image}}
+                      </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label>{% translate 'Product Name' %}</label>
+                      {{add_product_form.product_name}}
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>{% translate 'Product Description' %}</label>
+                      {{add_product_form.description}}
+                    </div>    
+                    
+                  </div>
+                      
+                      <!-- <div class="form-group">
+                        <label>{% translate 'Address Line 1' %}</label>
+                        {{profile_form.address_line_1}}
+                      </div>
+                      
+                      <div class="form-group">
+                        <label>{% translate 'Address Line 2' %}</label>
+                        {{profile_form.address_line_2}}
+                      </div>
+                      
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <label>{% translate 'City' %}</label>
+                          {{profile_form.city}}
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>{% translate 'State' %}</label>
+                          {{profile_form.state}}
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>{% translate 'Country' %}</label>
+                          {{profile_form.country}}
+                        </div>
+                      </div> -->
+                      <input type="submit" value="{% translate 'Add Product' %}" class="btn btn-primary">
+                      
+                    </form>
+                  </div>
+                  
+                </div>
+              </div> <!-- row.// -->
+              {% include 'includes/alerts.html' %}
+            </div> <!-- card-body .// -->
+            
+          </article> <!-- order-group.// --> 
+        </main>
+      </div> <!-- row.// -->
+    </div>
+    
+    
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  
+  
+  
+  
+  {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-19 15:17+0000\n"
+"POT-Creation-Date: 2022-01-23 17:23+0500\n"
 "PO-Revision-Date: 2022-01-19 15:23+0000\n"
 "Last-Translator: aman aman <aman@aman.aman>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: accounts/models.py:109
+#, fuzzy
+#| msgid "Turkmen"
+msgid "Turkmenistan"
+msgstr "Türkmençe"
 
 #: accounts/utils.py:22
 msgid "Your verification code is "
@@ -40,19 +46,19 @@ msgstr "Täze Parol Ýaz"
 msgid "This code is not matching!"
 msgstr "Kod gabat gelenok!"
 
-#: ecommerce/settings.py:159
+#: ecommerce/settings.py:171
 msgid "English"
 msgstr "Iňlisçe"
 
-#: ecommerce/settings.py:160
+#: ecommerce/settings.py:172
 msgid "Russian"
 msgstr "Rusça"
 
-#: ecommerce/settings.py:161
+#: ecommerce/settings.py:173
 msgid "Turkmen"
 msgstr "Türkmençe"
 
-#: ecommerce/views.py:10
+#: ecommerce/views.py:11
 msgid "hello this is a test"
 msgstr "Salam, bul test."
 
@@ -113,7 +119,7 @@ msgstr "Profili Düzet"
 
 #: templates/accounts/edit_profile.html:22
 #: templates/accounts/forgotPassword.html:50 templates/accounts/login.html:57
-#: templates/accounts/registration.html:32 templates/store/checkout.html:38
+#: templates/accounts/registration.html:32 templates/store/checkout.html:41
 msgid "Phone Number"
 msgstr "Telefon Nomer"
 
@@ -136,23 +142,23 @@ msgstr "At"
 msgid "Last Name"
 msgstr "Familiýa"
 
-#: templates/accounts/edit_profile.html:65 templates/store/checkout.html:44
+#: templates/accounts/edit_profile.html:65 templates/store/checkout.html:63
 msgid "Address Line 1"
 msgstr "Adres-1"
 
-#: templates/accounts/edit_profile.html:70 templates/store/checkout.html:48
+#: templates/accounts/edit_profile.html:70 templates/store/checkout.html:67
 msgid "Address Line 2"
 msgstr "Adres-2"
 
-#: templates/accounts/edit_profile.html:76 templates/store/checkout.html:54
+#: templates/accounts/edit_profile.html:76 templates/store/checkout.html:73
 msgid "City"
 msgstr "Şäher"
 
-#: templates/accounts/edit_profile.html:80 templates/store/checkout.html:58
+#: templates/accounts/edit_profile.html:80 templates/store/checkout.html:77
 msgid "State"
 msgstr "Welaýat"
 
-#: templates/accounts/edit_profile.html:84 templates/store/checkout.html:62
+#: templates/accounts/edit_profile.html:84 templates/store/checkout.html:81
 msgid "Country"
 msgstr "Döwlet"
 
@@ -253,8 +259,7 @@ msgstr "Parol ýatdan çykdymy?"
 msgid "Your order history"
 msgstr "Zakazlaryň sanawy"
 
-#: templates/accounts/my_orders.html:24
-#: templates/accounts/order_detail.html:39
+#: templates/accounts/my_orders.html:24 templates/accounts/order_detail.html:39
 #: templates/orders/order_complete.html:49
 msgid "Order"
 msgstr "Zakaz"
@@ -378,8 +383,7 @@ msgstr "Nolla"
 
 #: templates/accounts/reset_password_email.html:6
 msgid "As requested please click link below to reset your password."
-msgstr ""
-"Siz parolyňyzy nollamak islediňiz, nollamak üçin aşakdaky linke basyň."
+msgstr "Siz parolyňyzy nollamak islediňiz, nollamak üçin aşakdaky linke basyň."
 
 #: templates/accounts/update_phone_number.html:15
 msgid "Update your phone number, with format: 993 6X XXXXXX"
@@ -465,7 +469,7 @@ msgid "Ordered Successfully"
 msgstr "Zakaz Edildi"
 
 #: templates/orders/order_complete.html:13 templates/store/cart.html:18
-#: templates/store/cart.html:106 templates/store/checkout.html:119
+#: templates/store/cart.html:106 templates/store/checkout.html:138
 msgid "Continue Shopping"
 msgstr "Söwda Etmäne Dowam Et"
 
@@ -482,7 +486,7 @@ msgid "Product Name"
 msgstr "Harydyň Ady"
 
 #: templates/orders/order_complete.html:63 templates/orders/payments.html:57
-#: templates/store/cart.html:28 templates/store/checkout.html:82
+#: templates/store/cart.html:28 templates/store/checkout.html:101
 msgid "Quantity"
 msgstr "Mukdary"
 
@@ -512,7 +516,7 @@ msgstr "Zakazyňyza täzeden göz aýlaň we Tölegi Geçiriň"
 msgid "Billing Address"
 msgstr "Faktura Adresi"
 
-#: templates/orders/payments.html:31 templates/store/checkout.html:67
+#: templates/orders/payments.html:31 templates/store/checkout.html:86
 msgid "Order Note"
 msgstr "Zakaz Belligi"
 
@@ -525,17 +529,17 @@ msgid "Review Products"
 msgstr "Harytlara Täzeden Göz Aýlaň"
 
 #: templates/orders/payments.html:56 templates/store/cart.html:27
-#: templates/store/checkout.html:81
+#: templates/store/checkout.html:100
 msgid "Product"
 msgstr "Haryt"
 
 #: templates/orders/payments.html:58 templates/store/cart.html:29
-#: templates/store/checkout.html:83
+#: templates/store/checkout.html:102
 msgid "Price"
 msgstr "Baha"
 
 #: templates/orders/payments.html:87 templates/store/cart.html:72
-#: templates/store/checkout.html:110
+#: templates/store/checkout.html:129
 msgid "each"
 msgstr "herbiri"
 
@@ -559,7 +563,13 @@ msgstr "Jemi:"
 msgid "Place Order"
 msgstr "Zakaz Et"
 
-#: templates/store/checkout.html:118
+#: templates/store/checkout.html:51
+#, fuzzy
+#| msgid "Phone Number"
+msgid "Extra Phone Number"
+msgstr "Telefon Nomer"
+
+#: templates/store/checkout.html:137
 msgid "Checkout"
 msgstr "Satyn Al"
 

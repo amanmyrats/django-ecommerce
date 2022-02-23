@@ -1,6 +1,16 @@
+from email.policy import default
+import os
+
+from operator import mod
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db.models.fields import EmailField
+from django.forms import FloatField
+from django.utils.translation import gettext as _
+from django.utils.text import slugify
+
+from django_resized import ResizedImageField
+
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, first_name, last_name, username, email, phone_number, password=None):
@@ -56,6 +66,7 @@ class Account(AbstractBaseUser):
     is_staff        = models.BooleanField(default=False)
     is_active       = models.BooleanField(default=False)
     is_superadmin   = models.BooleanField(default=False)
+    is_vendor       = models.BooleanField(default=False)
 
     USERNAME_FIELD  = 'phone_number'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'username']
@@ -76,20 +87,15 @@ class Account(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
+    def image_name(instance, filename):
+        filename = '{}_profile.jpg'.format(instance.user.id)
+        return os.path.join('userprofile', filename)
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    address_line_1 = models.CharField(max_length=100, blank=True)
-    address_line_2 = models.CharField(max_length=100, blank=True)
-    profile_picture = models.ImageField(blank=True, upload_to='userprofile', default='photos/user/default.jpg')
-    city = models.CharField(max_length=50, blank=True)
-    state = models.CharField(max_length=50, blank=True)
-    country = models.CharField(max_length=50, blank=True)
+    profile_picture = ResizedImageField(size=[100, 100], blank=True, upload_to=image_name, default='photos/user/default.jpg')
 
     def __str__(self):
         return self.user.first_name
 
-    def full_address(self):
-        return f'{self.address_line_1} - {self.address_line_2}'
-    
     def profile_picture_url(self):
         try:
             return self.profile_picture.url
@@ -103,3 +109,47 @@ class VerificationCode(models.Model):
 
     def __str__(self):
         return str(self.code)
+
+
+class BillingAddress(models.Model):
+    user            = models.OneToOneField(Account, on_delete=models.CASCADE)
+    phone_extra     = models.CharField(max_length=15, blank=True, null=True, default='')
+    address_line_1  = models.CharField(max_length=50)
+    address_line_2  = models.CharField(max_length=50, blank=True, null=True, default='')
+    city            = models.CharField(max_length=50)
+    state           = models.CharField(max_length=50, blank=True, null=True, default='')
+    country         = models.CharField(max_length=50, blank=True, default='Turkmenistan')
+
+    def full_address(self):
+        return f'{self.address_line_1} / {self.address_line_2}'
+
+    def __str__(self):
+        return ('{} / {}'.format(str(self.address_line_1), str(self.city)))
+
+
+class Vendor(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    official_name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(blank=True)
+
+    def __str__(self):
+        return str(self.official_name)
+
+    def save(self, *args, **kwargs):
+        if self.official_name:
+            self.slug = slugify(self.official_name)
+        super(Vendor, self).save(*args, **kwargs)
+
+
+class Driver(models.Model):
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    car_brand = models.CharField(max_length=30)
+    car_model = models.CharField(max_length=30)
+    car_year = models.CharField(max_length=4)
+    car_plate = models.CharField(max_length=15)
+    mobile = models.CharField(max_length=30)
+
+    def __str__(self):
+        return '{} {} {} {} {}'.format(self.first_name, self.last_name, self.car_model, self.car_plate, self.mobile)

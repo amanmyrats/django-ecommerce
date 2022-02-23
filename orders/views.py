@@ -1,4 +1,5 @@
 import datetime
+import imp
 import json
 from django.core.checks import messages
 
@@ -9,10 +10,13 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 
-from .models import Order, OrderProduct, Payment
-from carts.models import CartItem
+from accounts.models import BillingAddress
+from .models import Order, OrderProduct, Payment, OrderDelivery
+from carts.models import Cart, CartItem
 from store.models import Product, Variation
 from .forms import OrderForm
+
+from carts.utils import order_vendor_info, stock_available
 
 
 def payments(request):
@@ -42,7 +46,7 @@ def payments(request):
         orderproduct.user_id = request.user.id
         orderproduct.product_id = item.product_id
         orderproduct.quantity = item.quantity
-        orderproduct.product_price = item.product.price
+        orderproduct.product_price = item.variation.sale_price
         orderproduct.ordered = True
         orderproduct.save()
 
@@ -84,6 +88,18 @@ def payments(request):
 def place_order(request, total=0, quantity=0):
     current_user = request.user
 
+    # If there is no billing address then create one
+    try:
+        billingaddress = BillingAddress.objects.get(user=current_user)
+    except:
+        # if there is more than 1 billing address that belong to user, delete all
+        billingaddresses = BillingAddress.objects.filter(user=current_user)
+        for billaddr in billingaddresses:
+            billaddr.delete()
+        billingaddress = BillingAddress()
+        billingaddress.user = current_user
+        billingaddress.save()
+
     # If the cart count is less than or equal to 0, then redirect to store
     cart_items = CartItem.objects.filter(user=current_user)
     cart_count = cart_items.count()
@@ -94,8 +110,19 @@ def place_order(request, total=0, quantity=0):
     tax = 0
 
     for cart_item in cart_items:
-        total += (cart_item.variation.price * cart_item.quantity)
-        quantity += cart_item.quantity
+        # Check the item's stock situation
+        initial_quantity = cart_item.quantity
+        cart_item.quantity = stock_available(variation=cart_item.variation, quantity=cart_item.quantity)
+        if initial_quantity == cart_item.quantity:
+            total += (cart_item.variation.sale_price * cart_item.quantity)
+            quantity += cart_item.quantity
+        elif cart_item.quantity <= 0:
+            cart_item.delete()
+        else:
+            cart_item.save()
+            total += (cart_item.variation.sale_price * cart_item.quantity)
+            quantity += cart_item.quantity
+        
     tax = (2 * total)/100
     grand_total = total + tax
     
@@ -109,6 +136,7 @@ def place_order(request, total=0, quantity=0):
             data.first_name = form.cleaned_data['first_name']
             data.last_name = form.cleaned_data['last_name']
             data.phone = form.cleaned_data['phone']
+            data.phone_extra = form.cleaned_data['phone_extra']
             data.email = form.cleaned_data['email']
             data.address_line_1 = form.cleaned_data['address_line_1']
             data.address_line_2 = form.cleaned_data['address_line_2']
@@ -116,6 +144,7 @@ def place_order(request, total=0, quantity=0):
             data.state = form.cleaned_data['state']
             data.city = form.cleaned_data['city']
             data.order_note = form.cleaned_data['order_note']
+
 
             data.order_total = grand_total
             data.tax = tax
@@ -131,6 +160,14 @@ def place_order(request, total=0, quantity=0):
             data.order_number = order_number
             data.save()
 
+            # Save lastest billing address
+            billingaddress.phone_extra = data.phone_extra
+            billingaddress.address_line_1 = data.address_line_1
+            billingaddress.address_line_2 = data.address_line_2
+            billingaddress.country = data.country
+            billingaddress.state = data.state
+            billingaddress.city = data.city
+            billingaddress.save()
 
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             order.is_ordered = True
@@ -138,13 +175,25 @@ def place_order(request, total=0, quantity=0):
 
             # Move the cart items to Order Product table
             cart_items = CartItem.objects.filter(user=request.user)
+            
             for item in cart_items:
+                # Check the item's stock situation
+                initial_quantity = item.quantity
+                item.quantity = stock_available(variation=item.variation, quantity=item.quantity)
+                if initial_quantity == item.quantity:
+                    pass
+                elif item.quantity <= 0:
+                    item.delete()
+                    continue
+                else:
+                    item.save()
+                    
                 orderproduct = OrderProduct()
                 orderproduct.order_id = order.id
                 orderproduct.user_id = request.user.id
                 orderproduct.product_id = item.product_id
                 orderproduct.variation_id = item.variation_id
-                orderproduct.product_price = item.variation.price
+                orderproduct.product_price = item.variation.sale_price
                 orderproduct.quantity = item.quantity
                 orderproduct.ordered = True
                 orderproduct.save()
@@ -153,6 +202,22 @@ def place_order(request, total=0, quantity=0):
                 product = Variation.objects.get(id=item.variation.id)
                 product.quantity -= item.quantity
                 product.save()
+
+            
+            # Create orderdelivery info for vendor
+            vendors_dict = order_vendor_info(order=order)
+            print('vendors_dict', type(vendors_dict))
+            for vendor, values in vendors_dict.items():
+                sale = OrderDelivery()
+                sale.vendor = vendor
+                sale.order = order
+                sale.delivery_fee = values.get('delivery')
+                sale.save()
+
+            total_delivery = 0
+            new_order = OrderDelivery.objects.filter(order=order)
+            for delivery in new_order:
+                total_delivery += delivery.delivery_fee
 
             # Clear cart
             CartItem.objects.filter(user=request.user).delete()
@@ -175,10 +240,11 @@ def place_order(request, total=0, quantity=0):
            
            
             context = {
+                'vendors_dict':vendors_dict,
                 'order': order,
                 'cart_items': cart_items,
                 'total': total,
-                'tax': tax,
+                'total_delivery': total_delivery,
                 'grand_total': grand_total,
             }
             print(str(redirect('order_complete', order_no=order.order_number)))
@@ -196,24 +262,37 @@ def order_complete(request, order_no=None):
     if order_number is None:
         # messages
         return redirect('home')
+    
+    current_user = request.user
         
     try:
         order = Order.objects.get(order_number=order_number, is_ordered=True)
         ordered_products = OrderProduct.objects.filter(order_id=order.id)
-        
+
+        vendors_dict = order_vendor_info(order=order)
+
+        total_delivery = 0
+        new_order = OrderDelivery.objects.filter(order=order)
+        for delivery in new_order:
+            total_delivery += delivery.delivery_fee
+
         subtotal = 0
         for i in ordered_products:
             subtotal += i.product_price * i.quantity
         
+        grand_total = subtotal + total_delivery
         # payment = Payment.objects.get(payment_id=transID)
 
         context = {
+            'vendors_dict':vendors_dict,
             'order': order,
             'ordered_products': ordered_products,
             'order_number': order.order_number,
             # 'transID': payment.payment_id,
             # 'payment': payment,
+            'total_delivery':total_delivery,
             'subtotal': subtotal,
+            'grand_total':grand_total,
         }
         return render(request, 'orders/order_complete.html', context)
     except(Payment.DoesNotExist, Order.DoesNotExist):

@@ -1,0 +1,9 @@
+[
+    {
+      "model": "orders.city",
+      "pk": 1,
+      "fields": {
+        "name": "Aşgabat"
+      }
+    }
+  ]

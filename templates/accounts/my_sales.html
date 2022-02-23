@@ -1,0 +1,156 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% block content %} 
+
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  <div class="container">
+    <div class="row">
+      {% include 'includes/dashboard_sidebar.html' %}
+      {% if form %}
+      <main class="col-md-9">
+        {{form.errors}}
+        <form action="" method="POST">
+          {% csrf_token %}
+
+          <div class="shadow p-1 mb-3 bg-white rounded">
+            <div class="form-row">
+
+              <div class="form-group col-md-4">
+                <label>{% translate 'Order' %}</label>
+                {{ form.order }}
+              </div>
+              <div class="form-group col-md-4">
+                <label>{% translate 'Vendor' %}</label>
+                {{ form.vendor }}
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>{% translate 'Driver' %}</label>
+                {{ form.driver }}
+              </div>
+              <div class="form-group col-md-3">
+                <label>{% translate 'Delivery Fee' %}</label>
+                {{ form.delivery_fee }}
+              </div>
+              <div class="form-group col-md-3">
+                <label>{% translate 'Status' %}</label>
+                {{ form.status }}
+              </div>
+            </div>
+            <input type="submit" value="{% translate 'Update' %}" class="btn btn-primary">
+          </div>
+
+
+        </form>
+      </main>
+      {% else %}
+      <main class="col-md-9">
+        <article class="card">
+          <header class="card-header">
+            <strong class="d-inline-block mr-3">{% translate 'My Sales' %}</strong>
+            <a href="?" 
+            class="btn btn-large btn-sedondary border border-primary {% if not request.GET.status %} btn-info {% endif %}">
+                {% translate 'All' %}</a>
+            <a href="?status=1" 
+            class="btn btn-large btn-sedondary border border-primary {% if request.GET.status == '1' %} btn-info {% endif %}">
+                {% translate 'New' %}</a>
+            <a href="?status=2" 
+            class="btn btn-large btn-sedondary border border-primary {% if request.GET.status == '2' %} btn-info {% endif %}">
+                {% translate 'On Delivery' %}</a>
+            <a href="?status=3" 
+            class="btn btn-large btn-sedondary border border-primary {% if request.GET.status == '3' %} btn-info {% endif %}">
+                {% translate 'Delivered and Paid' %}</a>
+            <a href="?status=4" 
+            class="btn btn-large btn-sedondary border border-primary {% if request.GET.status == '4' %} btn-info {% endif %}">
+                {% translate 'Cancelled' %}</a>
+          </header>
+          <div class="card-body">
+
+            <div class="row"> 
+              <div class="col-md-12">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col-md">{% translate 'Order' %} #</th>
+                      <th scope="col-md">{% translate 'Billed To' %}</th>
+                      <th scope="col-md">{% translate 'Date' %}</th>
+                      <!-- <th scope="col-md">{% translate 'Phone' %}</th> -->
+                      <!-- <th scope="col-md">{% translate 'Order Total' %}</th> -->
+                      <th scope="col-md">{% translate 'Vendor Total' %}</th>
+                      <th scope="col-md">{% translate 'Delivery Fee' %}</th>
+                      <th scope="col-md">{% translate 'Driver' %}</th>
+                      <th scope="col-md">{% translate 'Status' %}</th>
+                      <th scope="col-md">{% translate 'Edit' %}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      {% for sale in sales %}
+                      <tr>
+                        <th scope="row"><a href="{% url 'order_detail' sale.order.order_number %}?onlyvendorspart=1">{{sale.order.order_number}}</a></th>
+                        <td>{{sale.order.full_name}} <br> {{sale.order.user.phone_number}} <br> {{sale.order.phone_extra}} <br>
+                            {{sale.order.address_line_1}} <br>
+                            {{sale.order.address_line_2}} - {{sale.order.city}}</td>
+                        <td>{{sale.order.updated_at}}</td>
+                        <!-- <td>{{sale.order.user.phone_number}} <br> {{sale.order.phone_extra}}</td> -->
+                        <!-- <td>{{sale.order.order_total}}</td> -->
+                        <td>{{sale.vendor_total}}</td>
+                        <td>{{sale.delivery_fee}}</td>
+                        <td>{{sale.driver}}</td>
+                        <td>{{sale.get_status_display}}</td>
+                        <td><a href="{% url 'my_sales' %}?edit={{sale.id}}" class="btn btn-primary">{% translate 'Edit' %}</a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                    </div> <!-- row.// -->
+                    {% include 'includes/alerts.html' %}
+                  </div> <!-- card-body .// -->
+                  
+                </article> <!-- order-group.// --> 
+
+
+                <nav class="mt-4" aria-label="Page navigation sample">
+                  {% if sales.has_other_pages %}
+                  <ul class="pagination">
+                      {% if sales.has_previous %}
+                          <li class="page-item"><a class="page-link" href="?page={{sales.previous_page_number}}">{% translate 'Previous' %}</a></li>
+                      {% else %}
+                          <li class="page-item disabled"><a class="page-link" href="#">{% translate 'Previous' %}</a></li>
+                      {% endif %}
+            
+                      {% for i in sales.paginator.page_range %}
+                          {% if sales.number == i %}
+                              <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                          {% else %} 
+                              <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                          {% endif %}
+                      {% endfor %} 
+            
+                      {% if sales.has_next %} 
+                          <li class="page-item"><a class="page-link" href="?page={{sales.next_page_number}}">{% translate 'Next' %}</a></li>
+                      {% else %} 
+                          <li class="page-item disabled"><a class="page-link" href="#">{% translate 'Next' %}</a></li>
+                      {% endif %}
+                  </ul>
+                  {% endif %}
+              </nav>
+              </main>
+              {% endif %}
+            </div> <!-- row.// -->
+          </div>
+          
+          
+        </section>
+        <!-- ========================= SECTION CONTENT END// ========================= -->
+        
+        
+        
+        
+        {% endblock %}

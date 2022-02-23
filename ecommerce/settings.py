@@ -201,7 +201,7 @@ if 'AWS_ACCESS_KEY_ID' in os.environ:
 
     DEFAULT_FILE_STORAGE = 'ecommerce.media_storages.MediaStorage'
 else:
-    print('DEBUG is True')
+    # print('DEBUG is True')
     STATIC_URL = '/static/'
     STATIC_ROOT = BASE_DIR / 'static'
     STATICFILES_DIRS = [
@@ -241,3 +241,11 @@ def has_rosetta_access(user):
 
 # SMS
 SMS_BACKEND = 'sms.backends.console.SmsBackend'
+
+# Image Resize
+DJANGORESIZED_DEFAULT_SIZE = [640, 640]
+DJANGORESIZED_DEFAULT_QUALITY = 100
+DJANGORESIZED_DEFAULT_KEEP_META = True
+DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'JPEG'
+DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'JPEG': ".jpg"}
+DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True

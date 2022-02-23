@@ -109,7 +109,7 @@
         </div>  -->
         <!-- row.// --> 
         <hr>
-        {% if single_product.stock <= 0 %}
+        {% if not single_product.is_available %}
         <h5>{% translate 'Out of Stock' %} </h5>
         {% else %}
         <button type="submit" class="btn  btn-primary"> <span class="text">{% translate 'Add to cart' %}</span> <i class="fas fa-shopping-cart"></i>  </button>

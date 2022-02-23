@@ -15,17 +15,17 @@
                         <!-- Start .row -->
                         <div class="col-lg-6">
                             <!-- col-lg-6 start here -->
-                            <div class="invoice-logo"><img src="{% static 'images/logo.png' %}" alt="{% translate 'Invoice logo' %}" style="max-height: 40px;"></div>
+                            <div class="invoice-logo"><img src="{% static 'images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
                         </div>
                         <!-- col-lg-6 end here -->
                         <div class="col-lg-6">
                             <!-- col-lg-6 start here -->
                             <div class="invoice-from">
                                 <ul class="list-unstyled text-right">
-                                    <li><strong>{% translate 'Invoiced To' %}</strong></li>
+                                    <li><strong>{% translate 'Invoiced To:' %}</strong></li>
                                     <li>{{order.full_name}}</li>
                                     <li>{{order.full_address}}</li>
-                                    <li>{{order.city}} - {{order.state}}</li>
+                                    <li>{{order.city}}{% if order.state %} - {{order.state}} {% endif %}</li>
                                     <li>{{order.country}}</li>
                                 </ul>
                             </div>
@@ -36,87 +36,87 @@
                             <div class="invoice-details mt25">
                                 <div class="well">
                                     <ul class="list-unstyled mb0">
-                                        <li><strong>{% translate 'Order' %}</strong> #{{order.order_number}}</li>
-                                        <li><strong>{% translate 'Transaction ID' %}</strong> #{{order.payment.payment_id}}</li>
-                                        <li><strong>{% translate 'Order Date:' %}</strong> {{order.created_at}}</li>
-                                        <li><strong>{% translate 'Status:' %}</strong> {{order.payment.status}}</li>
+                                        <li><strong>{% translate 'Order' %}</strong> #{{order_number}}</li>
+                                        <!-- <li><strong>Transaction ID</strong> #{{transID}}</li> -->
+                                        <li><strong>{% translate 'Order Date' %}</strong> {{order.created_at}}</li>
+                                        <!-- <li><strong>Status:</strong> {{payment.status}}</li> -->
                                     </ul>
                                 </div>
                             </div>
-                           
                             <div class="invoice-items">
                                 <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
+                                    {% for vendor, values in vendors_dict.items %}
                                     <table class="table table-bordered">
                                         <thead>
+                                            <tr>{% translate 'Vendor' %}: {{vendor}}</tr>
                                             <tr>
-                                                <th class="per70 text-center">{% translate 'Description' %}</th>
-                                                <th class="per5 text-center">{% translate 'Qty' %}</th>
+                                                <th class="per70 text-center">{% translate 'Product Name' %}</th>
+                                                <th class="per5 text-center">{% translate 'Quantity' %}</th>
+                                                <th class="per25 text-center">{% translate 'Unit Price' %}</th>
                                                 <th class="per25 text-center">{% translate 'Total' %}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for item in order_detail %}
+                                            {% for item in values.orderitems %}
                                             <tr>
                                                 <td>
-                                                    {% if item.product.has_variation %}
-                                                        {{item.product.product_name}} <br>
-
-                                                        {% if item.variation.color %}
-                                                            {{item.variation.color}}
-                                                        {% endif %}
-
-                                                        {% if item.variation.color and item.variation.size %}
-                                                            -
-                                                        {% endif %}
-
-                                                        {% if item.variation.size %}
-                                                            {{item.variation.size}}
-                                                        {% endif %}
-
-                                                    {% else %}
+                                                    <b>
                                                         {{item.product.product_name}}
-                                                    {% endif %}
+                                                    </b> 
+                                                        {{ item.variation.color }} : {{ item.variation.size }}
 
-                                                {% if item.variations.all %}
-                                                    {% for i in item.variations.all %} 
-                                                    <br>
-                                                    {{ i.variation_category }} : {{ i.variation_value }}
-                                                    {% endfor %}
-                                                {% endif %}
 
 
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">
-                                                    {% if item.product.has_variation %}
-                                                        ${{item.variaton.price}} USD
-                                                    {% else %}
-                                                        ${{item.product.price}} USD
-                                                    {% endif %}
-                                                </td>
+                                                <td class="text-center">${{item.product_price}} USD</td>
+                                                <td class="text-center">{{item.total}}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                            <th colspan="2" class="text-right">{% translate 'Sub Total:' %}</th>
-                                                <th class="text-center">${{subtotal}} USD</th>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Sub Total:' %}({{vendor}})</th>
+                                                <th class="text-center text-muted">${{values.delivery}} USD</th>
                                             </tr>
-                                            <tr>
-                                                <th colspan="2" class="text-right">{% translate 'Tax:' %}</th>
+                                            <!-- <tr>
+                                                <th colspan="3" class="text-right">{% translate 'Tax:' %}</th>
                                                 <th class="text-center">${{order.tax}} USD</th>
-                                            </tr>
+                                            </tr> -->
                                             
                                             <tr>
-                                                <th colspan="2" class="text-right">{% translate 'Grand Total:' %}</th>
-                                                <th class="text-center">${{order.order_total}} USD</th>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Grand Total:' %}({{vendor}})</th>
+                                                <th class="text-center text-muted">${{values.subtotal}} USD</th>
                                             </tr>
                                         </tfoot>
                                     </table>
+                                    {% endfor %}
+                                    
+                                    {% if request.GET.superuserseeall or request.user.is_staff%}
+                                    
+                                    <table class="table table-bordered">
+
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Total Material:' %}</th>
+                                                <th class="text-center text-muted">${{subtotal}} USD</th>
+                                            </tr>
+
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Total Delivery:' %}</th>
+                                                <th class="text-center text-muted">${{total_delivery}} USD</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Grand Total:' %}</th>
+                                                <th class="text-center text-muted">${{grand_total}} USD</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="invoice-footer mt25">
-                                <p class="text-center">{% translate 'Thank you for shopping with us!' %}</p>
+                                <p class="text-center">{% translate 'Thanks for your shopping!' %}</p>
                             </div>
                         </div>
                         <!-- col-lg-12 end here -->
@@ -129,6 +129,5 @@
         <!-- col-lg-12 end here -->
     </div>
     </div>
-
 
 {% endblock %}

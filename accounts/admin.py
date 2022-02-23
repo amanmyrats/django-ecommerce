@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 
-from .models import Account, UserProfile, VerificationCode
+from .models import Account, BillingAddress, UserProfile, VerificationCode, Vendor, Driver
 
 
 class AccountAdmin(UserAdmin):
@@ -21,9 +21,12 @@ class UserProfileAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" width="30" style="border-radius:50%;">'.format(object.profile_picture.url))
 
     thumbnail.short_description = 'Profile Picture'
-    list_display = ('thumbnail', 'user', 'city', 'state', 'country')
+    list_display = ('thumbnail', 'user')
 
 
 admin.site.register(Account, AccountAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(VerificationCode)
+admin.site.register(BillingAddress)
+admin.site.register(Vendor)
+admin.site.register(Driver)

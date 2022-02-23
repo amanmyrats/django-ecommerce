@@ -1,3 +1,4 @@
+from ast import Not
 from random import randint, random
 import requests
 
@@ -15,15 +16,17 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.utils.translation import gettext as _
 
-from .models import Account, UserProfile, VerificationCode
+from .models import Account, UserProfile, Vendor, VerificationCode
 from .forms import RegistrationModelForm, UserForm, UserProfileForm
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
-from orders.models import Order, OrderProduct
+from orders.models import Order, OrderProduct, OrderDelivery
+from orders.forms import OrderDeliveryModelForm
 from .utils import send_verification_sms
-
+from carts.utils import order_vendor_info
 
 def registration(request):
     if request.method == 'POST':
@@ -355,7 +358,12 @@ def my_orders(request):
 
 @login_required(login_url='login')
 def edit_profile(request):
-    userprofile = get_object_or_404(UserProfile, user=request.user)
+    try:
+        userprofile = UserProfile.objects.get(user=request.user)
+    except:
+        userprofile = UserProfile()
+        userprofile.user = request.user
+        userprofile.save()
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
@@ -363,6 +371,9 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated.')
+            return redirect('edit_profile')
+        else:
+            messages.error(request, 'Something went wrong, update failed.')
             return redirect('edit_profile')
     
     else:
@@ -406,15 +417,101 @@ def change_password(request):
 
 @login_required(login_url='login')
 def order_detail(request, order_id):
-    order_detail = OrderProduct.objects.filter(order__order_number=order_id)
-    order = Order.objects.get(order_number=order_id)
+    onlyvendorspart = request.GET.get('onlyvendorspart')
+    superuserseeall = request.GET.get('superuserseeall')
+    current_user = request.user
+    print('onlyvendorspart', onlyvendorspart)
+
+    order = get_object_or_404(Order, order_number=order_id)
+    total_delivery = 0
+    only_vendor_delivery = 0
+    vendors_dict = {}
+    if order.user==current_user or superuserseeall or current_user.is_staff:
+        order_detail = OrderProduct.objects.filter(order__order_number=order_id)
+        orderdelivery = OrderDelivery.objects.filter(order__order_number=order_id)
+        for delivery in orderdelivery:
+                total_delivery += delivery.delivery_fee
+        vendors_dict = order_vendor_info(order=order)
+    elif onlyvendorspart:
+        vendor = get_object_or_404(Vendor, user=current_user)
+        order_detail = OrderProduct.objects.filter(order__order_number=order_id, product__owner=vendor)
+        orderdelivery =get_object_or_404(OrderDelivery, order__order_number=order_id, vendor=vendor)
+        only_vendor_delivery = orderdelivery.delivery_fee
+        vendors_dict = order_vendor_info(order=order, vendor=vendor)
+    else:
+        return redirect('store')
+
     subtotal = 0
     for i in order_detail:
         subtotal += i.product_price * i.quantity
-
+    
+    grand_total = subtotal + total_delivery
+    only_vendor_grand_total = subtotal + only_vendor_delivery
     context = {
+        'vendors_dict':vendors_dict,
         'order_detail': order_detail,
         'order': order,
         'subtotal': subtotal,
+        'total_delivery':total_delivery,
+        'only_vendor_delivery':only_vendor_delivery,
+        'grand_total':grand_total,
     }
     return render(request, 'accounts/order_detail.html', context)
+
+@login_required(login_url='login')
+def my_sales(request):
+    context = {}
+    status = request.GET.get('status')
+    edit = request.GET.get('edit')
+
+    if edit:
+        sale_id = edit
+        sale = get_object_or_404(OrderDelivery, id=sale_id)
+        context['sale'] = sale
+        form = OrderDeliveryModelForm(instance=sale)
+        context['form'] = form
+        if request.method == 'POST':
+            updated_sale_form = OrderDeliveryModelForm(request.POST, instance=sale)
+            context['form'] = updated_sale_form
+            if updated_sale_form.is_valid():
+                updated_sale_form.save()
+                return redirect('my_sales')
+            else:
+                print('form is not valid')
+        return render(request, 'accounts/my_sales.html', context)
+    vendor = get_object_or_404(Vendor, user=request.user)
+    sales_all = OrderDelivery.objects.filter(vendor=vendor).order_by('-created_at')
+
+    if status:
+        sales_all = sales_all.filter(status=status)
+
+    # Pagination
+    paginator = Paginator(sales_all, 50)
+    page = request.GET.get('page')
+    sales = paginator.get_page(page)
+    sales_count = sales_all.count()
+
+    context['sales'] = sales
+    context['sales_count'] = sales_count
+    return render(request, 'accounts/my_sales.html', context)
+
+@login_required(login_url='login')
+def all_sales(request):
+    if not request.user.is_staff:
+        return redirect('dashboard')
+    context = {}
+    status = request.GET.get('status')
+    sales_all = OrderDelivery.objects.all()
+
+    if status:
+        sales_all = sales_all.filter(status=status).order_by('-created_at')
+
+    # Pagination
+    paginator = Paginator(sales_all, 50)
+    page = request.GET.get('page')
+    sales = paginator.get_page(page)
+    sales_count = sales_all.count()
+
+    context['sales'] = sales
+    context['sales_count'] = sales_count
+    return render(request, 'accounts/all_sales.html', context)

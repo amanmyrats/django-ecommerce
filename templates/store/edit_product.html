@@ -1,0 +1,229 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% block content %} 
+
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+
+  <div class="container">
+    <div class="row">
+      {% include 'includes/dashboard_sidebar.html' %}
+      <main class="col-md-9">
+        <article class="card">
+          <header class="card-header">
+            <strong class="d-inline-block mr-3">{% translate 'Edit Product' %}</strong>
+          </header> 
+          <div class="card-body">
+
+            <div class="row"> 
+              <div class="col-md-12">
+                <div class="row">
+
+                <form action="{% url 'edit_product' product_slug %}" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="shadow p-1 mb-3 bg-white rounded">
+                    <div class="form-row">
+
+                      <div class="form-group col-md-8">
+                        <label>{% translate 'Product Name' %}</label>
+                        {{ product_form.product_name }}
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label>{% translate 'Category' %}</label>
+                        {{ product_form.category }}
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group col-md-8">
+                        <label>{% translate 'Description' %}</label>
+                        {{ product_form.description }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>{% translate 'Image' %}</label>
+                        {{ product_form.image }}
+                      </div>
+                    </div>
+                  </div>
+
+                  {{ variationformset.management_form }}
+                  <div class="whole-variation-form">
+                  
+                    {% for form in variationformset %}
+                    <div class="form-row shadow p-1 mb-3 bg-white rounded every-variation-form">
+                      {{ form.id }}
+                      <div class="col-md-9">
+                        <div class="form-row">
+                  
+                          <div class="form-group col-md-5">
+                            <label>{% translate 'Color' %}</label>
+                            {{ form.color }}
+                          </div>
+                          <div class="form-group col-md-5">
+                            <label>{% translate 'Size' %}</label>
+                            {{ form.size }}
+                          </div>
+                          <div class="form-group col-md-2">
+                            <label>{% translate 'Quantity' %}</label>
+                            {{ form.quantity }}
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-2">
+                            <label>{% translate 'Currency' %}</label>
+                            {{ form.currency }}
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label>{% translate 'Initial Price' %}</label>
+                            {{ form.initial_price }}
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label>{% translate '% Expense' %}</label>
+                            {{ form.expense_percentage }}
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label>{% translate 'Fixed Expense' %}</label>
+                            {{ form.expense_fixed }}
+                          </div>
+                          <div class="col-md-1">
+                            <div class="form-group col-md-1">
+                              <label>{% translate 'Delete?' %}</label>
+                              {% if variationformset.can_delete %}
+                              <li class="form-control">{{ form.DELETE }}</li>
+                              {% endif %}
+                            </div>
+                            <p><a class="delete" hidden href="#">{% translate 'Remove' %}</a></p>
+                          </div>
+                          
+                        </div>
+                        </div>
+                        <div class="col-md-3">
+                          IMAGE
+                        </div>
+                    </div>
+                  
+                    {% endfor %}
+                  </div>
+                    <p><a id="add" href="#">Add another item</a></p>
+                        <input type="submit" value="{% translate 'Save Changes' %}" class="btn btn-primary">
+                        
+                    </form>
+                    <!-- <button class="btn btn-primary btn-large" id="addForm">Add New Variation</button> -->
+                </div>
+                
+            </div>
+        </div> <!-- row.// -->
+        {% include 'includes/alerts.html' %}
+    </div> <!-- card-body .// -->
+    
+</article> <!-- order-group.// --> 
+        </main>
+      </div> <!-- row.// -->
+    </div>
+    
+    
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  
+ 
+<script>
+    $(document).ready(function() {
+  // Code adapted from http://djangosnippets.org/snippets/1389/
+
+  function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+    var replacement = prefix + '-' + ndx + '-';
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+ replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.name) el.name = el.name.replace(id_regex, replacement);
+  }
+
+  function deleteForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+
+    if (formCount > 1) {
+      // Delete the item/form
+      $(btn).parents('.every-variation-form').remove();
+
+      var forms = $('.every-variation-form'); // Get all the forms
+
+      // Update the total number of forms (1 less than before)
+      $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+
+      var i = 0;
+      // Go through the forms and set their indices, names and IDs
+      for (formCount = forms.length; i < formCount; i++) {
+        forms.get(i).find('input,select, option').each(function() {
+          updateElementIndex(this, prefix, i);
+        });
+      }
+
+    } // End if
+    else {
+        alert("You have to enter at least one todo item!");
+    }
+    return false;
+  }
+
+
+  function addForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+
+    // You can only submit a maximum of 100 todo items 
+    if (formCount < 100) {
+      // Clone a form (without event handlers) from the first form
+      var row = $(".every-variation-form:first").clone(false).get(0);
+      console.log(row)
+      // Insert it after the last form
+      $(row).removeAttr('id').hide().insertAfter(".every-variation-form:last").slideDown(300);
+
+      // Remove the bits we don't want in the new row/form
+      // e.g. error messages
+      $(".errorlist", row).remove();
+      $(row).children().removeClass('error');
+
+      // Relabel/rename all the relevant bits
+      $(row).find('input,select, option').each(function() {
+        updateElementIndex(this, prefix, formCount);
+        if ( $(this).attr('type') == 'text' )
+          $(this).val('');
+        if ( $(this).attr('type') == 'number' )
+          $(this).val('');
+        if ( $(this).attr('selected') == 'selected' )
+          $(this).removeAttr('selected');
+      });
+
+      $(row).find('.delete').removeAttr('hidden')
+
+      // Add an event handler for the delete item/form link 
+      $(row).find('.delete').click(function() {
+        return deleteForm(this, prefix);
+      });
+
+      // Update the total form count
+      $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1); 
+
+    } // End if
+    else {
+      alert("Sorry, you can only enter a maximum of hundred items.");
+    }
+    return false;
+  }
+
+  // Register the click event handlers
+  $("#add").click(function() {
+    return addForm(this, 'variation_set');
+  });
+
+  $(".delete").click(function() {
+    return deleteForm(this, 'variation_set');
+  });
+
+
+});
+
+</script>
+  {% endblock %}

@@ -1,9 +1,15 @@
 +Edit user address, when placing order and do it multi address
 +Multi Vendor
 +Resize image when admin is uploading(see before upload and after upload)
--Modify place order page per vendor
++Vendor Page to see order dashboard, my sales
++Modify place order page per vendor
++Product filtering
++store/vendor/product url pattern
++remove vendor from variation
++Category, Sub Category
+
+
+-unit test
+-seperate order for each vendor
 -Check if image resize is working when changing images
--Vendor Page to see order dashboard, my sales
--Category, Sub Category
--Product filtering
 -Scraping Visne Bebe

@@ -1,0 +1,29 @@
+id,brand,product_code,product_name,description,is_available,category
+1,,,ATX-Jeans test,,True,2
+3,LCW,,US Polo Jacket,manual description,True,2
+4,LCW,,Wrangler T-Shirt,manual description,True,2
+38,LCW,,caga esik dukanyndan,manual description,True,2
+39,LCW,,surat etst,tawegfd,True,2
+43,LCW,,surat etsta,tawegfd,True,2
+,VisneBebe,1,Body,some description,True,2
+,VisneBebe,2,T-shirt,some description,True,2
+,VisneBebe,3,Sweater,some description,True,2
+,VisneBebe,4,Koynek,some description,True,2
+,VisneBebe,5,Jorap -1,some description,True,2
+,VisneBebe,6,Jorap -2,some description,True,2
+,VisneBebe,7,Jorap -3,some description,True,2
+,VisneBebe,8,Jorap -4,some description,True,2
+,VisneBebe,9,Jorap -5,some description,True,2
+,VisneBebe,10,Jorap -6,some description,True,2
+,VisneBebe,11,Jorap -7,some description,True,2
+,VisneBebe,12,Jorap -8,some description,True,2
+,VisneBebe,13,Jorap -9,some description,True,2
+,VisneBebe,14,Jorap -10,some description,True,2
+,VisneBebe,15,Pantalon,some description,True,2
+,VisneBebe,16,Jeans,some description,True,2
+,VisneBebe,17,Kowus,some description,True,2
+,VisneBebe,18,Ayakgap,some description,True,2
+,VisneBebe,19,mayakgap,some description,True,2
+,VisneBebe,20,sayakgap,some description,True,2
+,VisneBebe,21,tayakgap,some description,True,2
+,VisneBebe,22,dayakgap,some description,True,2

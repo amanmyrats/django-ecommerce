@@ -1,13 +1,10 @@
-from email.policy import default
 import os
 
-from operator import mod
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.db.models.fields import EmailField
-from django.forms import FloatField
 from django.utils.translation import gettext as _
-from django.utils.text import slugify
+from django_unique_slugify import unique_slugify
+from django.urls import reverse
 
 from django_resized import ResizedImageField
 
@@ -18,7 +15,7 @@ class MyAccountManager(BaseUserManager):
         #     raise ValueError('User must have an email address')
         
         if not phone_number:
-            raise ValueError('User must have an phone number')
+            raise ValueError(_('User must have a phone number'))
         
         # if not username:
         #     raise ValueError('User must have an username')
@@ -128,16 +125,20 @@ class BillingAddress(models.Model):
 
 
 class Vendor(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='vendors')
     official_name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
         return str(self.official_name)
+    
+    def get_vendor_products_url(self):
+        return reverse('store_vendor', args=[self.slug])
 
     def save(self, *args, **kwargs):
-        if self.official_name:
-            self.slug = slugify(self.official_name)
+        # if self.official_name:
+        #     self.slug = slugify(self.official_name)
+        unique_slugify(self, str(self.official_name))
         super(Vendor, self).save(*args, **kwargs)
 
 
@@ -150,6 +151,11 @@ class Driver(models.Model):
     car_year = models.CharField(max_length=4)
     car_plate = models.CharField(max_length=15)
     mobile = models.CharField(max_length=30)
+    slug = models.SlugField(blank=True)
 
     def __str__(self):
         return '{} {} {} {} {}'.format(self.first_name, self.last_name, self.car_model, self.car_plate, self.mobile)
+    
+    def save(self, *args, **kwargs):
+        unique_slugify(self, str(self.first_name))
+        super(Driver, self).save(*args, **kwargs)

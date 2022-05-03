@@ -1,0 +1,140 @@
+{% extends 'base.html' %} 
+{% load i18n %}
+{% load static %}
+
+{% block content %} 
+
+
+<div class="container" style="margin-top: 50px;">
+    <center><i class="fas fa-check-circle" style="font-size: 72px;margin-bottom: 20px;color: #28A745;"></i></center>
+    <h2 class="text-center">{% translate 'Ordered Successfully' %}</h2>
+	<br>
+	<div class="text-center">
+		<a href="{% url 'store' %}" class="btn btn-success">{% translate 'Continue Shopping' %}</a>
+	</div>
+</div>
+
+<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
+    <div class="row invoice row-printable">
+        <div class="col-md-12">
+            <!-- col-lg-12 start here -->
+            <div class="panel panel-default plain" id="dash_0">
+                <!-- Start .panel -->
+                <div class="panel-body p30">
+                    <div class="row">
+                        <!-- Start .row -->
+                        <div class="col-lg-6">
+                            <!-- col-lg-6 start here -->
+                            <div class="invoice-logo"><img src="{% static 'images/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
+                        </div>
+                        <!-- col-lg-6 end here -->
+                        <div class="col-lg-6">
+                            <!-- col-lg-6 start here -->
+                            <div class="invoice-from">
+                                <ul class="list-unstyled text-right">
+                                    <li><strong>{% translate 'Invoiced To:' %}</strong></li>
+                                    <li>{{order.full_name}}</li>
+                                    <li>{{order.full_address}}</li>
+                                    <li>{{order.city}}{% if order.state %} - {{order.state}} {% endif %}</li>
+                                    <li>{{order.country}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- col-lg-6 end here -->
+                        <div class="col-lg-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="invoice-details mt25">
+                                <div class="well">
+                                    <ul class="list-unstyled mb0">
+                                        <li><strong>{% translate 'Order' %}</strong> #{{order_number}}</li>
+                                        <!-- <li><strong>Transaction ID</strong> #{{transID}}</li> -->
+                                        <li><strong>{% translate 'Order Date' %}</strong> {{order.created_at}}</li>
+                                        <!-- <li><strong>Status:</strong> {{payment.status}}</li> -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="invoice-items">
+                                <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
+                                    {% for order_vendor in orders %}
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>{% translate 'Vendor' %}: {{order_vendor.vendor}}</tr>
+                                            <tr>
+                                                <th class="per70 text-center">{% translate 'Product Name' %}</th>
+                                                <th class="per5 text-center">{% translate 'Quantity' %}</th>
+                                                <th class="per25 text-center">{% translate 'Unit Price' %}</th>
+                                                <th class="per25 text-center">{% translate 'Total' %}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order_vendor.orderproducts.all %}
+                                            <tr>
+                                                <td>
+                                                    <b>
+                                                        {{item.product.product_name}}
+                                                    </b> 
+                                                        {{ item.variation.color }} : {{ item.variation.size }}
+
+
+
+                                                </td>
+                                                <td class="text-center">{{item.quantity}}</td>
+                                                <td class="text-center">${{item.product_price}} USD</td>
+                                                <td class="text-center">{{item.total}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Sub Total:' %}({{order_vendor.vendor}})</th>
+                                                <th class="text-center text-muted">${{order_vendor.subtotal}} USD</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Delivery:' %}({{order_vendor.vendor}})</th>
+                                                <th class="text-center text-muted">${{order_vendor.delivery_fee}} USD</th>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Grand Total:' %}({{order_vendor.vendor}})</th>
+                                                <th class="text-center text-muted">${{order_vendor.grand_total}} USD</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                    {% endfor %}
+                                    <table class="table table-bordered">
+
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Total Material:' %}</th>
+                                                <th class="text-center text-muted">${{subtotal}} USD</th>
+                                            </tr>
+
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Total Delivery:' %}</th>
+                                                <th class="text-center text-muted">${{total_delivery}} USD</th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Grand Total:' %}</th>
+                                                <th class="text-center text-muted">${{grand_total}} USD</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="invoice-footer mt25">
+                                <p class="text-center">{% translate 'Thanks for your shopping!' %}</p>
+                            </div>
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+                    <!-- End .row -->
+                </div>
+            </div>
+            <!-- End .panel -->
+        </div>
+        <!-- col-lg-12 end here -->
+    </div>
+    </div>
+
+
+{% endblock %}

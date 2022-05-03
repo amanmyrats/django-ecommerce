@@ -1,0 +1,10 @@
+id,brand,product_code,product_name,description,is_available,category
+1,LCW,,ATX-Jeans test,manual description,True,2
+2,LCW,,Blue T-Shirt,manual description,True,2
+3,LCW,,US Polo Jacket,manual description,True,2
+4,LCW,,Wrangler T-Shirt,manual description,True,2
+38,LCW,,caga esik dukanyndan,manual description,True,2
+39,LCW,,surat etst,tawegfd,True,2
+40,LCW,35634,Blue T-Shirt,some long description,True,2
+41,LCW,,test product,,True,2
+42,LCW,,test product,awef,True,2

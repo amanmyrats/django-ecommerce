@@ -23,28 +23,28 @@ class VariationInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_name', 'category', 'modified_date', 'is_available')
+    list_display = ('product_name', 'owner', 'category', 'modified_date', 'is_available')
     prepopulated_fields = {'slug':('product_name','image')}
     inlines = [ProductGalleryInline, VariationInline]
 
-    def save_model(self, request, obj, form, change):
-        vendor = get_vendor(request=request)
-        if vendor:
-            obj.owner = vendor
-            obj.slug = slugify(str(obj.product_name) + '-' + str(randint(1,1000000)) + '-' + str(vendor.id))
-            super().save_model(request, obj, form, change)
-            obj.slug = slugify(str(obj.product_name) + '-' + str(obj.pk))
-            super().save_model(request, obj, form, change)
+    # def save_model(self, request, obj, form, change):
+    #     vendor = get_vendor(request=request)
+    #     if vendor:
+    #         obj.owner = vendor
+    #         obj.slug = slugify(str(obj.product_name) + '-' + str(randint(1,1000000)) + '-' + str(vendor.id))
+    #         super().save_model(request, obj, form, change)
+    #         obj.slug = slugify(str(obj.product_name) + '-' + str(obj.pk))
+    #         super().save_model(request, obj, form, change)
     
-    def save_formset(self, request, form, formset, change):
-        vendor = get_vendor(request=request)
-        if vendor:
-            instances = formset.save(commit=False) # gets instance from memory and add to it before saving it
-            for obj in formset.deleted_objects:
-                obj.delete()
-            for instance in instances:
-                instance.owner = vendor
-                instance.save()
+    # def save_formset(self, request, form, formset, change):
+        # vendor = get_vendor(request=request)
+        # if vendor:
+        #     instances = formset.save(commit=False) # gets instance from memory and add to it before saving it
+        #     for obj in formset.deleted_objects:
+        #         obj.delete()
+        #     for instance in instances:
+        #         # instance.owner = vendor
+        #         instance.save()
 
 
 class VariationAdmin(admin.ModelAdmin):

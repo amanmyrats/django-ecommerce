@@ -15,6 +15,32 @@
           <header class="card-header">
             <strong class="d-inline-block mr-3">{% translate 'All Your Products' %}</strong>
           </header>
+          <header class="card-header">
+            <strong class="d-inline-block mr-3">
+              <div class="row">
+
+                <form action="{% url 'export' %}?model_name=product" method="post" class="m-3">
+                  {% csrf_token %}
+                  <input class="btn btn-large btn-primary" type="submit" value="{% translate 'Export Products To CSV' %}">
+                </form>
+                <form action="{% url 'export' %}?model_name=variation" method="post" class="m-3">
+                  {% csrf_token %}
+                  <input class="btn btn-large btn-primary" type="submit" value="{% translate 'Export Variations To CSV' %}">
+                </form>
+                <form action="{% url 'import_csv' %}?model_name=product" method="post" enctype="multipart/form-data" class="m-3">
+                  {% csrf_token %}
+                  <input type="file" name="csv_file" id="" required>
+                  <input class="btn btn-large btn-primary" type="submit" value="{% translate 'Import Products CSV' %}">
+                </form>
+                <form action="{% url 'import_csv' %}?model_name=variation" method="post" enctype="multipart/form-data" class="m-3">
+                  {% csrf_token %}
+                  <input type="file" name="csv_file" id="" required>
+                  <input class="btn btn-large btn-primary" type="submit" value="{% translate 'Import Variation CSV' %}">
+                </form>
+              </div>
+              
+            </strong>
+          </header>
           {% for product in products %}
           <div class="card-body">
             <div class="row"> 

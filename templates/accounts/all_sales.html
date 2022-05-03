@@ -6,7 +6,7 @@
 
 <!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-conten padding-y bg">
-
+<h1>all sales.html</h1>
   <div class="container">
     <div class="row">
       {% include 'includes/dashboard_sidebar.html' %}
@@ -42,8 +42,8 @@
                       <th scope="col-md">{% translate 'Date' %}</th>
                       <!-- <th scope="col-md">{% translate 'Phone' %}</th> -->
                       <th scope="col-md">{% translate 'Order Total' %}</th>
-                      <th scope="col-md">{% translate 'Vendor Total' %}</th>
-                      <th scope="col-md">{% translate 'Delivery Fee' %}</th>
+                      <!-- <th scope="col-md">{% translate 'Vendor Total' %}</th> -->
+                      <th scope="col-md">{% translate 'Driver Fee' %}</th>
                       <th scope="col-md">{% translate 'Driver' %}</th>
                       <th scope="col-md">{% translate 'Status' %}</th>
                       <!-- <th scope="col-md">{% translate 'Edit' %}</th> -->
@@ -53,7 +53,7 @@
                   <tbody>
                             {% for sale in sales %}
                             <tr>
-                              <th scope="row"><a href="{% url 'order_detail' sale.order.order_number %}?superuserseeall=1">{{sale.order.order_number}}</a></th>
+                              <th scope="row"><a href="{% url 'order_detail' sale.order.order_number_vendor %}?superuserseeall=1">{{sale.order.order_number_vendor}}</a></th>
                               <td>{{sale.order.full_name}} <br> {{sale.order.user.phone_number}} <br> {{sale.order.phone_extra}} <br>
                                 {{sale.order.address_line_1}} <br>
                                 {{sale.order.address_line_2}} - {{sale.order.city}}</td>

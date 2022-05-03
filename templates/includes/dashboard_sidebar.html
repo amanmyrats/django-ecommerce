@@ -9,10 +9,10 @@
         {% if request.user.is_vendor %}
         <a class="list-group-item {% if '/add_product/' in request.path %}active{% endif %}" href="{% url 'add_product' %}">{% translate 'Add Product' %}</a>
         <a class="list-group-item {% if '/list_product/' in request.path %}active{% endif %}" href="{% url 'list_product' %}">{% translate 'See My Products' %}</a>
-        <a class="list-group-item {% if '/my_sales/' in request.path %}active{% endif %}" href="{% url 'my_sales' %}">{% translate 'My Sales' %}</a>
+        <a class="list-group-item {% if '/my_sales/' in request.path %}active{% endif %}" href="{% url 'vendor_sales' logged_in_vendor.slug %}">{% translate 'My Sales' %}</a>
         {% endif %}
         {% if request.user.is_staff %}
-        <a class="list-group-item {% if '/all_sales/' in request.path %}active{% endif %}" href="{% url 'all_sales' %}">{% translate 'All Sales' %}</a>
+        <a class="list-group-item {% if '/all_sales/' in request.path %}active{% endif %}" href="{% url 'sales' %}">{% translate 'All Sales' %}</a>
         {% endif %}
     </ul>
     <br>

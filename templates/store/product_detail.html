@@ -5,9 +5,13 @@
 {% block content %} 
 
 
+        
 
-<section class="section-content padding-y bg">
-    <div class="container">
+<section class="section-content padding-y bg pt-2">
+  <div class="container">
+
+      <!-- Include breadcrumb -->
+      {% include 'includes/breadcrumbs.html' with current_category=current_category current_product=single_product %}
     
     <!-- ============================ COMPONENT 1 ================================= -->
     <div class="card">
@@ -16,16 +20,16 @@
     <article class="gallery-wrap"> 
         <div class="img-big-wrap mainImage">
           <center>
-            <img src="{{single_product.image.url}}">
+            <img src="{{single_product.image_url}}">
           </center>
         </div> <!-- img-big-wrap.// -->
         
     </article> <!-- gallery-wrap .end// -->
       <ul class="thumb">
         <li>
-          <a href="{{single_product.image.url}}" target="mainImage"><img src="{{single_product.image.url}}" alt="{% translate 'Product Image' %}"></a>
+          <a href="{{single_product.image_url}}" target="mainImage"><img src="{{single_product.image_url}}" alt="{% translate 'Product Image' %}"></a>
           {% for i in product_gallery %}
-          <a href="{{i.image.url}}" target="mainImage"><img src="{{i.image.url}}" alt="{% translate 'Product Image' %}"></a>
+          <a href="{{i.image_url}}" target="mainImage"><img src="{{i.image_url}}" alt="{% translate 'Product Image' %}"></a>
           {% endfor %}
         </li>
       </ul>

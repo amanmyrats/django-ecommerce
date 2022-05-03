@@ -71,10 +71,10 @@ def add_cart(request, product_id):
                 )
                 cart.save()
             
-            is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart, variation=product_variation).exists()
+            is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart, variation=product_variation, user=None).exists()
 
             if is_cart_item_exists:
-                cart_item = CartItem.objects.get(product=product, cart=cart, variation=product_variation) 
+                cart_item = CartItem.objects.get(product=product, cart=cart, variation=product_variation, user=None) 
                 # Check the item's stock situation
                 cart_item.quantity = stock_available(variation=cart_item.variation, quantity=cart_item.quantity+requested_quantity)
                 if cart_item.quantity <= 0:
@@ -84,7 +84,7 @@ def add_cart(request, product_id):
             else:
                 cart_item = CartItem.objects.create(product = product, variation=product_variation, cart = cart, quantity = 1)
                 # Check the item's stock situation
-                cart_item.quantity = stock_available(variation=cart_item.variation, quantity=cart_item.quantity+requested_quantity)
+                cart_item.quantity = stock_available(variation=cart_item.variation, quantity=requested_quantity)
                 if cart_item.quantity <= 0:
                     cart_item.delete()
                 else:
@@ -126,6 +126,8 @@ def cart(request, total=0, quantity=0, cart_items=None):
     try:
         tax = 0
         grand_total = 0
+        vendors_dict = {}
+        total_delivery = 0
         if request.user.is_authenticated:
             cart_items = CartItem.objects.filter(user=request.user, is_active=True)
             vendors_dict = cart_vendor_info(cart_items=cart_items, user=request.user)
@@ -147,8 +149,6 @@ def cart(request, total=0, quantity=0, cart_items=None):
                 cart_item.save()
                 total += (cart_item.variation.sale_price * cart_item.quantity)
                 quantity += cart_item.quantity
-
-        total_delivery = 0
         for v in vendors_dict:
             total_delivery += vendors_dict[v]['delivery']
 
@@ -214,7 +214,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             total_delivery += vendors_dict[v]['delivery']
 
         tax = (2 * total)/100
-        grand_total = total + tax
+        grand_total = total + total_delivery
     except ObjectDoesNotExist:
         pass
     context = {

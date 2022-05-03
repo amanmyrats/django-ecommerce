@@ -1,4 +1,7 @@
+import re
+
 from django import forms
+from django.utils.translation import gettext as _
 
 from .models import Account, UserProfile
 
@@ -27,12 +30,22 @@ class RegistrationModelForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(RegistrationModelForm, self).clean()
-        password = cleaned_data['password']
-        confirm_password = cleaned_data['confirm_password']
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
         
         if password != confirm_password:
             raise forms.ValidationError(
-                "Passwords do not match!"
+                _("Passwords do not match!")
+            )
+        elif not password:
+            raise forms.ValidationError(
+                _("Passwords cannot be empty!")
+            )
+        
+        phone_number = cleaned_data.get('phone_number')
+        if not re.match('^6[1-5]{1}[0-9]{6}$', phone_number):
+            raise forms.ValidationError(
+                _("Phone number is not valid Turkmenistan Tmcell number, must in format 6x xxxxxx")
             )
 
         
@@ -46,8 +59,9 @@ class UserForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
     
+
 class UserProfileForm(forms.ModelForm):
-    profile_picture = forms.ImageField(required=False, error_messages={'invalid':("Image files only")}, widget=forms.FileInput)
+    profile_picture = forms.ImageField(required=False, error_messages={'invalid':_("Image files only")}, widget=forms.FileInput)
     class Meta:
         model = UserProfile
         fields = ['profile_picture']

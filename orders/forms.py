@@ -21,3 +21,18 @@ class OrderDeliveryModelForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
         self.fields['order'].widget.attrs['readonly'] = True
         self.fields['vendor'].widget.attrs['readonly'] = True
+
+
+class OrderPartialModelForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['order_number_vendor', 'status', 'driver', 'driver_fee']
+        readonly_fields = ['order_number_vendor']
+
+    def __init__(self, *args, **kwargs):
+        super(OrderPartialModelForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+        # self.fields['vendor'].widget.attrs['readonly'] = True
+        self.fields['order_number_vendor'].widget.attrs['readonly'] = True
+        

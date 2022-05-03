@@ -1,0 +1,12 @@
+id,product,color,size,quantity,currency,initial_price,expense_percentage,expense_fixed,final_price,sale_price,in_stock,is_active,no_change_product,no_change_color,no_change_size,no_change_brand,no_change_currency,delete?
+76,1,5,5,10,,100,100,0,0,0,False,True,tayakgap,No Variation,No Variation,VisneBebe,,
+77,2,5,5,10,,100,100,0,200,200,True,True,sayakgap,No Variation,No Variation,VisneBebe,,
+78,3,5,5,10,,100,100,0,200,200,True,True,mayakgap,No Variation,No Variation,VisneBebe,,
+79,4,5,5,10,,100,100,0,200,200,True,True,Ayakgap,No Variation,No Variation,VisneBebe,,
+80,5,5,5,10,,100,100,0,200,200,True,True,Kowus,No Variation,No Variation,VisneBebe,,
+81,6,5,5,10,,150,100,0,300,300,True,True,Jeans,No Variation,No Variation,VisneBebe,,
+82,7,5,5,10,,150,100,0,300,300,True,True,Pantalon,No Variation,No Variation,VisneBebe,,
+83,8,5,5,10,,150,100,0,300,300,True,True,Jorap -10,No Variation,No Variation,VisneBebe,,
+84,9,5,5,10,,150,100,0,300,300,True,True,Jorap -9,No Variation,No Variation,VisneBebe,,
+85,10,5,5,10,,200,100,0,400,400,True,True,Jorap -8,No Variation,No Variation,VisneBebe,,
+86,11,5,5,10,,200,100,0,400,400,True,True,Jorap -7,No Variation,No Variation,VisneBebe,,

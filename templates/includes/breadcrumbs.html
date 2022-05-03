@@ -1,0 +1,46 @@
+{% load i18n %}
+{% load mptt_tags %}
+
+
+{% if current_category.descendants or current_category.children %}
+<nav aria-label="breadcrumb" class="h6 navbar navbar-expand-lg  navbar-light bg-light">
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'store' %}">🏠</a></li>
+    {% for category in current_category.get_ancestors %}
+
+    <li class="breadcrumb-item row ml-1">
+            <a class="col" href="{{category.get_url}}">{{category.name}}</a>
+            
+        </li>
+        <span class="divider"> 
+        <div class="dropdown col m-0">
+            <button class="btn btn-info dropdown-toggle py-0 px-1 mr-2" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </button>/
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                {% for subcategory in category.get_children %}
+                <a href="{{subcategory.get_url}}" class="dropdown-item">{{subcategory.name}}</a>
+                {% endfor %}
+            </div>
+        </div> 
+         </span>
+        {% endfor %}
+    <li class="breadcrumb-item active row ml-1 mr-1" aria-current="page">
+        <a href="{{current_category.get_url}}"> {{current_category.name}} </a></li>
+        {% if not current_category.is_leaf_node %}
+        <div class="dropdown col ">
+            <button class="btn btn-info dropdown-toggle py-0 px-1 mr-2" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                {% for current_category in current_category.get_children %}
+                <a href="{{current_category.get_url}}" class="dropdown-item">{{current_category.name}}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    {% if current_product %}
+    <li class="breadcrumb-item active" aria-current="page">{{current_product.product_name}} </li>
+    {% endif %}
+    </ol>
+</nav>
+{% endif %}

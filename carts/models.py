@@ -12,35 +12,6 @@ class Cart(models.Model):
         return self.cart_id
 
 
-# class CartDelivery(models.Model):
-#     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
-#     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
-#     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    
-#     def delivery_fee(self):
-#         cartitems = CartItem.objects.filter(cart=self.cart, product__owner=self.vendor).exists()
-#         if cartitems:
-#             cartitems = CartItem.objects.filter(cart=self.cart, product__owner=self.vendor)
-#             total = 0
-#             for item in cartitems:
-#                 total += item.quantity * item.variation.sale_price
-            
-#             vendor_delivery = Delivery.objects.filter(vendor=self.vendor).first()
-            
-#             if total < vendor_delivery.free_delivery_limit:
-#                 return float(0)
-#             else:
-#                 return vendor_delivery.fee
-#         else:
-#             return float(0)
-
-#     class Meta:
-#         constraints = [models.UniqueConstraint(fields=['cart', 'user', 'vendor'], name='cart_vendor')]
-
-
-
-
-
 class CartItem(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product,  on_delete=models.CASCADE)

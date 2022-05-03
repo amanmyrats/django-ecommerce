@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'storages',
     'rosetta',
     'sms',
+    'django_filters',
+    'mptt',
 ]
 
 MIDDLEWARE = [
@@ -95,7 +97,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'category.context_processors.menu_links',
+                'category.context_processors.root_categories',
                 'carts.context_processors.counter',
+                'accounts.context_processors.vendors',
+                'store.context_processors.all_colors',
+                'store.context_processors.all_sizes',
                 'django.template.context_processors.i18n',
             ],
         },
@@ -156,7 +162,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 # TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Ashgabat'

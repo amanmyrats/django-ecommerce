@@ -2,133 +2,197 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
-    
+{% load mptt_tags %}
 <!-- ========================= SECTION PAGETOP ========================= -->
-<section class="section-pagetop bg">
+<section class="section-pagetop bg pt-2">
     <div class="container">
+        
+    <!-- Include breadcrumb -->
+    {% include 'includes/breadcrumbs.html' with current_category=current_category only %}
+        
         {% if 'search' in request.path %}
             <h2 class="title-page">{% translate 'Search Result' %}</h2>
         {% else %}
             <h2 class="title-page">{% translate 'Our Store' %}</h2>
         {% endif %}        
+
+    
+
     </div> <!-- container //  -->
     </section>
     <!-- ========================= SECTION INTRO END// ========================= -->
     
     <!-- ========================= SECTION CONTENT ========================= -->
-    <section class="section-content padding-y">
+    <section class="section-content padding-y pt-2">
     <div class="container">
     
     <div class="row">
         <aside class="col-md-3">
+            <form action="" method="get" id="filterForm">
+                {% if request.GET.search %}
+                    <input type="text" name="search" value="{{request.GET.search}}" hidden>
+                {% endif %}
             
     <div class="card">
+        {% if not vendors_page %}
         <article class="filter-group">
+        <header class="card-header">
+            <a href="#" data-toggle="collapse" data-target="#collapse_0" aria-expanded="true" class="">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Vendors </h6>
+            </a>
+        </header>
+        <div class="filter-content collapse show" id="collapse_0" style="">
+            <div class="card-body">
+                {% for vendor in vendors %}
+              <label class="checkbox-btn">
+                <input type="checkbox" value="{{ vendor.id }}" name="vendor"
+                    {% if vendor.id|slugify in current_parameters.vendor %}checked {% endif %}>
+                    <span class="btn btn-light"> {{vendor.official_name}} </span>
+                </label>
+              {% endfor %}
+              
+            </div><!-- card-body.// -->
+        </div>
+    </article> <!-- filter-group .// -->
+    {% endif %}
+    {% if not category_page %} 
+
+    <article class="filter-group">
+        <header class="card-header">
+            <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Categories </h6>
+            </a>
+        </header>
+        <div class="filter-content collapse show" id="collapse_1" style="">
+            <div class="card-body">
+                {% for category in links %}
+              <label class="checkbox-btn">
+                <input type="checkbox" value="{{ category.id }}" name="category" 
+                     {% if category.id|slugify in current_parameters.category %}checked {% endif %} >
+                <span class="btn btn-light"> {{category.name}} </span>
+             </label>
+             
+              {% endfor %}
+              
+        </div><!-- card-body.// -->
+        </div>
+    </article> <!-- filter-group .// -->
+    {% endif %}
+
+       
+       
+       
+       <article class="filter-group">
             <header class="card-header">
-                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down"></i>
-                    <h6 class="title">{% translate 'Categories' %}</h6>
+                    <h6 class="title">Colors </h6>
                 </a>
             </header>
-            <div class="filter-content collapse show" id="collapse_1" style="">
+            <div class="filter-content collapse show" id="collapse_2" style="">
                 <div class="card-body">
-                    
-                    <ul class="list-menu">
-                        <li><a href="{% url 'store' %}">{% translate 'All Products' %}</a></li>
-                        {% for category in links %}
-                        <li><a href="{{ category.get_url }}">{{ category.category_name }}</a></li>
-                        {% endfor %}
-                    </ul>
-    
-                </div> <!-- card-body.// -->
+                    {% for color in all_colors %}
+                  <label class="checkbox-btn">
+                    <input type="checkbox" value="{{ color.id }}" name="color"
+                        {% if color.id|slugify in current_parameters.color %}checked {% endif %}>
+                    <span class="btn btn-light"> {{color.name}} </span>
+                  </label>
+                  {% endfor %}
+                  
+            </div><!-- card-body.// -->
             </div>
-        </article> <!-- filter-group  .// -->
+        </article> <!-- filter-group .// -->
+
         <article class="filter-group">
             <header class="card-header">
-                <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
+                <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down"></i>
                     <h6 class="title">Sizes </h6>
                 </a>
             </header>
-            <div class="filter-content collapse show" id="collapse_4" style="">
+            <div class="filter-content collapse show" id="collapse_3" style="">
                 <div class="card-body">
+                    {% for size in all_sizes %}
                   <label class="checkbox-btn">
-                    <input type="checkbox">
-                    <span class="btn btn-light"> XS </span>
+                    <input type="checkbox" value="{{ size.id }}" name="size"
+                        {% if size.id|slugify in current_parameters.size %}checked {% endif %}>
+                    <span class="btn btn-light"> {{size.name}} </span>
                   </label>
-    
-                  <label class="checkbox-btn">
-                    <input type="checkbox">
-                    <span class="btn btn-light"> SM </span>
-                  </label>
-    
-                  <label class="checkbox-btn">
-                    <input type="checkbox">
-                    <span class="btn btn-light"> LG </span>
-                  </label>
-    
-                  <label class="checkbox-btn">
-                    <input type="checkbox">
-                    <span class="btn btn-light"> XXL </span>
-                  </label>
+                  {% endfor %}
+                  
             </div><!-- card-body.// -->
             </div>
         </article> <!-- filter-group .// -->
         
         <article class="filter-group">
             <header class="card-header">
-                <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down"></i>
                     <h6 class="title">{% translate 'Price range ' %}</h6>
                 </a>
             </header>
-            <div class="filter-content collapse show" id="collapse_3" style="">
+            <div class="filter-content collapse show" id="collapse_4" style="">
                 <div class="card-body">
                     
                     <div class="form-row">
                     <div class="form-group col-md-6">
-                      <label>Min</label>
+                      <label>{% translate 'Min Price' %}</label>
                       <!-- <input class="form-control" placeholder="$0" type="number"> -->
-                          <select class="mr-2 form-control">
-                            <option value="0">$0</option>
-                            <option value="50">$50</option>
-                            <option value="100">$100</option>
-                            <option value="150">$150</option>
-                            <option value="200">$200</option>
-                            <option value="500">$500</option>
-                            <option value="1000">$1000</option>
+                          <select class="mr-2 form-control" name="min_price">
+                            <option></option>
+                            <option value="50" {% if 50|slugify in current_parameters.min_price %} selected {% endif %}>50</option>
+                            <option value="100" {% if 100|slugify in current_parameters.min_price %} selected {% endif %}>100</option>
+                            <option value="150" {% if 150|slugify in current_parameters.min_price %} selected {% endif %}>150</option>
+                            <option value="200" {% if 200|slugify in current_parameters.min_price %} selected {% endif %}>200</option>
+                            <option value="500" {% if 500|slugify in current_parameters.min_price %} selected {% endif %}>500</option>
+                            <option value="1000" {% if 1000|slugify in current_parameters.min_price %} selected {% endif %}>1000</option>
                         </select>
                     </div>
                     <div class="form-group text-right col-md-6">
-                      <label>Max</label>
-                          <select class="mr-2 form-control">
-                            <option value="50">$50</option>
-                            <option value="100">$100</option>
-                            <option value="150">$150</option>
-                            <option value="200">$200</option>
-                            <option value="500">$500</option>
-                            <option value="1000">$1000</option>
-                            <option value="2000">$2000+</option>
+                      <label>{% translate 'Max Price' %}</label>
+                          <select class="mr-2 form-control" name="max_price">
+                            <option></option>
+                            <option value="10000" {% if 10000|slugify in current_parameters.max_price %} selected {% endif %}>10000+</option>
+                            <option value="50" {% if 50|slugify in current_parameters.max_price %} selected {% endif %}>50</option>
+                            <option value="100" {% if 100|slugify in current_parameters.max_price %} selected {% endif %}>100</option>
+                            <option value="150" {% if 150|slugify in current_parameters.max_price %} selected {% endif %}>150</option>
+                            <option value="200" {% if 200|slugify in current_parameters.max_price %} selected {% endif %}>200</option>
+                            <option value="500" {% if 500|slugify in current_parameters.max_price %} selected {% endif %}>500</option>
+                            <option value="1000" {% if 1000|slugify in current_parameters.max_price %} selected {% endif %}>1000</option>
+                            <option value="2000" {% if 2000|slugify in current_parameters.max_price %} selected {% endif %}>2000</option>
                         </select>
                     </div>
                     </div> <!-- form-row.// -->
-                    <button class="btn btn-block btn-primary">{% translate 'Apply' %}</button>
                 </div><!-- card-body.// -->
             </div>
         </article> <!-- filter-group .// -->
         
     </div> <!-- card.// -->
-    
-        </aside> <!-- col.// -->
-        <main class="col-md-9">
+    <input  class="btn btn-block btn-primary" type="submit" value="{% translate 'Apply Filter' %}">
+    <a href="?" class="btn btn-block btn-primary">{% translate 'Clear Filter' %}</a>
+</aside> <!-- col.// -->
+<main class="col-md-9">
     
     <header class="border-bottom mb-4 pb-3">
             <div class="form-inline">
                 <span class="mr-md-auto"><b>{{ product_count }}</b> {% translate 'Items found' %} </span>
-                
+
+                <!-- Sorting -->
+                <div class="form-row">
+                    <label>{% translate 'Sort' %} </label>
+                    <!-- <input class="form-control" placeholder="$0" type="number"> -->
+                    <select class="mr-2 form-control" name="order" id="order">
+                        <option></option>
+                        <option value="lowtohigh" {% if 'lowtohigh' in current_parameters.order %} selected {% endif %}>{% translate 'Low To High' %}</option>
+                        <option value="hightolow" {% if 'hightolow' in current_parameters.order %} selected {% endif %}>{% translate 'High To Low' %}</option>
+                    </select>
+                </div> <!-- form-row.// -->
             </div>
-    </header><!-- sect-heading -->
-    
+        </header><!-- sect-heading -->
+        
+    </form>
     <div class="row">
         {% if products %}
         {% for product in products %}
@@ -137,7 +201,7 @@
                 <div class="img-wrap"> 
                     
                     <a href="{{product.get_url}}">
-                        <img src="{{ product.image.url }}">
+                        <img src="{{ product.image_url }}">
                     </a>
                     
                 </div> <!-- img-wrap.// -->
@@ -166,28 +230,27 @@
         {% endif %}
     </div> <!-- row end.// -->
     
-    
     <nav class="mt-4" aria-label="Page navigation sample">
-        {% if products.has_other_pages %}
+        {% if page_obj.has_other_pages %}
         <ul class="pagination">
-            {% if products.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">{% translate 'Previous' %}</a></li>
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}&{{ current_url_parameter_except_page }}">{% translate 'Previous' %}</a></li>
             {% else %}
-                <li class="page-item disabled"><a class="page-link" href="#">{% translate 'Previous' %}</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#?{{ current_url_parameter_except_page }}">{% translate 'Previous' %}</a></li>
             {% endif %}
 
-            {% for i in products.paginator.page_range %}
-                {% if products.number == i %}
-                    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+            {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li class="page-item active"><a class="page-link" href="#?{{ current_url_parameter_except_page }}">{{i}}</a></li>
                 {% else %} 
-                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{i}}&{{ current_url_parameter_except_page }}">{{i}}</a></li>
                 {% endif %}
             {% endfor %} 
 
-            {% if products.has_next %} 
-                <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">{% translate 'Next' %}</a></li>
+            {% if page_obj.has_next %} 
+                <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}&{{ current_url_parameter_except_page }}">{% translate 'Next' %}</a></li>
             {% else %} 
-                <li class="page-item disabled"><a class="page-link" href="#">{% translate 'Next' %}</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#?{{ current_url_parameter_except_page }}">{% translate 'Next' %}</a></li>
             {% endif %}
         </ul>
         {% endif %}
@@ -201,4 +264,20 @@
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
     
+    {% endblock %}
+
+{% block js %}
+    <script>
+    console.log("beginning")
+    
+        $(document).ready(function(){
+            console.log("document ready")
+    
+            $("#order").change(function(){
+                console.log("order changed")
+                $("#filterForm").submit();
+                console.log("form submitted")
+            });
+    });
+    </script>
 {% endblock %}

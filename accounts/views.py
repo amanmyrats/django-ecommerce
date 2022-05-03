@@ -1,5 +1,5 @@
-from ast import Not
 from random import randint, random
+from attr import fields
 import requests
 
 from django.contrib import messages, auth
@@ -8,7 +8,10 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import FormMixin
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -18,20 +21,23 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.utils.translation import gettext as _
+import django_filters
 
 from .models import Account, UserProfile, Vendor, VerificationCode
 from .forms import RegistrationModelForm, UserForm, UserProfileForm
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
 from orders.models import Order, OrderProduct, OrderDelivery
-from orders.forms import OrderDeliveryModelForm
+from orders.forms import OrderDeliveryModelForm, OrderPartialModelForm
 from .utils import send_verification_sms
 from carts.utils import order_vendor_info
 
 def registration(request):
     if request.method == 'POST':
+        # print('request is post')
         form = RegistrationModelForm(request.POST)
         if form.is_valid():
+            # print('form is valid')
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             phone_number = form.cleaned_data['phone_number']
@@ -47,12 +53,12 @@ def registration(request):
                 password=password
             )
             user.save()
-
+            # print('user created successfully', user)
             # Create instance of User in UserProfile model
             newly_registrated_user_profile = UserProfile()
             newly_registrated_user_profile.user = user
             newly_registrated_user_profile.save()
-
+            # print('newly registered user registered into UserProfile model')
 
             # USER ACTIVATION with mail
                 # current_site = get_current_site(request)
@@ -73,11 +79,16 @@ def registration(request):
             send_verification_sms(user=user)
 
             return redirect('/accounts/login/?command=mobileverification&mobile='+phone_number)
+        else:
+            # print('form is not valid')
+            context = {'form':form}
+            return render(request, 'accounts/registration.html', context)
     else:
         form = RegistrationModelForm()
     context = {
         'form':form,
     }
+    
     return render(request, 'accounts/registration.html', context)
 
 
@@ -85,17 +96,28 @@ def update_phone_number(request):
     if request.method == 'POST':
         current_phone_number = request.POST.get('current_phone_number')
         updated_phone_number  = request.POST.get('updated_phone_number')
-        possible_updated_user = Account.objects.filter(phone_number=updated_phone_number)
-        if len(possible_updated_user)>0:
+        possible_updated_user = Account.objects.filter(phone_number=updated_phone_number).exists()
+        if possible_updated_user:
             messages.info(request, 'This number is already a member!')
-            return redirect('login')
-        # print('current_phone_number', current_phone_number)
-        # print('updated_phone_number', updated_phone_number)
+            if request.user.is_authenticated:
+                return redirect(reverse('edit_profile'))
+            else:
+                return redirect('login')
         if current_phone_number is not None:
+            user = Account.objects.filter(phone_number=current_phone_number).exists()
+            if not user:
+                messages.info(request, 'There is no user with this phone number, please register first!')
+                return redirect('registration')
             user = Account.objects.filter(phone_number=current_phone_number).first()
+            # if request.user.phone_number:
+            #     pass
             if user.is_active:
-                if not user.phone_number == request.user.phone_number:
-                    messages.info(request, 'This user is already active!')
+                if request.user.is_authenticated:
+                    if not user.phone_number == request.user.phone_number:
+                        messages.info(request, 'This user is already active!')
+                        return redirect('login')
+                else:
+                    messages.info(request, 'This user is already active, if that is you, please login!')
                     return redirect('login')
             # print('user', user)
             if user is not None:
@@ -106,7 +128,7 @@ def update_phone_number(request):
                 # Send SMS
                 send_verification_sms(user=user)
 
-                if not request.user == 'Anonmous':
+                if request.user.is_authenticated:
                     logout(request)
                 return redirect('/accounts/login/?command=mobileverification&mobile='+updated_phone_number)
     current_phone_number_from_get_request = request.GET.get('current_phone_number')
@@ -213,19 +235,27 @@ def activate_by_phone_number(request):
             # user = Account.objects.get(phone_number=phone_number)
             user = get_object_or_404(Account, phone_number=phone_number)
             # print('user', user)
-            true_verification_code = user.verificationcode.code
+            try:
+                true_verification_code = user.verificationcode.code
+            except:
+                true_verification_code = None
             # print('true_verification_code', true_verification_code)
-            if mobile_verification_code==true_verification_code:
-                user.is_active=True 
-                user.save()
-                verified_user = VerificationCode.objects.filter(user=user)
-                for vu in verified_user:
-                    vu.delete()
-                messages.success(request, 'Your account was activated successfully! You can login now.')
-                return redirect('login')
+            if true_verification_code:
+                if mobile_verification_code==true_verification_code:
+                    user.is_active=True 
+                    user.save()
+                    verified_user = VerificationCode.objects.filter(user=user)
+                    for vu in verified_user:
+                        vu.delete()
+                    messages.success(request, 'Your account was activated successfully! You can login now.')
+                    return redirect('login')
+                else:
+                    print('verification code is not same')
+                    messages.error(request, 'Invalid Activation Code')
+                    return redirect('registration')
             else:
-                print('verification code is not same')
-                messages.error(request, 'Invalid Activation Code')
+                print('Interesting, there is no verification code assigned to this user.')
+                messages.error(request, 'Interesting, there is no verification code assigned to this user.')
                 return redirect('registration')
         except:
             # print('no user found')
@@ -262,7 +292,7 @@ def forgotPassword(request):
             # FORGOT PASSWORD WITH PHONE NUMBER
             send_verification_sms(user=user)
 
-            messages.success(request, 'We have sent code to reset your password, write code here to reset your password.')
+            messages.success(request, 'We have sent a code to reset your password, write code here to reset your password.')
             context = {
                 'phone_number':phone_number,
             }
@@ -296,26 +326,37 @@ def resetpassword_validate(request, uidb64, token):
 
 
 def resetpassword_validate_by_mobile(request):
-    phone_number = request.POST.get('phone_number')
-    verification_code = request.POST.get('verification_code')
-    user = Account.objects.filter(phone_number=phone_number).first()
-    verificationcode_from_database = VerificationCode.objects.filter(user=user).first()
-
-    if str(verificationcode_from_database) == str(verification_code):
+    if request.method == 'POST':
+        phone_number = request.POST.get('phone_number')
+        verification_code = request.POST.get('verification_code')
+        user_exists = Account.objects.filter(phone_number=phone_number).exists()
+        if not user_exists:
+            messages.error(request, _('This user does not exist'))
+            return redirect('login')
+        user = Account.objects.filter(phone_number=phone_number).first()
+        verificationcode_from_database_exists = VerificationCode.objects.filter(user=user).exists()
+        if not verificationcode_from_database_exists:
+            messages.error(request, _('We did not send you any verification code.'))
+            return redirect('login')
+        verificationcode_from_database = VerificationCode.objects.filter(user=user).first()
         try:
             check_old_verification = VerificationCode.objects.filter(user=user)
             for u in check_old_verification:
                 u.delete()
         except:
             pass
-        messages.success(request, _('Please choose new password.'))
-        context = {
-            'phone_number':phone_number,
-        }
-        return render(request, 'accounts/resetPassword.html', context)
+        if str(verificationcode_from_database) == str(verification_code):
+            messages.success(request, _('Please choose new password.'))
+            context = {
+                'phone_number':phone_number,
+            }
+            return render(request, 'accounts/resetPassword.html', context)
+        else:
+            messages.error(request, _('This code is not matching!'))
+            return redirect('login')
+            
     else:
-        messages.error(request, _('This code is not matching!'))
-        return redirect('login')
+        return redirect('resetPassword')
         
 
 def resetPassword(request):
@@ -391,127 +432,159 @@ def edit_profile(request):
 @login_required(login_url='login')
 def change_password(request):
     if request.method == 'POST':
-        current_password = request.POST['current_password']
-        new_password = request.POST['new_password']
-        confirm_password = request.POST['confirm_password']
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
 
-        user = Account.objects.get(phone_number__exact=request.user.phone_number)
+        user = get_object_or_404(Account, phone_number__exact=request.user.phone_number)
 
         if new_password == confirm_password:
             success = user.check_password(current_password)
             if success:
                 user.set_password(new_password)
                 user.save()
-                # auth.logout(request)
+                auth.logout(request)
                 messages.success(request, 'Password updated successfully.')
-                return redirect('change_password')
+                return redirect('login')
             else:
                 messages.error(request, 'Please enter valid current password!')
-                return redirect('change_password')
         else:
             messages.error(request, 'Password does not match!')
-            return redirect('change_password')
+        return redirect('change_password')
     context = {}
     return render(request, 'accounts/change_password.html', context)
 
-
 @login_required(login_url='login')
-def order_detail(request, order_id):
-    onlyvendorspart = request.GET.get('onlyvendorspart')
-    superuserseeall = request.GET.get('superuserseeall')
+def order_detail(request, order_vendor_id):
+    # superuserseeall = request.GET.get('superuserseeall')
     current_user = request.user
-    print('onlyvendorspart', onlyvendorspart)
 
-    order = get_object_or_404(Order, order_number=order_id)
-    total_delivery = 0
-    only_vendor_delivery = 0
-    vendors_dict = {}
-    if order.user==current_user or superuserseeall or current_user.is_staff:
-        order_detail = OrderProduct.objects.filter(order__order_number=order_id)
-        orderdelivery = OrderDelivery.objects.filter(order__order_number=order_id)
-        for delivery in orderdelivery:
-                total_delivery += delivery.delivery_fee
-        vendors_dict = order_vendor_info(order=order)
-    elif onlyvendorspart:
-        vendor = get_object_or_404(Vendor, user=current_user)
-        order_detail = OrderProduct.objects.filter(order__order_number=order_id, product__owner=vendor)
-        orderdelivery =get_object_or_404(OrderDelivery, order__order_number=order_id, vendor=vendor)
-        only_vendor_delivery = orderdelivery.delivery_fee
-        vendors_dict = order_vendor_info(order=order, vendor=vendor)
+    order = get_object_or_404(Order, order_number_vendor=order_vendor_id)
+    if order.user==current_user or current_user.is_staff:
+        context = {
+            'order': order,
+        }
+        return render(request, 'accounts/order_detail.html', context)
     else:
         return redirect('store')
 
-    subtotal = 0
-    for i in order_detail:
-        subtotal += i.product_price * i.quantity
+
+# @login_required(login_url='login')
+# def my_sales(request):
+#     context = {}
+#     status = request.GET.get('status')
+#     edit = request.GET.get('edit')
+
+#     if edit:
+#         sale_id = edit
+#         sale = get_object_or_404(OrderDelivery, id=sale_id)
+#         context['sale'] = sale
+#         form = OrderDeliveryModelForm(instance=sale)
+#         context['form'] = form
+#         if request.method == 'POST':
+#             updated_sale_form = OrderDeliveryModelForm(request.POST, instance=sale)
+#             context['form'] = updated_sale_form
+#             if updated_sale_form.is_valid():
+#                 updated_sale_form.save()
+#                 return redirect('my_sales')
+#             else:
+#                 print('form is not valid')
+#         return render(request, 'accounts/my_sales.html', context)
+#     vendor = get_object_or_404(Vendor, user=request.user)
+#     sales_all = OrderDelivery.objects.filter(vendor=vendor).order_by('-created_at')
+
+#     if status:
+#         sales_all = sales_all.filter(status=status)
+
+#     # Pagination
+#     paginator = Paginator(sales_all, 50)
+#     page = request.GET.get('page')
+#     sales = paginator.get_page(page)
+#     sales_count = sales_all.count()
+
+#     context['sales'] = sales
+#     context['sales_count'] = sales_count
+#     return render(request, 'accounts/my_sales.html', context)
+
+# @login_required(login_url='login')
+# def all_sales(request):
+#     if not request.user.is_staff:
+#         return redirect('dashboard')
+#     context = {}
+#     status = request.GET.get('status')
+#     sales_all = OrderDelivery.objects.all()
+
+#     if status:
+#         sales_all = sales_all.filter(status=status).order_by('-created_at')
+
+#     # Pagination
+#     paginator = Paginator(sales_all, 50)
+#     page = request.GET.get('page')
+#     sales = paginator.get_page(page)
+#     sales_count = sales_all.count()
+
+#     context['sales'] = sales
+#     context['sales_count'] = sales_count
+#     return render(request, 'accounts/all_sales.html', context)
+
+class SalesFilterSet(django_filters.FilterSet):
+    class Meta:
+        model = Order 
+        fields = ['status']
+
+
+class SalesListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'accounts/sales.html'
+    context_object_name = 'sales'
+    paginate_by = 10
+    login_url = '/accounts/login/'
+
+    def get_queryset(self):
+        vendor_slug = self.kwargs.get('vendor_slug')
+        print('vendor slug', vendor_slug)
+        sales = Order.objects.all()
+        if vendor_slug:
+            sales = sales.filter(vendor__slug=vendor_slug)
+        if self.request.GET.get('status'):
+            sales = SalesFilterSet(self.request.GET, queryset=sales).qs.distinct()
+        return sales
+
+    def get_context_data(self, **kwargs):
+        context = super(SalesListView, self).get_context_data(**kwargs)
+        return context
+
+
+class SaleDetailView(LoginRequiredMixin, FormMixin, DetailView):
+    model = Order
+    template_name = 'accounts/order_detail.html'
+    context_object_name = 'order'
+    slug_url_kwarg = 'order_slug'     
+    form_class = OrderPartialModelForm
+
+    def get_success_url(self):
+        try:
+            vendor = Vendor.objects.get(user=self.request.user)
+            return reverse('vendor_sales', kwargs={'vendor_slug':vendor.slug})
+        except Vendor.DoesNotExist:
+            return reverse('sales')
+        # if self.request.user.is_vendor:
+        # else:
+        #     return reverse('sales')
     
-    grand_total = subtotal + total_delivery
-    only_vendor_grand_total = subtotal + only_vendor_delivery
-    context = {
-        'vendors_dict':vendors_dict,
-        'order_detail': order_detail,
-        'order': order,
-        'subtotal': subtotal,
-        'total_delivery':total_delivery,
-        'only_vendor_delivery':only_vendor_delivery,
-        'grand_total':grand_total,
-    }
-    return render(request, 'accounts/order_detail.html', context)
-
-@login_required(login_url='login')
-def my_sales(request):
-    context = {}
-    status = request.GET.get('status')
-    edit = request.GET.get('edit')
-
-    if edit:
-        sale_id = edit
-        sale = get_object_or_404(OrderDelivery, id=sale_id)
-        context['sale'] = sale
-        form = OrderDeliveryModelForm(instance=sale)
+    def get_context_data(self, **kwargs):
+        context = super(SaleDetailView, self).get_context_data(**kwargs)
+        form = OrderPartialModelForm(instance=self.get_object())
         context['form'] = form
-        if request.method == 'POST':
-            updated_sale_form = OrderDeliveryModelForm(request.POST, instance=sale)
-            context['form'] = updated_sale_form
-            if updated_sale_form.is_valid():
-                updated_sale_form.save()
-                return redirect('my_sales')
-            else:
-                print('form is not valid')
-        return render(request, 'accounts/my_sales.html', context)
-    vendor = get_object_or_404(Vendor, user=request.user)
-    sales_all = OrderDelivery.objects.filter(vendor=vendor).order_by('-created_at')
-
-    if status:
-        sales_all = sales_all.filter(status=status)
-
-    # Pagination
-    paginator = Paginator(sales_all, 50)
-    page = request.GET.get('page')
-    sales = paginator.get_page(page)
-    sales_count = sales_all.count()
-
-    context['sales'] = sales
-    context['sales_count'] = sales_count
-    return render(request, 'accounts/my_sales.html', context)
-
-@login_required(login_url='login')
-def all_sales(request):
-    if not request.user.is_staff:
-        return redirect('dashboard')
-    context = {}
-    status = request.GET.get('status')
-    sales_all = OrderDelivery.objects.all()
-
-    if status:
-        sales_all = sales_all.filter(status=status).order_by('-created_at')
-
-    # Pagination
-    paginator = Paginator(sales_all, 50)
-    page = request.GET.get('page')
-    sales = paginator.get_page(page)
-    sales_count = sales_all.count()
-
-    context['sales'] = sales
-    context['sales_count'] = sales_count
-    return render(request, 'accounts/all_sales.html', context)
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        form = OrderPartialModelForm(request.POST, instance=self.get_object())
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return render(request, self.template_name, {'errors': form.errors, 'form':form})
+    
+    def form_valid(self, form):
+        form.save()
+        return super(SaleDetailView, self).form_valid(form)

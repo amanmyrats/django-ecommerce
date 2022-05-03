@@ -19,9 +19,14 @@ urlpatterns = [
     path('update_phone_number/', views.update_phone_number, name='update_phone_number'),
 
     path('my_orders/', views.my_orders, name='my_orders'),
+    path('order_detail/<int:order_vendor_id>/', views.order_detail, name='order_detail'),
+    # path('order_detail_test/<int:order_vendor_id>/', views.order_detail_test, name='order_detail_test'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('change_password/', views.change_password, name='change_password'),
-    path('order_detail/<int:order_id>/', views.order_detail, name='order_detail'),
-    path('my_sales/', views.my_sales, name='my_sales'),
-    path('all_sales/', views.all_sales, name='all_sales'),
+    # path('my_sales/', views.my_sales, name='my_sales'),
+    # path('all_sales/', views.all_sales, name='all_sales'),
+
+    path('all_sales/', views.SalesListView.as_view(), name='sales'),
+    path('my_sales/<slug:vendor_slug>/', views.SalesListView.as_view(), name='vendor_sales'),
+    path('my_sales/<slug:vendor_slug>/<slug:order_slug>/', views.SaleDetailView.as_view(), name='vendor_sale_detail'),
 ]

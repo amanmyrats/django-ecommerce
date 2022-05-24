@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 from accounts.models import BillingAddress
 from .models import Order, OrderProduct, Payment, OrderDelivery
@@ -204,12 +205,16 @@ def place_order(request, total=0, quantity=0):
                         orderproduct.user_id = request.user.id
                         orderproduct.product_id = item.product_id
                         orderproduct.variation_id = item.variation_id
-                        orderproduct.product_price = item.variation.sale_price
                         orderproduct.quantity = item.quantity
+                        orderproduct.product_price = item.variation.sale_price
+                        orderproduct.package_price = item.variation.package_price
                         orderproduct.ordered = True
                         orderproduct.save()
 
-                        subtotal += orderproduct.quantity*orderproduct.product_price
+                        if settings.WHOLESALE:
+                            subtotal += orderproduct.quantity*orderproduct.package_price
+                        else:
+                            subtotal += orderproduct.quantity*orderproduct.product_price
 
                     # Reduce the quantity of the sold products
                     product = Variation.objects.get(id=item.variation.id)
@@ -311,10 +316,10 @@ def order_complete(request, order_no=None):
             # 'order_number': order.order_number,
             # 'transID': payment.payment_id,
             # 'payment': payment,
-            'total_delivery':total_delivery,
             'subtotal': subtotal,
+            'total_delivery':total_delivery,
             'grand_total':grand_total,
         }
-        return render(request, 'orders/order_complete_test.html', context)
+        return render(request, 'orders/order_complete.html', context)
     except(Payment.DoesNotExist, Order.DoesNotExist):
         return redirect('home')

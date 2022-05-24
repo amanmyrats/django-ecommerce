@@ -17,6 +17,8 @@ from django.utils.translation import gettext as _
 from django.forms import inlineformset_factory
 from django.core.files.storage import default_storage
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 import django_filters
 
@@ -99,7 +101,7 @@ def search(request):
     }
     return render(request, 'store/store.html', context )
 
-
+@login_required(login_url='login')
 def submit_review(request, product_id):
     url = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
@@ -128,6 +130,7 @@ def variation_price(request):
     product_id = request.GET.get('product_id')
     color_id = request.GET.get('color_id')
     size_id = request.GET.get('size_id')
+    items_in_package = 1
 
     context = {}
 
@@ -157,12 +160,15 @@ def variation_price(request):
         variation = Variation.objects.get(product_id=product_id, color_id=color_id, size_id=size_id)
         context['price'] = variation.sale_price
         context['variation_id'] = variation.id
+        context['items_in_package'] = variation.items_in_package
+        context['package_price'] = variation.package_price
     except Variation.DoesNotExist:
         pass
     return JsonResponse(context)
 
 # Here check if user is in vendors group
 # and logged in
+@login_required(login_url='login')
 def add_product(request):
     print('inside add_product')
     context = {}
@@ -186,7 +192,7 @@ def add_product(request):
     context['add_product_form'] = add_product_form
     return render(request, 'store/add_product.html', context)
 
-
+@login_required(login_url='login')
 def edit_product(request, product_slug=None):
     context = {}
     context['product_slug'] = product_slug
@@ -238,7 +244,7 @@ def edit_product(request, product_slug=None):
             return redirect('list_product')
         else:
             variationformset = VariationInlineFormSet(request.POST, request.FILES,instance=product, 
-                                queryset=Variation.objects.filter(owner=vendor))
+                                queryset=Variation.objects.filter(product__owner=vendor))
             messages.error(request, _('Error when saving changes.'))
             context['variationformset'] = variationformset
             context['product_form'] = product_form
@@ -248,6 +254,7 @@ def edit_product(request, product_slug=None):
 
 # Here check if user is in vendors group
 # and logged in
+@login_required(login_url='login')
 def list_product(request):
     context = {}
     vendor = get_vendor(request=request)
@@ -489,6 +496,22 @@ class ProductDetailView(DetailView):
                 orderproduct = None
         else:
             orderproduct = None
+        
+        is_single_variation = False 
+        is_all_variation_same_price = False
+        items_in_package = 0
+        item_unit_price = 0
+        item_total_price = 0
+        if single_product.lowest_price==single_product.highest_price:
+            is_all_variation_same_price = True
+            items_in_package = single_product.productvariations.first().items_in_package
+            item_unit_price = single_product.productvariations.first().sale_price
+            item_total_price = items_in_package * item_unit_price
+        if single_product.productvariations.count()==1:
+            is_single_variation = True
+            items_in_package = single_product.productvariations.first().items_in_package
+            item_unit_price = single_product.productvariations.first().sale_price
+            item_total_price = items_in_package * item_unit_price
 
         # Get the reviews
         reviews = ReviewRating.objects.filter(product_id=single_product.id, status=True)
@@ -503,5 +526,10 @@ class ProductDetailView(DetailView):
         context['product_gallery'] = product_gallery
         context['variation_gallery'] = variation_gallery
         context['current_category'] = current_category
+        context['is_all_variation_same_price'] = is_all_variation_same_price
+        context['is_single_variation'] = is_single_variation
+        context['items_in_package'] = items_in_package
+        context['item_unit_price'] = item_unit_price
+        context['item_total_price'] = item_total_price
         
         return context

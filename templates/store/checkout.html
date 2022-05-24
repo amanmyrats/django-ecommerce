@@ -110,8 +110,11 @@
                         <tr class="small text-uppercase">
                             <th scope="col">{% translate 'Product' %}</th>
                             <th scope="col" width="120">{% translate 'Quantity' %}</th>
+                            {% if is_wholesale %}
+                            <th scope="col" width="140">{% translate 'Wholesale Price' %}</th>
+                            {% else %}
                             <th scope="col" width="120">{% translate 'Price' %}</th>
-                            
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -134,12 +137,24 @@
                             <td> 
                                 <label for="">{{ cart_item.quantity }}</label>
                             </td>
+                            {% if is_wholesale %}
+                            <!-- WHOLESALE -->
                             <td> 
                                 <div class="price-wrap"> 
                                     <var class="price">${{ cart_item.sub_total }}</var> 
-                                        <small class="text-muted"> ${{ cart_item.variation.sale_price }}{% translate 'each' %} </small> 
+                                        <small class="text-muted"> ${{ cart_item.variation.package_price }} {% translate 'each package' %} </small> 
                                 </div> <!-- price-wrap .// -->
                             </td>
+                            {% else %}
+                            <!-- RETAILSALE -->
+                            <td> 
+                                <div class="price-wrap"> 
+                                    <var class="price">${{ cart_item.sub_total }}</var> 
+                                        <small class="text-muted"> ${{ cart_item.variation.sale_price }}  {% translate 'each' %} </small> 
+                                </div> <!-- price-wrap .// -->
+                            </td>
+                            {% endif %}
+
                             
                         </tr>
                         {% endfor %}
@@ -160,7 +175,7 @@
                 <div class="card">
                     <div class="card-body">
                         <dl class="dlist-align">
-                          <dt>{% translate 'Total price:' %}</dt>
+                          <dt>{% translate 'Total Price:' %}</dt>
                           <dd class="text-right">${{ total }}</dd>
                         </dl>
                         <dl class="dlist-align">

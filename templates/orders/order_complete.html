@@ -55,19 +55,23 @@
                             </div>
                             <div class="invoice-items">
                                 <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
-                                    {% for vendor, values in vendors_dict.items %}
+                                    {% for order_vendor in orders %}
                                     <table class="table table-bordered">
                                         <thead>
-                                            <tr>{% translate 'Vendor' %}: {{vendor}}</tr>
+                                            <tr>{% translate 'Vendor' %}: {{order_vendor.vendor}}</tr>
                                             <tr>
                                                 <th class="per70 text-center">{% translate 'Product Name' %}</th>
                                                 <th class="per5 text-center">{% translate 'Quantity' %}</th>
+                                                {% if is_wholesale %} 
+                                                <th class="per25 text-center">{% translate 'Wholesale Price' %}</th>
+                                                {% else %} 
                                                 <th class="per25 text-center">{% translate 'Unit Price' %}</th>
+                                                {% endif %}
                                                 <th class="per25 text-center">{% translate 'Total' %}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for item in values.orderitems %}
+                                            {% for item in order_vendor.orderproducts.all %}
                                             <tr>
                                                 <td>
                                                     <b>
@@ -78,25 +82,32 @@
 
 
                                                 </td>
-                                                <td class="text-center">{{item.quantity}}</td>
+                                                <td class="text-center">{{item.quantity}} {% translate 'package' %}</td>
+                                                {% if is_wholesale %} 
+                                                <!-- WHOLESALE -->
+                                                <td class="text-center">${{item.package_price}} USD</td>
+                                                {% else %} \
+                                                <!-- RETAILSALE -->
                                                 <td class="text-center">${{item.product_price}} USD</td>
+                                                {% endif %}
+
                                                 <td class="text-center">{{item.total}}</td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="3" class="text-right text-muted">{% translate 'Sub Total:' %}({{vendor}})</th>
-                                                <th class="text-center text-muted">${{values.delivery}} USD</th>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Sub Total:' %}({{order_vendor.vendor}})</th>
+                                                <th class="text-center text-muted">${{order_vendor.subtotal}} USD</th>
                                             </tr>
-                                            <!-- <tr>
-                                                <th colspan="3" class="text-right">{% translate 'Tax:' %}</th>
-                                                <th class="text-center">${{order.tax}} USD</th>
-                                            </tr> -->
+                                            <tr>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Delivery:' %}({{order_vendor.vendor}})</th>
+                                                <th class="text-center text-muted">${{order_vendor.delivery_fee}} USD</th>
+                                            </tr>
                                             
                                             <tr>
-                                                <th colspan="3" class="text-right text-muted">{% translate 'Grand Total:' %}({{vendor}})</th>
-                                                <th class="text-center text-muted">${{values.subtotal}} USD</th>
+                                                <th colspan="3" class="text-right text-muted">{% translate 'Grand Total:' %}({{order_vendor.vendor}})</th>
+                                                <th class="text-center text-muted">${{order_vendor.grand_total}} USD</th>
                                             </tr>
                                         </tfoot>
                                     </table>

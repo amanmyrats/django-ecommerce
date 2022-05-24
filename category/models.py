@@ -24,25 +24,18 @@ class Category(MPTTModel):
         order_insertion_by = ['name']
 
     def get_url(self):
-        # tt = self.get_slug_list()
-        # print('tt', tt)
         return reverse('products_by_category', args=[self.get_slug_list()[-1],])
     
-    # def get_url(self):
-    #     return reverse('products_by_category', args=[self.slug])
-
     def __str__(self):
         return self.name
     
     def get_slug_list(self):
         try:
             ancestors = self.get_ancestors(include_self=True)
-            # print('ancestors', ancestors)
         except:
             ancestors = []
         else:
             ancestors = [i.slug for i in ancestors]
-            # print('ancestors', ancestors)
         slugs = []
         for i in range(len(ancestors)):
             slugs.append('/'.join(ancestors[:i+1]))
@@ -51,12 +44,3 @@ class Category(MPTTModel):
     def save(self, *args, **kwargs):
         unique_slugify(self, self.name)
         return super().save(*args, **kwargs)
-
-
-
-# class Genre(MPTTModel):
-#     name = models.CharField(max_length=50, unique=True)
-#     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-
-#     class MPTTMeta:
-#         order_insertion_by = ['name']

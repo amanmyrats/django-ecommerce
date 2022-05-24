@@ -22,6 +22,8 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
+# WHOLESALE
+WHOLESALE = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -40,7 +42,6 @@ else:
 
 
 ALLOWED_HOSTS = ['sargajak-developmentenv.eba-vsmpedkh.us-west-2.elasticbeanstalk.com', 'http://127.0.0.1', '127.0.0.1', '*']
-
 
 # Application definition
 
@@ -102,6 +103,7 @@ TEMPLATES = [
                 'accounts.context_processors.vendors',
                 'store.context_processors.all_colors',
                 'store.context_processors.all_sizes',
+                'store.context_processors.wholesale_check',
                 'django.template.context_processors.i18n',
             ],
         },

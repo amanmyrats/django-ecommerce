@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.db.models import Avg, Count, UniqueConstraint
 from django_unique_slugify import unique_slugify
+from django.conf import settings
 
 from django_resized import ResizedImageField
 from mptt.models import TreeForeignKey
@@ -35,9 +36,9 @@ class Product(models.Model):
     # stock           = models.IntegerField()
     category        = TreeForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     is_available    = models.BooleanField(default=True, blank=True)
-    is_physical = models.BooleanField(default=True, null=True, blank=True)
-    location = models.CharField(max_length=20, blank=True, null=True)
-    weight = models.FloatField(blank=True, null=True)
+    is_physical     = models.BooleanField(default=True, null=True, blank=True)
+    location        = models.CharField(max_length=20, blank=True, null=True)
+    weight          = models.FloatField(blank=True, null=True)
 
     lowest_price    = models.FloatField(default=0, blank=True)
     highest_price   = models.FloatField(default=0, blank=True)
@@ -180,29 +181,35 @@ class Variation(models.Model):
         filename = '{}_thumb.jpg'.format(instance.id)
         return os.path.join('photos/products', filename)
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='productvariations')
-    sku = models.CharField(max_length=20, null=True, blank=True)
-    barcode = models.CharField(max_length=40, null=True, blank=True)
-    color = models.ForeignKey(Color, on_delete=models.PROTECT, default=1)
-    size = models.ForeignKey(Size, on_delete=models.PROTECT, default=1)
+    product  = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='productvariations')
+    sku      = models.CharField(max_length=20, null=True, blank=True)
+    barcode  = models.CharField(max_length=40, null=True, blank=True)
+    color    = models.ForeignKey(Color, on_delete=models.PROTECT, default=1)
+    size     = models.ForeignKey(Size, on_delete=models.PROTECT, default=1)
     quantity = models.IntegerField()
     
     currency = models.ForeignKey('Currency', on_delete=models.SET_NULL, null=True, blank=True)
 
-    initial_price = models.FloatField(default=0)
-    expense_percentage = models.FloatField(default=0)
-    expense_fixed = models.FloatField(default=0)
+    initial_price       = models.FloatField(default=0, blank=True)
+    expense_percentage  = models.FloatField(default=0, blank=True)
+    expense_fixed       = models.FloatField(default=0, blank=True)
 
-    final_price = models.FloatField(default=0, blank=True, null=True)
-    sale_price = models.FloatField(default=0, blank=True, null=True)
+    final_price     = models.FloatField(default=0, blank=True, null=True)
+    sale_price      = models.FloatField(default=0, blank=True, null=True)
 
     image           = ResizedImageField(size=[500,500], upload_to=medium_image_name, blank=True, null=True)
     # image_small     = ResizedImageField(size=[75,75], upload_to=small_image_name, blank=True, null=True)
     # image_thumbnail = ResizedImageField(size=[45,45], upload_to=thumb_image_name, blank=True, null=True)
 
-    in_stock = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
-    created_data = models.DateTimeField(auto_now=True)
+    min_order = models.IntegerField(default=1, blank=True)
+
+    # wholesale
+    items_in_package    = models.IntegerField(default=1, blank=True)
+    package_price       = models.FloatField(default=0, blank=True)
+
+    in_stock        = models.BooleanField(default=True)
+    is_active       = models.BooleanField(default=True)
+    created_data    = models.DateTimeField(auto_now=True)
     
     class Meta:
         constraints = [models.UniqueConstraint(fields=['product', 'color', 'size'], name='single_variation')]
@@ -229,22 +236,12 @@ class Variation(models.Model):
             self.in_stock = False
         else:
             self.in_stock = True
-        
-        # if self.currency.code != 'TMT':
-        #     self.final_price = self.final_tmt_price * 21
-        # else:
-        #     self.final_price = self.final_tmt_price
         self.sale_price = self.final_price
+
+        if settings.WHOLESALE:
+            self.package_price = self.sale_price*self.items_in_package
         super(Variation, self).save(*args, **kwargs)
         self.product.save()
-        # if self.sale_price < self.product.lowest_price:
-        #     self.product.lowest_price = self.sale_price
-        #     self.product.save()
-        # elif self.sale_price > self.product.highest_price:
-        #     print('sale price is bigger than product max')
-        #     self.product.highest_price = self.sale_price
-        #     self.product.save()
-        # super(Variation, self).save(*args, **kwargs)
 
 
 class ReviewRating(models.Model):

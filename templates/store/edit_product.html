@@ -57,11 +57,11 @@
                       <div class="col-md-9">
                         <div class="form-row">
                   
-                          <div class="form-group col-md-5">
+                          <div class="form-group col-md-4">
                             <label>{% translate 'Color' %}</label>
                             {{ form.color }}
                           </div>
-                          <div class="form-group col-md-5">
+                          <div class="form-group col-md-4">
                             <label>{% translate 'Size' %}</label>
                             {{ form.size }}
                           </div>
@@ -69,6 +69,12 @@
                             <label>{% translate 'Quantity' %}</label>
                             {{ form.quantity }}
                           </div>
+                          {% if is_wholesale %}
+                          <div class="form-group col-md-2">
+                            <label>{% translate 'Items in Package' %}</label>
+                            {{ form.items_in_package }}
+                          </div>
+                          {% endif %}
                         </div>
                         <div class="form-row">
                           <div class="form-group col-md-2">
@@ -171,9 +177,11 @@
 
   function addForm(btn, prefix) {
     var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    console.log("total forms" + '#id_' + prefix + '-TOTAL_FORMS')
+    console.log("formCount" + formCount)
 
     // You can only submit a maximum of 100 todo items 
-    if (formCount < 100) {
+    if (formCount < 1000) {
       // Clone a form (without event handlers) from the first form
       var row = $(".every-variation-form:first").clone(false).get(0);
       console.log(row)
@@ -215,11 +223,11 @@
 
   // Register the click event handlers
   $("#add").click(function() {
-    return addForm(this, 'variation_set');
+    return addForm(this, 'productvariations');
   });
 
   $(".delete").click(function() {
-    return deleteForm(this, 'variation_set');
+    return deleteForm(this, 'productvariations');
   });
 
 

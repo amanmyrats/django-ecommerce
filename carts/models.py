@@ -1,8 +1,11 @@
+from django.conf import settings
+
 from django.db import models
 from accounts.models import Account, Vendor
 
 from store.models import Product, Variation
 from orders.models import Delivery
+
 
 class Cart(models.Model):
     cart_id = models.CharField(max_length=250, blank=True)
@@ -21,7 +24,10 @@ class CartItem(models.Model):
     is_active = models.BooleanField(default=True)
 
     def sub_total(self):
-        return self.variation.sale_price * self.quantity
+        if settings.WHOLESALE:
+            return self.variation.package_price * self.quantity
+        else:
+            return self.variation.sale_price * self.quantity
 
     def __unicode__(self):
         return self.product

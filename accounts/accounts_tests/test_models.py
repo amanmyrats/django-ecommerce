@@ -1,6 +1,23 @@
+import tempfile
+import pytest
+
 from django.test import TestCase, Client
 from accounts.models import Account, BillingAddress, Driver, UserProfile, Vendor, VerificationCode
-import tempfile
+
+
+@pytest.fixture
+def user(db):
+    new_user = Account.objects.create(
+                            first_name='aman', last_name='aman', username='aman999999',
+                            email='aman999999@aman.aman', phone_number='61999999', is_active=True, is_staff=True
+                        )
+    new_user.set_password('aman')
+    new_user.save()
+    return new_user
+
+@pytest.fixture
+def vendor(db, user):
+    return Vendor.objects.create(user=user, official_name='sargajak')
 
 
 class AccountsModelsTest(TestCase):

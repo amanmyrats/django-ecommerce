@@ -2,8 +2,7 @@
 {% load i18n %}
 {% load static %}
 
-{% block content %} 
-<h1>This is a test order detail page</h1>
+{% block content %}
 {% if request.GET.edit %}
 <!-- {{form}} -->
       <main class="col-md-9">
@@ -93,7 +92,11 @@
                                             <tr>
                                                 <th class="per70 text-center">{% translate 'Product Name' %}</th>
                                                 <th class="per5 text-center">{% translate 'Quantity' %}</th>
+                                                {% if is_wholesale %}
+                                                <th class="per25 text-center">{% translate 'Wholesale Unit Price' %}</th>
+                                                {% else %}
                                                 <th class="per25 text-center">{% translate 'Unit Price' %}</th>
+                                                {% endif %}
                                                 <th class="per25 text-center">{% translate 'Total' %}</th>
                                             </tr>
                                         </thead>
@@ -110,7 +113,11 @@
 
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
+                                                {% if is_wholesale %}
+                                                <td class="text-center">${{item.package_price}} USD</td>
+                                                {% else %}
                                                 <td class="text-center">${{item.product_price}} USD</td>
+                                                {% endif %}
                                                 <td class="text-center">{{item.total}}</td>
                                             </tr>
                                             {% endfor %}

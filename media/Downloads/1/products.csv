@@ -1,4 +1,7 @@
 id,owner,brand,product_code,product_name,description,is_available,category
+31,1,,,New York,Sary betinden New York T-Shirt,True,7
+30,1,,,Makasima,this is makasima,True,9
+29,1,,,Bet Kowus,Gaty bet kowus.,True,9
 27,1,Dell,D-00-34,Laptop,Best laptop around,True,6
 25,2,,,ATX-Jeans test,manual description2,True,5
 24,2,LCW,,US Polo Jacket,manual description2,True,7

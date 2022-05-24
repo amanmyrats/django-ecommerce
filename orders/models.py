@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.forms import FloatField
 from django.utils.translation import gettext as _
@@ -33,6 +34,8 @@ class Order(models.Model):
     order_number = models.CharField(max_length=20)
     order_number_vendor = models.CharField(max_length=20, unique=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
+
+    # Address
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=15, blank=True, null=True)
@@ -43,12 +46,14 @@ class Order(models.Model):
     country = models.CharField(max_length=50, blank=True, null=True)
     state = models.CharField(max_length=50, blank=True, null=True)
     city = models.CharField(max_length=50)
+
     order_note = models.CharField(max_length=100, blank=True)
     order_total = models.FloatField(default=0)
     tax = models.FloatField(default=0)
     channel = models.CharField(max_length=40, blank=True, null=True)
     ip = models.CharField(blank=True, max_length=50)
     is_ordered = models.BooleanField(default=False)
+    
     subtotal = models.FloatField(blank=True, null=True, default=0)
     delivery_fee = models.FloatField(blank=True, null=True, default=0)
     grand_total = models.FloatField(blank=True, null=True, default=0)
@@ -84,8 +89,9 @@ class OrderProduct(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     variation = models.ForeignKey(Variation, on_delete=models.CASCADE, null=True, blank=True)
-    quantity = models.IntegerField()
-    product_price = models.FloatField()
+    quantity = models.IntegerField(default=0)
+    product_price = models.FloatField(default=0)
+    package_price = models.FloatField(default=0)
     ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -96,8 +102,12 @@ class OrderProduct(models.Model):
     def total(self):
         if self.quantity and self.product_price:
             try:
-                total = self.quantity * self.product_price
-                return float(total)
+                if settings.WHOLESALE:
+                    total = self.quantity * self.package_price
+                    return float(total)
+                else:
+                    total = self.quantity * self.product_price
+                    return float(total)
             except:
                 return 0
         else:

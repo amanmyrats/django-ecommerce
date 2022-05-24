@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.translation import gettext as _
+from django.conf import settings
 
 from store.models import Product, Variation
 from .models import Cart, CartItem
@@ -141,7 +142,10 @@ def cart(request, total=0, quantity=0, cart_items=None):
             initial_quantity = cart_item.quantity
             cart_item.quantity = stock_available(variation=cart_item.variation, quantity=cart_item.quantity)
             if initial_quantity == cart_item.quantity:
-                total += (cart_item.variation.sale_price * cart_item.quantity)
+                if settings.WHOLESALE:
+                    total += (cart_item.variation.package_price * cart_item.quantity)
+                else:
+                    total += (cart_item.variation.sale_price * cart_item.quantity)
                 quantity += cart_item.quantity
             elif cart_item.quantity <= 0:
                 cart_item.delete()
@@ -160,8 +164,8 @@ def cart(request, total=0, quantity=0, cart_items=None):
     context = {
         'vendors_dict':vendors_dict,
         'cart_items':cart_items,
-        'total':total,
         'quantity':quantity,
+        'total':total,
         'total_delivery':total_delivery,
         'grand_total':grand_total
     }
@@ -200,7 +204,10 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             initial_quantity = cart_item.quantity
             cart_item.quantity = stock_available(variation=cart_item.variation, quantity=cart_item.quantity)
             if initial_quantity == cart_item.quantity:
-                total += (cart_item.variation.sale_price * cart_item.quantity)
+                if settings.WHOLESALE:
+                    total += (cart_item.variation.package_price * cart_item.quantity)
+                else:
+                    total += (cart_item.variation.sale_price * cart_item.quantity)
                 quantity += cart_item.quantity
             elif cart_item.quantity <= 0:
                 cart_item.delete()
@@ -220,8 +227,8 @@ def checkout(request, total=0, quantity=0, cart_items=None):
     context = {
         'vendors_dict':vendors_dict,
         'cart_items':cart_items,
-        'total':total,
         'quantity':quantity,
+        'total':total,
         'total_delivery':total_delivery,
         'grand_total':grand_total, 
         'billingaddress':billingaddress,

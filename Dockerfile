@@ -8,6 +8,10 @@ WORKDIR /usr/src/app
 ENV PYTHONWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# install packages
+RUN apk update \
+    && apk add --virtual build-deps postgresql-dev gcc python3-dev musl-dev jpeg-dev zlib-dev libjpeg
+
 # install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
@@ -15,3 +19,6 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY . .
+
+# run entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

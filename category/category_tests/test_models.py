@@ -1,5 +1,6 @@
 import pytest
 
+from django.test import TestCase
 from category.models import Category
 
 
@@ -17,8 +18,22 @@ def test_category_model(db, category_caga):
 
     assert category_caga.name=='caga'
 
-    # assert True
-
 def test_test(db):
     # print(len(Category.objects.all()))
     assert len(Category.objects.all())==0
+
+class CategoryModelTest(TestCase):
+    def test_category(self):
+        print('all categories', Category.objects.all())
+        parent = Category.objects.create(name='parent')
+        assert Category.objects.all().count()==1
+        assert isinstance(parent, Category)
+        assert '/' in parent.get_url()
+
+        child = Category.objects.create(name='child', parent=parent)
+        assert Category.objects.all().count()==2
+        assert isinstance(child, Category)
+
+
+
+

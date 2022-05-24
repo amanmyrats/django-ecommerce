@@ -7,9 +7,11 @@
 +store/vendor/product url pattern
 +remove vendor from variation
 +Category, Sub Category
++unit test
++seperate order for each vendor
 
 
--unit test
--seperate order for each vendor
+-wholesale patch (adding product page, and dashboard page)
 -Check if image resize is working when changing images
 -Scraping Visne Bebe
+-There must be only one view that add/edit/delete products and variations

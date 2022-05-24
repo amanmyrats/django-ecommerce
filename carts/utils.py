@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from .models import CartItem
 from orders.models import Delivery, OrderProduct
 
@@ -11,6 +13,22 @@ def cart_items_vendor_list(cart_items=None):
     return list(set(vendors))
 
 def cart_vendor_info(cart_items=None, user=None, cart=None):
+    """
+        vendors_dict = {
+
+            'sargajak': {
+                        'cartitems' : [variation1, variation2, variation3]
+                        'delivery'  : 12345,
+                        'subtotal'  : 123456
+            },
+
+            'another_vendor': {
+                        'cartitems' : [variation1, variation2, variation3]
+                        'delivery'  : 12345,
+                        'subtotal'  : 123456
+            }
+        }
+    """ 
     if cart_items is None:
         return {}
     if user is None and cart is None:
@@ -27,7 +45,10 @@ def cart_vendor_info(cart_items=None, user=None, cart=None):
         vendors_dict[item.product.owner]['cartitems'].append(item)
 
     for item in cart_items:
-        vendors_dict[item.product.owner]['subtotal'] += item.variation.sale_price * item.quantity 
+        if settings.WHOLESALE:
+            vendors_dict[item.product.owner]['subtotal'] += item.variation.package_price * item.quantity 
+        else:
+            vendors_dict[item.product.owner]['subtotal'] += item.variation.sale_price * item.quantity 
 
     # Calculate delivery fee for each vendor
     for v in vendors_dict:
@@ -45,6 +66,22 @@ def cart_vendor_info(cart_items=None, user=None, cart=None):
     return vendors_dict
 
 def order_vendor_info(order=None, vendor=None):
+    """
+        vendors_dict = {
+
+            'sargajak': {
+                        'orderitems' : [orderitem1, orderitem2, orderitem3]
+                        'delivery'  : 12345,
+                        'subtotal'  : 123456
+            },
+            
+            'another_vendor': {
+                        'orderitems' : [orderitem1, orderitem2, orderitem3]
+                        'delivery'  : 12345,
+                        'subtotal'  : 123456
+            }
+        }
+    """ 
     if order is None:
         return {}
 
@@ -64,7 +101,10 @@ def order_vendor_info(order=None, vendor=None):
         vendors_dict[item.product.owner]['orderitems'].append(item)
 
     for item in order_items:
-        vendors_dict[item.product.owner]['subtotal'] += item.variation.sale_price * item.quantity 
+        if settings.WHOLESALE:
+            vendors_dict[item.product.owner]['subtotal'] += item.variation.package_price * item.quantity 
+        else:
+            vendors_dict[item.product.owner]['subtotal'] += item.variation.sale_price * item.quantity 
 
     # Calculate delivery fee for each vendor
     for v in vendors_dict:

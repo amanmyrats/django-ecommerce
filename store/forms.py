@@ -24,7 +24,7 @@ class ProductModelForm(forms.ModelForm):
 class VariationModelForm(forms.ModelForm):
     class Meta:
         model = Variation
-        fields = ('color', 'size', 'quantity', 'currency', 'initial_price', 'expense_percentage', 'expense_fixed')
+        fields = ('color', 'size', 'quantity', 'items_in_package', 'currency', 'initial_price', 'expense_percentage', 'expense_fixed')
     
     def __init__(self, *args, **kwargs):
         super(VariationModelForm, self).__init__(*args, **kwargs)

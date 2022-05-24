@@ -12,7 +12,7 @@
         {% include 'includes/alerts.html' %}
     <!-- ============================ COMPONENT 1 ================================= -->
     {% if not cart_items %} 
-        <h2 class="text-center">{% translate 'Your shoppig cart is Empty' %}</h2>
+        <h2 class="text-center">{% translate 'Your shopping cart is Empty' %}</h2>
         <br>
         <div class="text-center">
             <a href="{% url 'store' %}" class="btn btn-primary">{% translate 'Continue Shopping' %}</a>
@@ -31,7 +31,11 @@
     <tr class="small text-uppercase">
       <th scope="col">{% translate 'Product' %}</th>
       <th scope="col" width="120">{% translate 'Quantity' %}</th>
+      {% if is_wholesale %}
+      <th scope="col" width="140">{% translate 'Wholesale Price' %}</th>
+      {% else %}
       <th scope="col" width="120">{% translate 'Price' %}</th>
+        {% endif %}
       <th scope="col" class="text-right" width="200"> </th>
     </tr>
     </thead>
@@ -73,12 +77,25 @@
                             </div> <!-- input-group.// -->
                         </div> <!-- col.// -->
         </td>
+
+        {% if is_wholesale %}
+        <!-- WHOLESALE UNIT PRICE AND TOTAL PRICE -->
+        <td> 
+            <div class="price-wrap"> 
+                <var class="price">${{ cart_item.sub_total }}</var> 
+                <small class="text-muted"> ${{ cart_item.variation.package_price }} {% translate 'each package' %} </small> 
+            </div> <!-- price-wrap .// -->
+        </td>
+        {% else %}
+        <!-- RETAILSALE UNIT PRICE AND TOTAL PRICE -->
         <td> 
             <div class="price-wrap"> 
                 <var class="price">${{ cart_item.sub_total }}</var> 
                 <small class="text-muted"> ${{ cart_item.variation.sale_price }} {% translate 'each' %} </small> 
             </div> <!-- price-wrap .// -->
         </td>
+        {% endif %}
+
         <td class="text-right"> 
         <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" class="btn btn-danger"> {% translate 'Remove' %}</a>
         </td>
@@ -87,9 +104,9 @@
 
     <tr>
         <td class="border-bottom border-top"> {% translate 'Delivery' %}({{vendor}}):</td>
-        <td class="border-bottom border-top""></td>
-        <td class="price border-bottom border-top"">{{values.delivery}} </td>
-        <td class="border-bottom border-top""> </td>
+        <td class="border-bottom border-top"></td>
+        <td class="price border-bottom border-top">{{values.delivery}} </td>
+        <td class="border-bottom border-top"></td>
     </tr>
     <tr >
         <td class="border-bottom"> {% translate 'Subtotal' %}({{vendor}}):</td>
@@ -109,6 +126,7 @@
     
             <div class="card">
             <div class="card-body">
+
                 <dl class="dlist-align">
                   <dt>{% translate 'Total price:' %}</dt>
                   <dd class="text-right">${{ total }}</dd>

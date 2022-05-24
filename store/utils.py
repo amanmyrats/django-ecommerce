@@ -76,7 +76,8 @@ def export_model(qs=None, model_name=None, csv_file=None):
     elif model_name == 'variation':
         with open(csv_file, 'w') as f:
             # fields = [f.name for f in Variation._meta.fields]
-            fields = ['id', 'product', 'color', 'size', 'quantity', 'currency', 'initial_price', 'expense_percentage', 'expense_fixed', 'final_price', 'sale_price', 'in_stock', 'is_active']
+            fields = ['id', 'product', 'color', 'size', 'quantity', 'min_order', 'items_in_package', 'currency', 'initial_price', 'expense_percentage', 'expense_fixed', 'final_price', 'sale_price', 'in_stock', 'is_active']
+
             manual_fields = list(fields)
             manual_fields.append('no_change_product')
             manual_fields.append('no_change_color')
@@ -103,6 +104,8 @@ def export_model(qs=None, model_name=None, csv_file=None):
                 except:
                     row.append('')
                 row.append(variation.quantity)
+                row.append(variation.min_order)
+                row.append(variation.items_in_package)
                 try:
                     row.append(variation.currency.id)
                 except:
@@ -212,6 +215,8 @@ def import_model(request=None, csv_file=None, model_name=None):
                                 obj.color_id = int(row.get('color'))
                                 obj.size_id = int(row.get('size'))
                                 obj.quantity = int(row.get('quantity'))
+                                obj.min_order = int(row.get('min_order'))
+                                obj.items_in_package = int(row.get('items_in_package'))
                                 obj.currency_id = row.get('currency')
                                 obj.initial_price = float(row.get('initial_price'))
                                 obj.expense_percentage = float(row.get('expense_percentage'))
@@ -236,6 +241,8 @@ def import_model(request=None, csv_file=None, model_name=None):
                                 color_id = int(row.get('color')),
                                 size_id = int(row.get('size')),
                                 quantity = int(row.get('quantity')),
+                                min_order = int(row.get('min_order')),
+                                items_in_package = int(row.get('items_in_package')),
                                 currency_id = row.get('currency'),
                                 initial_price = float(row.get('initial_price')),
                                 expense_percentage = float(row.get('expense_percentage')),

@@ -113,6 +113,29 @@
         </div>  -->
         <!-- row.// --> 
         <hr>
+
+        {% if is_wholesale %} 
+        
+        <div>
+          <var  class="price h4">1 {% translate 'package' %} = </var>  
+          <var  class="price h4"><span id="items-in-package">
+            <!-- {% if is_all_variation_same_price or is_single_variation %} -->
+              {{ items_in_package }}
+            <!-- {% endif %} -->
+          </span> {% translate 'pcs' %} *</var> 
+          <var  class="price h4"><span id="wholesale-price">
+            <!-- {% if is_all_variation_same_price or is_single_variation %} -->
+              {{ item_unit_price }}
+            <!-- {% endif %} -->
+          </span>Manat</var> 
+          <var  class="price h4">=<span id="package-price">
+            <!-- {% if is_all_variation_same_price or is_single_variation %} -->
+              {{ item_total_price }}
+            <!-- {% endif %} -->
+          </span>Manat</var> 
+
+        </div>
+        {% endif %}
         {% if not single_product.is_available %}
         <h5>{% translate 'Out of Stock' %} </h5>
         {% else %}
@@ -250,6 +273,11 @@
             }
             if (data['price']){
               $('#product-price').text(data['price'])
+
+              // wholesale price change
+              $('#items-in-package').text(data['items_in_package'])
+              $('#wholesale-price').text(data['price'])
+              $('#package-price').text(data['package_price'])
             };
             console.log('data variation ', data['variation_id'])
             if (data['variation_id']){

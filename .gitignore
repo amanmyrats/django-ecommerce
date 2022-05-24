@@ -60,7 +60,9 @@ coverage.xml
 local_settings.py
 # db.sqlite3
 db.sqlite3-journal
-.env*
+.env.dev
+.env.prod
+.env.prod.db
 
 # Flask stuff:
 instance/

@@ -63,6 +63,7 @@ db.sqlite3-journal
 .env.dev
 .env.prod
 .env.prod.db
+.env*
 
 # Flask stuff:
 instance/

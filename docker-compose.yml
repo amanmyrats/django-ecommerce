@@ -19,7 +19,7 @@ services:
     environment:
       - POSTGRES_USER=lomay
       - POSTGRES_PASSWORD=lomay
-      - POSTGRES_DB=lomay_dev
+      - POSTGRES_DB=lomay_dev_db
 
 volumes:
   postgres_data:

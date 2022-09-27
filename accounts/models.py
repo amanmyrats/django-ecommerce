@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from django_unique_slugify import unique_slugify
 from django.urls import reverse
 
-from django_resized import ResizedImageField
+# from django_resized import ResizedImageField
 
 
 class MyAccountManager(BaseUserManager):
@@ -88,7 +88,7 @@ class UserProfile(models.Model):
         filename = '{}_profile.jpg'.format(instance.user.id)
         return os.path.join('userprofile', filename)
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    profile_picture = ResizedImageField(size=[100, 100], blank=True, upload_to=image_name, default='photos/user/default.jpg')
+    profile_picture = models.ImageField(blank=True, upload_to=image_name, default='photos/user/default.jpg')
 
     def __str__(self):
         return self.user.first_name

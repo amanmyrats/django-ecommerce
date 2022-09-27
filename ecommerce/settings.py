@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'sms',
     'django_filters',
     'mptt',
+    'modeltranslation',
 ]
 
 MIDDLEWARE = [
@@ -180,6 +181,9 @@ LANGUAGES = (
     ('ru', _('Russian')),
     ('tk', _('Turkmen')),
 )
+
+# MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+# MODELTRANSLATION_LANGUAGES = ('ru', 'tk')
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),

@@ -6,7 +6,7 @@ from django.db.models import Avg, Count, UniqueConstraint
 from django_unique_slugify import unique_slugify
 from django.conf import settings
 
-from django_resized import ResizedImageField
+# from django_resized import ResizedImageField
 from mptt.models import TreeForeignKey
 
 from accounts.models import Account, Vendor
@@ -28,9 +28,9 @@ class Product(models.Model):
     product_name    = models.CharField(max_length=200)
     description     = models.TextField(max_length=500, blank=True)
     slug            = models.SlugField(max_length=200, unique=True, blank=True)
-    image           = ResizedImageField(size=[500,500], upload_to=medium_image_name, default='photos/products/default.jpg', blank=True, null=True)
-    image_small     = ResizedImageField(size=[75,75], upload_to=small_image_name, blank=True, null=True)
-    image_thumbnail = ResizedImageField(size=[45,45], upload_to=thumb_image_name, blank=True, null=True)
+    image           = models.ImageField(upload_to=medium_image_name, default='photos/products/default.jpg', blank=True, null=True)
+    image_small     = models.ImageField(upload_to=small_image_name, blank=True, null=True)
+    image_thumbnail = models.ImageField(upload_to=thumb_image_name, blank=True, null=True)
     owner           = models.ForeignKey(Vendor, on_delete=models.SET_NULL, blank=True, null=True)
     
     # stock           = models.IntegerField()
@@ -197,7 +197,7 @@ class Variation(models.Model):
     final_price     = models.FloatField(default=0, blank=True, null=True)
     sale_price      = models.FloatField(default=0, blank=True, null=True)
 
-    image           = ResizedImageField(size=[500,500], upload_to=medium_image_name, blank=True, null=True)
+    image           = models.ImageField(upload_to=medium_image_name, blank=True, null=True)
     # image_small     = ResizedImageField(size=[75,75], upload_to=small_image_name, blank=True, null=True)
     # image_thumbnail = ResizedImageField(size=[45,45], upload_to=thumb_image_name, blank=True, null=True)
 

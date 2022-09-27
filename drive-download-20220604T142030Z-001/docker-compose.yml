@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    build: ./app
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/usr/src/app/
+      - ./app/:/usr/src/app/
     ports:
       - 8000:8000
     env_file:
@@ -17,9 +17,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=lomay
-      - POSTGRES_PASSWORD=lomay
-      - POSTGRES_DB=lomay_dev
+      - POSTGRES_USER=hello_django
+      - POSTGRES_PASSWORD=hello_django
+      - POSTGRES_DB=hello_django_dev
 
 volumes:
   postgres_data:

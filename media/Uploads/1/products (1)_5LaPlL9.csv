@@ -1,0 +1,7 @@
+id,owner,brand,product_code,product_name,description,is_available,category
+1,1,,,Koynek,,True,2
+,1,,,T-Shirt,,True,2
+,1,,,Ayakgap,,True,2
+,1,,,Jeans,,True,2
+,1,,,Hat,,True,2
+,1,,,Jorap,,True,2

@@ -1,0 +1,13 @@
+id,product,color,size,quantity,min_order,items_in_package,currency,initial_price,expense_percentage,expense_fixed,final_price,sale_price,in_stock,is_active,no_change_product,no_change_color,no_change_size,no_change_brand,no_change_currency,delete?
+1,1,2,2,15,1,3,1,100,30,0,130,130,True,True,Koynek,Yellow,S,,TMM,
+2,2,1,1,10,1,3,1,100,30,0,0,0,False,True,T-Shirt,No Variation,No Variation,,,
+,2,2,2,10,1,3,1,100,30,0,0,0,False,True,T-Shirt,No Variation,No Variation,,,
+,2,2,3,10,1,3,1,100,30,0,0,0,False,True,T-Shirt,No Variation,No Variation,,,
+,2,2,4,10,1,3,1,100,30,0,0,0,False,True,T-Shirt,No Variation,No Variation,,,
+3,3,1,1,10,1,3,1,100,30,0,0,0,False,True,Ayakgap,No Variation,No Variation,,,
+,3,3,2,10,1,3,1,100,30,0,0,0,False,True,Ayakgap,No Variation,No Variation,,,
+,3,3,3,10,1,3,1,100,30,0,0,0,False,True,Ayakgap,No Variation,No Variation,,,
+,3,3,4,10,1,3,1,100,30,0,0,0,False,True,Ayakgap,No Variation,No Variation,,,
+4,4,1,1,10,1,3,1,100,30,0,0,0,False,True,Jeans,No Variation,No Variation,,,
+5,5,1,1,10,1,3,1,100,30,0,0,0,False,True,Hat,No Variation,No Variation,,,
+6,6,1,1,10,1,3,1,100,30,0,0,0,False,True,Jorap,No Variation,No Variation,,,

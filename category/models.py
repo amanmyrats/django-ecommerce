@@ -1,7 +1,7 @@
 from multiprocessing.connection import answer_challenge
 from django.db import models
 from django.urls import reverse
-from django_resized import ResizedImageField
+# from django_resized import ResizedImageField
 from django.db.models import Avg, Count, UniqueConstraint
 
 from mptt.models import MPTTModel, TreeForeignKey
@@ -13,7 +13,7 @@ class Category(MPTTModel):
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     description = models.TextField(max_length=250, blank=True)
-    image = ResizedImageField(size=[500,500], upload_to='photos/categories', default='photos/categories/default.jpg', blank=True, null=True)
+    image = models.ImageField(upload_to='photos/categories', default='photos/categories/default.jpg', blank=True, null=True)
 
     class Meta:
         verbose_name = 'category'

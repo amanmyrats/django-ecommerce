@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-23 17:23+0500\n"
-"PO-Revision-Date: 2022-01-19 15:23+0000\n"
+"POT-Creation-Date: 2022-06-17 11:07+0500\n"
+"PO-Revision-Date: 2022-06-17 15:37+0354\n"
 "Last-Translator: aman aman <aman@aman.aman>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,17 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: accounts/models.py:109
+#: accounts/forms.py:38
 #, fuzzy
-#| msgid "Turkmen"
-msgid "Turkmenistan"
-msgstr "Türkmençe"
+#| msgid "This code is not matching!"
+msgid "Passwords do not match!"
+msgstr "Kod gabat gelenok!"
+
+#: accounts/forms.py:42
+msgid "Passwords cannot be empty!"
+msgstr "Açarsözi boş bolup bilmeýär!"
+
+#: accounts/forms.py:48
+msgid ""
+"Phone number is not valid Turkmenistan Tmcell number, must in format 6x "
+"xxxxxx"
+msgstr "Nomer TmCell nomeri bolmaly. Şul formatda: 6x xxxxxx"
+
+#: accounts/forms.py:64 store/forms.py:13
+msgid "Image files only"
+msgstr "Diňe surat bolmaly"
+
+#: accounts/models.py:18
+msgid "User must have a phone number"
+msgstr "Ulanyjynyň telefony bolmaly"
 
 #: accounts/utils.py:22
 msgid "Your verification code is "
 msgstr "Siziň tassyklama koduňyz"
 
-#: accounts/views.py:274
+#: accounts/views.py:307
 msgid ""
 "Write your phone number to reset your password. If your phone number is "
 "registered in our system, we will send you verification code."
@@ -36,31 +54,109 @@ msgstr ""
 "Parolyňyzy nollamak üçin telefon nomeriňizi ýazyň. Eger siz biziň agzamyz "
 "bolsaňyz, size tassyklamak üçin kod ugradýarys."
 
-#: accounts/views.py:308
+#: accounts/views.py:334
+msgid "This user does not exist"
+msgstr "Bizde beýle ulanyjy ýok"
+
+#: accounts/views.py:339
+msgid "We did not send you any verification code."
+msgstr "Biz size tassyklama kodyny ugratmadyk."
+
+#: accounts/views.py:349
 #, fuzzy
 #| msgid "Create New Password"
 msgid "Please choose new password."
 msgstr "Täze Parol Ýaz"
 
-#: accounts/views.py:314
+#: accounts/views.py:355
 msgid "This code is not matching!"
 msgstr "Kod gabat gelenok!"
 
-#: ecommerce/settings.py:171
+#: carts/views.py:36
+msgid "Product variations is out of stock."
+msgstr "Haryt görnüşi gutardy."
+
+#: ecommerce/settings.py:179
 msgid "English"
 msgstr "Iňlisçe"
 
-#: ecommerce/settings.py:172
+#: ecommerce/settings.py:180
 msgid "Russian"
 msgstr "Rusça"
 
-#: ecommerce/settings.py:173
+#: ecommerce/settings.py:181
 msgid "Turkmen"
 msgstr "Türkmençe"
 
 #: ecommerce/views.py:11
 msgid "hello this is a test"
 msgstr "Salam, bul test."
+
+#: orders/models.py:25 orders/models.py:119
+#: templates/accounts/all_sales.html:22 templates/accounts/my_sales.html:62
+#: templates/accounts/sales.html:63
+msgid "New"
+msgstr "Täze"
+
+#: orders/models.py:26 orders/models.py:120
+#: templates/accounts/all_sales.html:25 templates/accounts/my_sales.html:65
+#: templates/accounts/sales.html:66
+msgid "On Delivery"
+msgstr "Ýolda"
+
+#: orders/models.py:27 orders/models.py:121
+#: templates/accounts/all_sales.html:28 templates/accounts/my_sales.html:68
+#: templates/accounts/sales.html:69
+msgid "Delivered and Paid"
+msgstr "Eltildi we Tölendi"
+
+#: orders/models.py:28 orders/models.py:122
+#: templates/accounts/all_sales.html:31 templates/accounts/my_sales.html:71
+#: templates/accounts/sales.html:72
+msgid "Cancelled"
+msgstr "Goýbolsun edildi"
+
+#: store/views.py:204
+msgid "There is no such product."
+msgstr "Beýle haryt ýok."
+
+#: store/views.py:210 store/views.py:262
+msgid "You are not a vendor."
+msgstr "Siz satyjy däl."
+
+#: store/views.py:230
+#, fuzzy
+#| msgid "Ordered Successfully"
+msgid "Product was changed successfully."
+msgstr "Zakaz Edildi"
+
+#: store/views.py:237
+msgid "Probably you already have this variation."
+msgstr "Sizde bu haryt görnüşi öňem bar oýdýän."
+
+#: store/views.py:238 store/views.py:248
+msgid "Error when saving changes."
+msgstr "Üýgeşmeleri ýatda saklamakda bir ýalňyşlyk boldy."
+
+#: store/views.py:243
+msgid "Product variations were changed successfully."
+msgstr "Haryt görnüşleri üstünlikli üýtgedildi."
+
+#: store/views.py:314
+msgid "This table cannot be exported"
+msgstr "Bu tablisany çykaryp alyp bolmaýar."
+
+#: store/views.py:334
+msgid "Import was successfull."
+msgstr "Sistema salmak üstünlikli boldy."
+
+#: store/views.py:336
+msgid "Error occured when importing!"
+msgstr "Sistema salyp otyrkak ýalňyşlyk boldy!"
+
+#: store/views.py:338
+msgid "No Attachment!"
+msgstr "Goşyndy Ýok!"
 
 #: templates/accounts/account_verification_email.html:4
 #: templates/accounts/reset_password_email.html:4
@@ -76,6 +172,97 @@ msgstr "Registrasiýaňyzy tassyklamak üçin aşakdaky linke basyň."
 #: templates/accounts/reset_password_email.html:9
 msgid "If you think it is not you, ignore this email."
 msgstr "Eger bu size degişli däl bolsa, bu yazga üns bermäň."
+
+#: templates/accounts/all_sales.html:16
+#: templates/includes/dashboard_sidebar.html:15
+msgid "All Sales"
+msgstr "Hemme Satuwlar"
+
+#: templates/accounts/all_sales.html:19 templates/accounts/my_sales.html:59
+#: templates/accounts/sales.html:60
+msgid "All"
+msgstr "Hemmesi"
+
+#: templates/accounts/all_sales.html:40 templates/accounts/my_orders.html:24
+#: templates/accounts/my_sales.html:23 templates/accounts/my_sales.html:80
+#: templates/accounts/order_detail.html:17
+#: templates/accounts/order_detail.html:79 templates/accounts/sales.html:24
+#: templates/accounts/sales.html:81 templates/orders/order_complete.html:49
+msgid "Order"
+msgstr "Zakaz"
+
+#: templates/accounts/all_sales.html:41 templates/accounts/my_sales.html:81
+#: templates/accounts/sales.html:82
+#, fuzzy
+#| msgid "Invoiced To"
+msgid "Billed To"
+msgstr "Faktura Kime:"
+
+#: templates/accounts/all_sales.html:42 templates/accounts/my_orders.html:28
+#: templates/accounts/my_sales.html:82 templates/accounts/sales.html:83
+msgid "Date"
+msgstr "Sene"
+
+#: templates/accounts/all_sales.html:43 templates/accounts/my_orders.html:26
+#: templates/accounts/my_sales.html:83 templates/accounts/sales.html:84
+msgid "Phone"
+msgstr "Telefon"
+
+#: templates/accounts/all_sales.html:44 templates/accounts/my_orders.html:27
+#: templates/accounts/my_sales.html:84 templates/accounts/sales.html:85
+msgid "Order Total"
+msgstr "Zakaz Jemi"
+
+#: templates/accounts/all_sales.html:45 templates/accounts/my_sales.html:85
+#: templates/accounts/sales.html:86
+#, fuzzy
+#| msgid "Order Total"
+msgid "Vendor Total"
+msgstr "Zakaz Jemi"
+
+#: templates/accounts/all_sales.html:46
+#: templates/accounts/order_detail.html:32 templates/accounts/sales.html:39
+#: templates/accounts/sales.html:87
+msgid "Driver Fee"
+msgstr "Sürüji Haky"
+
+#: templates/accounts/all_sales.html:47 templates/accounts/my_sales.html:34
+#: templates/accounts/my_sales.html:87 templates/accounts/order_detail.html:28
+#: templates/accounts/sales.html:35 templates/accounts/sales.html:88
+msgid "Driver"
+msgstr "Sürüji"
+
+#: templates/accounts/all_sales.html:48 templates/accounts/my_sales.html:42
+#: templates/accounts/my_sales.html:88 templates/accounts/order_detail.html:36
+#: templates/accounts/sales.html:43 templates/accounts/sales.html:89
+#, fuzzy
+#| msgid "Status:"
+msgid "Status"
+msgstr "Ýagdaýy:"
+
+#: templates/accounts/all_sales.html:49 templates/accounts/my_sales.html:89
+#: templates/accounts/my_sales.html:106 templates/accounts/sales.html:90
+#: templates/accounts/sales.html:107 templates/store/list_product.html:69
+msgid "Edit"
+msgstr "Üýtget"
+
+#: templates/accounts/all_sales.html:86 templates/accounts/all_sales.html:88
+#: templates/accounts/my_sales.html:123 templates/accounts/my_sales.html:125
+#: templates/accounts/sales.html:124 templates/accounts/sales.html:126
+#: templates/store/list_product.html:86 templates/store/list_product.html:88
+#: templates/store/store.html:237 templates/store/store.html:239
+#: templates/store/store_old.html:174 templates/store/store_old.html:176
+msgid "Previous"
+msgstr "Öňki"
+
+#: templates/accounts/all_sales.html:100 templates/accounts/all_sales.html:102
+#: templates/accounts/my_sales.html:137 templates/accounts/my_sales.html:139
+#: templates/accounts/sales.html:138 templates/accounts/sales.html:140
+#: templates/store/list_product.html:100 templates/store/list_product.html:102
+#: templates/store/store.html:251 templates/store/store.html:253
+#: templates/store/store_old.html:188 templates/store/store_old.html:190
+msgid "Next"
+msgstr "Indiki"
 
 #: templates/accounts/change_password.html:17
 msgid "Change Your Password"
@@ -119,7 +306,7 @@ msgstr "Profili Düzet"
 
 #: templates/accounts/edit_profile.html:22
 #: templates/accounts/forgotPassword.html:50 templates/accounts/login.html:57
-#: templates/accounts/registration.html:32 templates/store/checkout.html:41
+#: templates/accounts/registration.html:32 templates/store/checkout.html:42
 msgid "Phone Number"
 msgstr "Telefon Nomer"
 
@@ -142,23 +329,28 @@ msgstr "At"
 msgid "Last Name"
 msgstr "Familiýa"
 
-#: templates/accounts/edit_profile.html:65 templates/store/checkout.html:63
+#: templates/accounts/edit_profile.html:65 templates/store/add_product.html:49
+#: templates/store/checkout.html:66
 msgid "Address Line 1"
 msgstr "Adres-1"
 
-#: templates/accounts/edit_profile.html:70 templates/store/checkout.html:67
+#: templates/accounts/edit_profile.html:70 templates/store/add_product.html:54
+#: templates/store/checkout.html:72
 msgid "Address Line 2"
 msgstr "Adres-2"
 
-#: templates/accounts/edit_profile.html:76 templates/store/checkout.html:73
+#: templates/accounts/edit_profile.html:76 templates/store/add_product.html:60
+#: templates/store/checkout.html:80
 msgid "City"
 msgstr "Şäher"
 
-#: templates/accounts/edit_profile.html:80 templates/store/checkout.html:77
+#: templates/accounts/edit_profile.html:80 templates/store/add_product.html:64
+#: templates/store/checkout.html:85
 msgid "State"
 msgstr "Welaýat"
 
-#: templates/accounts/edit_profile.html:84 templates/store/checkout.html:81
+#: templates/accounts/edit_profile.html:84 templates/store/add_product.html:68
+#: templates/store/checkout.html:90
 msgid "Country"
 msgstr "Döwlet"
 
@@ -183,13 +375,13 @@ msgstr "Parolyň barmy? Giriň"
 msgid "Verify Code"
 msgstr "Kody Tassykla"
 
-#: templates/accounts/forgotPassword.html:66 templates/accounts/login.html:76
+#: templates/accounts/forgotPassword.html:66 templates/accounts/login.html:75
 #: templates/accounts/resetPassword.html:41
 #: templates/accounts/update_phone_number.html:42
 msgid "Don't have account?"
 msgstr "Hasabyň ýokmy?"
 
-#: templates/accounts/forgotPassword.html:66 templates/accounts/login.html:76
+#: templates/accounts/forgotPassword.html:66 templates/accounts/login.html:75
 #: templates/accounts/registration.html:13
 #: templates/accounts/resetPassword.html:41
 #: templates/accounts/update_phone_number.html:42
@@ -243,7 +435,7 @@ msgstr ""
 msgid "Change Phone Number "
 msgstr "Telefon Nomer"
 
-#: templates/accounts/login.html:49 templates/includes/navbar.html:73
+#: templates/accounts/login.html:49 templates/includes/navbar.html:30
 msgid "Sign in"
 msgstr "Gir"
 
@@ -259,78 +451,107 @@ msgstr "Parol ýatdan çykdymy?"
 msgid "Your order history"
 msgstr "Zakazlaryň sanawy"
 
-#: templates/accounts/my_orders.html:24 templates/accounts/order_detail.html:39
-#: templates/orders/order_complete.html:49
-msgid "Order"
-msgstr "Zakaz"
-
 #: templates/accounts/my_orders.html:25
 msgid "Billing Name"
 msgstr "Faktura Ady"
 
-#: templates/accounts/my_orders.html:26
-msgid "Phone"
-msgstr "Telefon"
+#: templates/accounts/my_sales.html:27 templates/accounts/order_detail.html:21
+#: templates/accounts/order_detail.html:91 templates/accounts/sales.html:28
+#: templates/orders/order_complete.html:61
+msgid "Vendor"
+msgstr "Satyjy"
 
-#: templates/accounts/my_orders.html:27
-msgid "Order Total"
-msgstr "Zakaz Jemi"
+#: templates/accounts/my_sales.html:38 templates/accounts/my_sales.html:86
+msgid "Delivery Fee"
+msgstr "Eltip Bermek Bahasy"
 
-#: templates/accounts/my_orders.html:28
-msgid "Date"
-msgstr "Sene"
+#: templates/accounts/my_sales.html:46 templates/accounts/order_detail.html:40
+#: templates/accounts/sales.html:47
+msgid "Update"
+msgstr "Täzele"
 
-#: templates/accounts/order_detail.html:18
-msgid "Invoice logo"
-msgstr "Faktura Logo"
+#: templates/accounts/my_sales.html:56 templates/accounts/sales.html:57
+#: templates/includes/dashboard_sidebar.html:12
+msgid "My Sales"
+msgstr "Meniň Satuwlarym"
 
-#: templates/accounts/order_detail.html:25
-msgid "Invoiced To"
+#: templates/accounts/order_detail.html:65
+#: templates/orders/order_complete.html:35
+msgid "Invoiced To:"
 msgstr "Faktura Kime:"
 
-#: templates/accounts/order_detail.html:40
-msgid "Transaction ID"
-msgstr "Töleg ID"
+#: templates/accounts/order_detail.html:81
+#: templates/orders/order_complete.html:51
+msgid "Order Date"
+msgstr "Zakaz Senesi"
 
-#: templates/accounts/order_detail.html:41
-msgid "Order Date:"
-msgstr "Zakaz Senesi:"
-
-#: templates/accounts/order_detail.html:42
-msgid "Status:"
-msgstr "Ýagdaýy:"
-
-#: templates/accounts/order_detail.html:52
-msgid "Description"
+#: templates/accounts/order_detail.html:93
+#: templates/orders/order_complete.html:63 templates/store/add_product.html:38
+#: templates/store/edit_product.html:30
+msgid "Product Name"
 msgstr "Harydyň Ady"
 
-#: templates/accounts/order_detail.html:53
-msgid "Qty"
-msgstr "Mukdar"
+#: templates/accounts/order_detail.html:94
+#: templates/orders/order_complete.html:64 templates/orders/payments.html:57
+#: templates/store/cart.html:33 templates/store/checkout.html:112
+#: templates/store/edit_product.html:69
+msgid "Quantity"
+msgstr "Mukdary"
 
-#: templates/accounts/order_detail.html:54
-#: templates/orders/order_complete.html:65
+#: templates/accounts/order_detail.html:96
+#, fuzzy
+#| msgid "Price"
+msgid "Wholesale Unit Price"
+msgstr "Baha"
+
+#: templates/accounts/order_detail.html:98
+#: templates/orders/order_complete.html:68
+#, fuzzy
+#| msgid "Price"
+msgid "Unit Price"
+msgstr "Baha"
+
+#: templates/accounts/order_detail.html:100
+#: templates/orders/order_complete.html:70
 msgid "Total"
 msgstr "Jemi"
 
-#: templates/accounts/order_detail.html:102
-#: templates/orders/order_complete.html:88
+#: templates/accounts/order_detail.html:127
+#: templates/orders/order_complete.html:100
 msgid "Sub Total:"
 msgstr "Ara Jemi:"
 
-#: templates/accounts/order_detail.html:106
-#: templates/orders/order_complete.html:92 templates/store/cart.html:94
-msgid "Tax:"
-msgstr "Salgyt:"
+#: templates/accounts/order_detail.html:131
+#: templates/orders/order_complete.html:104
+msgid "Delivery:"
+msgstr "Eltip Bermek:"
 
-#: templates/accounts/order_detail.html:111
-#: templates/orders/order_complete.html:97
+#: templates/accounts/order_detail.html:136
+#: templates/accounts/order_detail.html:156
+#: templates/orders/order_complete.html:109
+#: templates/orders/order_complete.html:128
 msgid "Grand Total:"
 msgstr "Umumy Jemi:"
 
-#: templates/accounts/order_detail.html:119
-msgid "Thank you for shopping with us!"
-msgstr "Bizden söwda edeniňiz üçin sagboluň!"
+#: templates/accounts/order_detail.html:147
+#: templates/orders/order_complete.html:119
+#, fuzzy
+#| msgid "Total price:"
+msgid "Total Material:"
+msgstr "Jemi Baha:"
+
+#: templates/accounts/order_detail.html:152
+#: templates/orders/order_complete.html:124 templates/store/cart.html:135
+#: templates/store/checkout.html:182
+#, fuzzy
+#| msgid "Total price:"
+msgid "Total Delivery:"
+msgstr "Jemi Baha:"
+
+#: templates/accounts/order_detail.html:165
+#: templates/orders/order_complete.html:136
+msgid "Thanks for your shopping!"
+msgstr "Söwdaňyz üçin sagboluň!"
 
 #: templates/accounts/registration.html:18
 msgid "First name"
@@ -340,8 +561,7 @@ msgstr "At"
 msgid "Last name"
 msgstr "Familiýa"
 
-#: templates/accounts/registration.html:28 templates/includes/navbar.html:25
-#: templates/store/checkout.html:34
+#: templates/accounts/registration.html:28 templates/store/checkout.html:34
 msgid "Email"
 msgstr "Email"
 
@@ -353,7 +573,7 @@ msgstr "Parol döret"
 msgid "Repeat password"
 msgstr "Paroly gaýtala"
 
-#: templates/accounts/registration.html:53 templates/includes/navbar.html:74
+#: templates/accounts/registration.html:53 templates/includes/navbar.html:31
 msgid "Register"
 msgstr "Agza boluň"
 
@@ -383,7 +603,8 @@ msgstr "Nolla"
 
 #: templates/accounts/reset_password_email.html:6
 msgid "As requested please click link below to reset your password."
-msgstr "Siz parolyňyzy nollamak islediňiz, nollamak üçin aşakdaky linke basyň."
+msgstr ""
+"Siz parolyňyzy nollamak islediňiz, nollamak üçin aşakdaky linke basyň."
 
 #: templates/accounts/update_phone_number.html:15
 msgid "Update your phone number, with format: 993 6X XXXXXX"
@@ -403,7 +624,8 @@ msgstr "Zakaz ediň, Gapyňyza gelsin"
 msgid "Popular products"
 msgstr "Köp Satylýan Harytlar"
 
-#: templates/home.html:92 templates/store/store.html:157
+#: templates/home.html:92 templates/store/store.html:221
+#: templates/store/store_old.html:157
 msgid "Add to Cart"
 msgstr "Sebede Goş"
 
@@ -412,7 +634,7 @@ msgid "Error:"
 msgstr "Ýalňyşlyk:"
 
 #: templates/includes/dashboard_sidebar.html:5
-#: templates/includes/navbar.html:79
+#: templates/includes/navbar.html:36
 msgid "Dashboard"
 msgstr "Dolandyryş Paneli"
 
@@ -428,77 +650,77 @@ msgstr "Profili Üýtget"
 msgid "Change Password"
 msgstr "Paroly Çalyş"
 
+#: templates/includes/dashboard_sidebar.html:10
+#: templates/store/add_product.html:72
+#, fuzzy
+#| msgid "All Products"
+msgid "Add Product"
+msgstr "Hemme Harytlar"
+
 #: templates/includes/dashboard_sidebar.html:11
+#, fuzzy
+#| msgid "Review Products"
+msgid "See My Products"
+msgstr "Harytlara Täzeden Göz Aýlaň"
+
+#: templates/includes/dashboard_sidebar.html:19
 msgid "Log out"
 msgstr "Çyk"
 
-#: templates/includes/navbar.html:26
-msgid "Call Us"
-msgstr "Jaň Ediň"
-
-#: templates/includes/navbar.html:43 templates/store/store.html:30
-msgid "Categories"
-msgstr "Kategoriýalar"
-
-#: templates/includes/navbar.html:46 templates/store/store.html:37
-msgid "All Products"
-msgstr "Hemme Harytlar"
-
-#: templates/includes/navbar.html:53
-msgid "Store"
-msgstr "Dükan"
-
-#: templates/includes/navbar.html:57
-msgid "Search"
-msgstr "Gözle"
-
-#: templates/includes/navbar.html:71
+#: templates/includes/navbar.html:28
 msgid "Welcome guest!"
 msgstr "Myhman hoşgeldiňiz!"
 
-#: templates/includes/navbar.html:77
+#: templates/includes/navbar.html:34
 msgid "Welcome"
 msgstr "Hoşgeldiňiz"
 
-#: templates/includes/navbar.html:80
+#: templates/includes/navbar.html:37
 msgid "Logout"
 msgstr "Çyk"
+
+#: templates/includes/navbar.html:68 templates/store/store_old.html:30
+msgid "Categories"
+msgstr "Kategoriýalar"
+
+#: templates/includes/navbar.html:71 templates/store/store_old.html:37
+msgid "All Products"
+msgstr "Hemme Harytlar"
+
+#: templates/includes/navbar.html:84
+msgid "Vendors"
+msgstr "Satyjylar"
+
+#: templates/includes/navbar.html:87 templates/includes/navbar.html:147
+msgid "All Vendors"
+msgstr "Hemme Satyjylar"
+
+#: templates/includes/navbar.html:97
+msgid "Store"
+msgstr "Dükan"
+
+#: templates/includes/navbar.html:105
+msgid "Search From Whole Site"
+msgstr "Ähli Sahypdan Gözle"
 
 #: templates/orders/order_complete.html:10
 msgid "Ordered Successfully"
 msgstr "Zakaz Edildi"
 
 #: templates/orders/order_complete.html:13 templates/store/cart.html:18
-#: templates/store/cart.html:106 templates/store/checkout.html:138
+#: templates/store/cart.html:147 templates/store/checkout.html:194
 msgid "Continue Shopping"
 msgstr "Söwda Etmäne Dowam Et"
 
-#: templates/orders/order_complete.html:35
-msgid "Invoiced To:"
-msgstr "Faktura Kime:"
+#: templates/orders/order_complete.html:66 templates/store/cart.html:35
+#: templates/store/checkout.html:114
+msgid "Wholesale Price"
+msgstr "Lomaý Bahasy"
 
-#: templates/orders/order_complete.html:51
-msgid "Order Date"
-msgstr "Zakaz Senesi"
-
-#: templates/orders/order_complete.html:62
-msgid "Product Name"
-msgstr "Harydyň Ady"
-
-#: templates/orders/order_complete.html:63 templates/orders/payments.html:57
-#: templates/store/cart.html:28 templates/store/checkout.html:101
-msgid "Quantity"
-msgstr "Mukdary"
-
-#: templates/orders/order_complete.html:64
-#, fuzzy
-#| msgid "Price"
-msgid "Unit Price"
-msgstr "Baha"
-
-#: templates/orders/order_complete.html:105
-msgid "Thanks for your shopping!"
-msgstr "Söwdaňyz üçin sagboluň!"
+#: templates/orders/order_complete.html:85
+#: templates/store/product_detail.html:120
+msgid "package"
+msgstr "seriýa"
 
 #: templates/orders/order_recieved_email.html:6
 msgid "YOUR ORDER HAS BEEN RECIEVED"
@@ -516,7 +738,7 @@ msgstr "Zakazyňyza täzeden göz aýlaň we Tölegi Geçiriň"
 msgid "Billing Address"
 msgstr "Faktura Adresi"
 
-#: templates/orders/payments.html:31 templates/store/checkout.html:86
+#: templates/orders/payments.html:31 templates/store/checkout.html:96
 msgid "Order Note"
 msgstr "Zakaz Belligi"
 
@@ -528,107 +750,288 @@ msgstr "Töleg Görnüşi"
 msgid "Review Products"
 msgstr "Harytlara Täzeden Göz Aýlaň"
 
-#: templates/orders/payments.html:56 templates/store/cart.html:27
-#: templates/store/checkout.html:100
+#: templates/orders/payments.html:56 templates/store/cart.html:32
+#: templates/store/checkout.html:111
 msgid "Product"
 msgstr "Haryt"
 
-#: templates/orders/payments.html:58 templates/store/cart.html:29
-#: templates/store/checkout.html:102
+#: templates/orders/payments.html:58 templates/store/cart.html:37
+#: templates/store/checkout.html:116
 msgid "Price"
 msgstr "Baha"
 
-#: templates/orders/payments.html:87 templates/store/cart.html:72
-#: templates/store/checkout.html:129
+#: templates/orders/payments.html:87 templates/store/cart.html:94
+#: templates/store/checkout.html:153
 msgid "each"
 msgstr "herbiri"
 
-#: templates/orders/payments.html:105 templates/store/cart.html:90
+#: templates/orders/payments.html:105 templates/store/cart.html:131
 msgid "Total price:"
 msgstr "Jemi Baha:"
 
+#: templates/store/add_product.html:16
+#, fuzzy
+#| msgid "Review Products"
+msgid "Add New Product"
+msgstr "Harytlara Täzeden Göz Aýlaň"
+
+#: templates/store/add_product.html:28
+#, fuzzy
+#| msgid "Product Name"
+msgid "Product Category"
+msgstr "Harydyň Ady"
+
+#: templates/store/add_product.html:32 templates/store/product_detail.html:30
+#: templates/store/product_detail.html:32
+msgid "Product Image"
+msgstr "Haryt Suraty"
+
+#: templates/store/add_product.html:42
+#, fuzzy
+#| msgid "Description"
+msgid "Product Description"
+msgstr "Harydyň Ady"
+
 #: templates/store/cart.html:15
-msgid "Your shoppig cart is Empty"
+#, fuzzy
+#| msgid "Your shoppig cart is Empty"
+msgid "Your shopping cart is Empty"
 msgstr "Siziň Sebediňiz Boş"
 
-#: templates/store/cart.html:76
+#: templates/store/cart.html:28 templates/store/checkout.html:107
+msgid "Vendor: "
+msgstr "Satyjy:"
+
+#: templates/store/cart.html:86 templates/store/checkout.html:145
+msgid "each package"
+msgstr "her seriýa"
+
+#: templates/store/cart.html:100 templates/store/edit_product.html:103
 msgid "Remove"
 msgstr "Aýyr"
 
-#: templates/store/cart.html:98
+#: templates/store/cart.html:106 templates/store/checkout.html:162
+msgid "Delivery"
+msgstr "Eltip Bermek"
+
+#: templates/store/cart.html:112 templates/store/checkout.html:167
+#, fuzzy
+#| msgid "Sub Total:"
+msgid "Subtotal"
+msgstr "Ara Jemi:"
+
+#: templates/store/cart.html:139 templates/store/checkout.html:186
 msgid "Total:"
 msgstr "Jemi:"
 
-#: templates/store/cart.html:105
+#: templates/store/cart.html:146
 msgid "Place Order"
 msgstr "Zakaz Et"
 
-#: templates/store/checkout.html:51
+#: templates/store/checkout.html:53
 #, fuzzy
 #| msgid "Phone Number"
 msgid "Extra Phone Number"
 msgstr "Telefon Nomer"
 
-#: templates/store/checkout.html:137
+#: templates/store/checkout.html:178
+#, fuzzy
+#| msgid "Total price:"
+msgid "Total Price:"
+msgstr "Jemi Baha:"
+
+#: templates/store/checkout.html:193
 msgid "Checkout"
 msgstr "Satyn Al"
 
-#: templates/store/product_detail.html:26
-#: templates/store/product_detail.html:28
-msgid "Product Image"
-msgstr "Haryt Suraty"
+#: templates/store/edit_product.html:16
+#, fuzzy
+#| msgid "Product"
+msgid "Edit Product"
+msgstr "Haryt"
 
-#: templates/store/product_detail.html:69
+#: templates/store/edit_product.html:34
+#, fuzzy
+#| msgid "Categories"
+msgid "Category"
+msgstr "Kategoriýalar"
+
+#: templates/store/edit_product.html:41
+msgid "Description"
+msgstr "Harydyň Ady"
+
+#: templates/store/edit_product.html:45
+msgid "Image"
+msgstr "Surat"
+
+#: templates/store/edit_product.html:61
+msgid "Color"
+msgstr "Reňk"
+
+#: templates/store/edit_product.html:65
+msgid "Size"
+msgstr "Ölçeg"
+
+#: templates/store/edit_product.html:74
+msgid "Items in Package"
+msgstr "Seriýadaky Haryt Sany"
+
+#: templates/store/edit_product.html:81
+msgid "Currency"
+msgstr "Pul Birligi"
+
+#: templates/store/edit_product.html:85
+#, fuzzy
+#| msgid "Price"
+msgid "Initial Price"
+msgstr "Baha"
+
+#: templates/store/edit_product.html:89
+#, python-format
+msgid "%% Expense"
+msgstr "Çykdajy"
+
+#: templates/store/edit_product.html:93
+msgid "Fixed Expense"
+msgstr "Üýtgemeýän Çykdajy"
+
+#: templates/store/edit_product.html:98
+msgid "Delete?"
+msgstr "Aýyr?"
+
+#: templates/store/edit_product.html:116
+msgid "Save Changes"
+msgstr "Üýtgeşmeleri Ýatda Sakla"
+
+#: templates/store/list_product.html:16
+#, fuzzy
+#| msgid "All Products"
+msgid "All Your Products"
+msgstr "Hemme Harytlar"
+
+#: templates/store/list_product.html:24
+msgid "Export Products To CSV"
+msgstr "Harytlary Çykar"
+
+#: templates/store/list_product.html:28
+msgid "Export Variations To CSV"
+msgstr "Haryt Görnüşlerini Çykar"
+
+#: templates/store/list_product.html:33
+msgid "Import Products CSV"
+msgstr "Harytlary Sistema Sal"
+
+#: templates/store/list_product.html:38
+msgid "Import Variation CSV"
+msgstr "Haryt Görnüşlerini Sistema Sal"
+
+#: templates/store/product_detail.html:73
 #, fuzzy
 #| msgid "Select Color-Size"
 msgid "Select Color"
 msgstr "Reňk we Ölçeg Saýlaň"
 
-#: templates/store/product_detail.html:83
+#: templates/store/product_detail.html:87
 #, fuzzy
 #| msgid "Select Color-Size"
 msgid "Select Size"
 msgstr "Reňk we Ölçeg Saýlaň"
 
-#: templates/store/product_detail.html:113
+#: templates/store/product_detail.html:125
+msgid "pcs"
+msgstr "sany"
+
+#: templates/store/product_detail.html:140
 msgid "Out of Stock"
 msgstr "Sklatda Gutardy"
 
-#: templates/store/product_detail.html:115
+#: templates/store/product_detail.html:142
 msgid "Add to cart"
 msgstr "Sebede Goş"
 
-#: templates/store/store.html:10
+#: templates/store/store.html:14 templates/store/store_old.html:10
 msgid "Search Result"
 msgstr "Gözlegiň Netijesi"
 
-#: templates/store/store.html:12
+#: templates/store/store.html:16 templates/store/store_old.html:12
 msgid "Our Store"
 msgstr "Biziň Dükanymyz"
 
-#: templates/store/store.html:82
+#: templates/store/store.html:133 templates/store/store_old.html:82
 msgid "Price range "
 msgstr "Baha Aralygy"
 
-#: templates/store/store.html:115
-msgid "Apply"
-msgstr "Täzele"
+#: templates/store/store.html:141
+#, fuzzy
+#| msgid "Price"
+msgid "Min Price"
+msgstr "Baha"
 
-#: templates/store/store.html:127
+#: templates/store/store.html:154
+#, fuzzy
+#| msgid "Price"
+msgid "Max Price"
+msgstr "Baha"
+
+#: templates/store/store.html:173
+msgid "Apply Filter"
+msgstr "Gözle"
+
+#: templates/store/store.html:174
+msgid "Clear Filter"
+msgstr "Gözlegi Arassala"
+
+#: templates/store/store.html:180 templates/store/store_old.html:127
 msgid "Items found"
 msgstr "(tapylan haryt sany)"
 
-#: templates/store/store.html:164
+#: templates/store/store.html:184
+msgid "Sort"
+msgstr "Hatar"
+
+#: templates/store/store.html:188
+msgid "Low To High"
+msgstr "Pesden Beýige"
+
+#: templates/store/store.html:189
+msgid "High To Low"
+msgstr "Beýikden Pese"
+
+#: templates/store/store.html:228 templates/store/store_old.html:164
 msgid "No Result."
 msgstr "Netije Ýok"
 
-#: templates/store/store.html:174 templates/store/store.html:176
-msgid "Previous"
-msgstr "Öňki"
+#: templates/store/store_old.html:115
+msgid "Apply"
+msgstr "Täzele"
 
-#: templates/store/store.html:188 templates/store/store.html:190
-msgid "Next"
-msgstr "Indiki"
+#, fuzzy
+#~ msgid "Turkmenistan"
+#~ msgstr "Türkmençe"
+
+#~ msgid "Invoice logo"
+#~ msgstr "Faktura Logo"
+
+#~ msgid "Transaction ID"
+#~ msgstr "Töleg ID"
+
+#~ msgid "Order Date:"
+#~ msgstr "Zakaz Senesi:"
+
+#~ msgid "Qty"
+#~ msgstr "Mukdar"
+
+#~ msgid "Tax:"
+#~ msgstr "Salgyt:"
+
+#~ msgid "Thank you for shopping with us!"
+#~ msgstr "Bizden söwda edeniňiz üçin sagboluň!"
+
+#~ msgid "Call Us"
+#~ msgstr "Jaň Ediň"
+
+#~ msgid "Search"
+#~ msgstr "Gözle"
 
 #~ msgid "Email Address"
 #~ msgstr "Email"

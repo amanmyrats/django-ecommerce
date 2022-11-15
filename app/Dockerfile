@@ -6,26 +6,25 @@ FROM ubuntu:20.04
 WORKDIR /usr/src/app
 
 # set environment variables
-ENV PYTHONWRITEBYTECODE 1
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install packages
-# RUN apk update \
-#     && apk add postgresql-dev gcc python3-dev py3-setuptools musl-dev
-# RUN apk add tiff-dev jpeg-dev openjpeg-dev zlib-dev freetype-dev lcms2-dev \
-#     libwebp-dev tcl-dev tk-dev harfbuzz-dev fribidi-dev libimagequant-dev \
-#     libxcb-dev libpng-dev
-RUN apt-get update \
-    && install -y python3-dev python3-setuptools \
-    && install -y python-dev \
-    && install -y libjpeg-dev \
-    && install -y libjpeg8-dev \
-    && install -y libpng3
+# install psycopg2 dependencies
+# RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apt-get update -y \
+    && apt-get -y install python3-pip python3-dev build-essential \
+    && apt-get install -y python3-setuptools libpq-dev
 
 # install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt 
+#--proxy=http://127.0.0.1:10808
+
+# copy entrypoint.sh
+COPY ./entrypoint.sh .
+RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
 
 # copy project
 COPY . .

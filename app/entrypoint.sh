@@ -11,7 +11,13 @@ then
     echo "PostgreSQL started"
 fi
 
-python manage.py flush --no-input
-python manage.py migrate
+# Collect static files                                                                                                                      
+echo "Collect static files"
+python3 manage.py collectstatic --noinput
+
+echo "Migrate"
+python3 manage.py flush --no-input
+# python3 manage.py makemigrations
+python3 manage.py migrate
 
 exec "$@"

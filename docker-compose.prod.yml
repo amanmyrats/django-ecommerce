@@ -28,11 +28,17 @@ services:
     volumes:
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
+      - ./certbot/www:/var/www/certbot/:ro
     restart: always
     ports:
-      - 1337:80
+      - 443:80
     depends_on:
       - web
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
 volumes:
   postgres_data:
